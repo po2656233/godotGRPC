@@ -1,0 +1,139 @@
+syntax = "proto3";
+package go;
+//该协议文件不提供 req 和 resp 注:如需使用,请在子游戏协议中嵌套相关协议.
+enum PlayerState {
+  PlayerLookOn = 0;         //旁观(可作为刚入场时的初始状态)
+  PlayerSitDown = 1;        //坐下(此状态下，才能参与游戏)
+  PlayerAgree = 2;          //同意(可作为准备状态)
+  PlayerPlaying = 3;        //游戏中
+  PlayerPickUp = 4;         //托管
+  PlayerChouKa = 5;         //抽卡
+  PlayerChooseJiang = 6;    //选将
+  PlayerTrustee = 97;       //系统接管
+  PlayerGiveUp = 98;        //放弃
+  PlayerStandUp = 99;       //站起(可作为结束状态)
+}
+// 公告级别
+enum NTFLevel{
+  //系统公告
+  GeneralNTF = 0;//普通公告
+  UrgencyNTF = 1;//紧急公告
+  NTMaintainNTF = 2;//维护公告
+  ServeStopNTF = 3;//停服公告
+  PraiseNTF = 4;    //表扬公告
+  //个人公告
+  STrumpetNTF = 5;  // 小喇叭
+  MTrumpetNTF = 6;  // 银喇叭
+  BTrumpetNTF = 7;  // 金喇叭
+}
+//玩家信息
+message PlayerInfo {
+  int64 UserID = 1;       // ID
+  string Name = 2;        // 账号
+  int32 FaceID = 3;       // 头像
+  int32 Age = 4;          // 年龄
+  int32 Sex = 5;          // 性别
+  int64 YuanBao = 6;      // 元宝 *100
+  int64 Coin = 7;         // 铜钱
+  int32 Level = 8;        // 游戏级别
+  int32 Ranking = 9;      // 排名
+  PlayerState State = 10; // 状态
+}
+//时间信息
+message TimeInfo {
+  int64 TimeStamp = 1; //时间戳（起始时间戳）
+  int32 WaitTime = 2;  //仍需等待时长
+  int32 OutTime = 3;   //服务器已过时长
+  int32 TotalTime = 4; //总时长
+}
+//牌局信息
+message InningInfo{
+  string Number = 1;    // 牌局编号
+  int64 WinnerID = 2;   // 赢家
+  int64 LoserID = 3;    // 输家
+  int64 Payoff = 4;     // 结算
+  int64 TimeStamp = 5;  // 时间戳
+  string Result = 6;    // 牌局结果奖励
+}
+//玩家列表(信息)
+message PlayerListInfo {
+  repeated PlayerInfo AllInfos = 1; //所有玩家信息
+}
+//-----------------------------------------------------------------------------------------
+/////////////[优秀如你]-->Req:请求 Resp:反馈<--[交互专用]///////////////////////////////////
+/////////////[优秀如你]-->Req:请求 Resp:反馈<--[交互专用]///////////////////////////////////
+/////////////[优秀如你]-->Req:请求 Resp:反馈<--[交互专用]///////////////////////////////////
+//-----------------------------------------------------------------------------------------
+//入场协议 对战类 [EnterXXXGameResp]
+//受游戏本身特性影响,PlayerInfo有本地化需求
+//请查看对应的子游戏协议文件 中的 EnterXXXGameResp
+//若无本地化需求,统一走 EnterGameResp协议
+//退出游戏
+message ExitGameReq {
+}
+message ExitGameResp {
+  int64 UserID = 1;
+}
+/////////////玩家行为(与游戏弱相关的行为)/////////////////////
+// [排行榜]
+message RankingListReq {
+  int32 TopCount = 1; // =>0 默认20
+}
+message RankingListResp {
+  PlayerInfo UserInfo = 1;    //玩家信息
+}
+// 托管[暂保留]
+message TrusteeReq {
+  bool IsTrustee = 1; //是否托管
+}
+message TrusteeResp {
+  int64 UserID = 1; // 玩家ID
+  bool IsTrustee = 2; //是否托管
+}
+///////////////////游戏记录///////////////////////////////
+//获取游戏记录(根据kindID)
+message GetRecordReq{
+  int64 StartTimeStamp = 1; //起始时间戳 = 0默认所有
+  int64 EndTimeStamp = 2;   //结束时间戳 = 0
+}
+message GetRecordResp{
+  int64 UserID = 1;  //玩家ID
+  int64 StartTimeStamp = 2;
+  int64 EndTimeStamp = 3;
+  repeated InningInfo Innings = 4;//牌局信息
+  int32 PageNum = 5;//页码 默认20条一页
+}
+////////////////////notify/////////////////////////////
+// 踢出[暂保留]
+message NotifyBeOut {
+  int64 UserID = 1;  //玩家ID
+  int64 GameID = 2; //游戏标识
+  int32 Code = 3;    //操作码 0:时间到被剔除 1:刷子
+  string Hints = 4;    //被踢出的原因
+}
+// 财产变化通知
+message NotifyBalanceChange{
+  int64 UserID = 1;
+  int64 YuanBao = 2;          // 元宝 (客户端统一 */100)
+  int64 AlterYuanBao = 3;     // 增减了多少元宝 (客户端统一 */100)
+  int64 Coin = 4;             // 铜钱 (客户端统一 */100)
+  int64 AlterCoin = 5;        // 增减了多少铜钱 (客户端统一 */100)
+  int32 Code = 6;             // 操作原因 1:结算 2:充值 3:平台扣除 4:平台奖励 5:冻结 6:返还
+  string Reason = 7;          // 备注详情
+}
+//公告
+message NotifyNoticeReq {
+  int64 GameID = 1;       // 游戏标识 =0大厅
+  string Title = 2;       // 标题
+  string Content = 3;     // 内容
+  NTFLevel  Level = 4;    // 个人只能发送 喇叭
+  int32 Timeout = 5;      // 总时长 0<= 默认一分钟
+}
+message NotifyNoticeResp {
+  int64 UserID = 1;      //玩家ID =0时为所有玩家
+  int64 GameID = 2;      //游戏标识 =0大厅
+  NTFLevel  Level = 3;    //公告级别
+  TimeInfo TimeInfo = 4;  //时间
+  string Title = 5;       //标题
+  string Content = 6;     //内容
+}

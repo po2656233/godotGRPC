@@ -1,0 +1,389 @@
+syntax = "proto3";
+package go;
+//次序说明(流程):
+//1、个人信息登录
+//2、招募武将
+//3、选择武将
+//4、匹配挑战对手
+//5、生命值小的一方优先消除,相同则随机一方开始
+//6、开始消除属性触发技能
+//7、15秒轮流消除
+//8、一方总生命值归零则游戏结束
+//9、游戏结束,分配奖励
+//10、退出游戏
+//////////////////////////////enum////////////////////////////////////////////////////
+//游戏类型
+enum HeroType {
+  Hero_null = 0;
+  JIN = 1;        //金
+  MU = 2;         //木
+  SHUI = 3;       //水
+  HUO = 4;        //火
+  TU = 5;         //土
+}
+//游戏场景
+enum GameScene {
+  Free = 0;           //空闲
+  Start = 1;          //开始
+  Playing = 2;        //游戏中
+  Opening = 3;        //开奖
+  Over = 4;           //结算
+  Closing = 5;        //关闭
+}
+/////////////基础信息//////////////////
+//用户个人信息
+message UserInfo{
+  int64 UserID = 1;      //ID
+  string Name = 2;        //用户
+  string Account = 3;     //帐号
+  string Password = 4;    //密码
+  int32 FaceID = 5;      //头像
+  int32 Gender = 6;      //性别
+  int32 Age = 7;         //年龄
+  int32 VIP = 8;         //VIP级别
+  int32 Level = 9;       //级别
+  int64  YuanBao = 10;      //元宝
+  int64  Coin = 11;      //铜钱
+  int64  Money = 12;      //金钱(余额)
+  string PassPortID = 13;   //证件号
+  string RealName = 14;     //真实名字
+  string PhoneNum = 15;     //手机
+  string Email = 16;        //邮箱
+  string Address = 17;      //住址
+  string IDentity = 18;     //识别码(平台生成)
+  int64 AgentID = 19;        //代理标识(上级代理人)
+  string ReferralCode = 20;   //推荐标识(推荐码,由邀请码生成)
+  string ClientAddr = 21;     //连接地址(当前实际IP)
+  string ServerAddr = 22;     //(跳转至该地址 由登录服务返回的真实服务器地址)
+  string MachineCode = 23;    //机器序列
+}
+// 武将信息
+message HeroInfo {
+  int64 ID = 1;
+  int32 HeadId = 2;             // 头像ID
+  string Name = 3;              // 武将名称
+  int32 Sex = 4;                // 武将性别
+  int32 Rarity = 5;             // 稀有度
+  HeroType Faction = 6;         // 所属阵营
+  int64 HealthPoint = 7;        // 当前生命值
+  int64 HealthPointFull = 8;    // 满血值
+  int64 Strength = 9;           // 力量
+  int64 Agility = 10;           // 敏捷
+  int64 Intelligence = 11;      // 智力
+  int64 AttackPoint = 12;       // 攻击力
+  int64 ArmorPoint = 13;        // 防御力
+  int64 SpellPower = 14;        // 法强
+  repeated int64 Skills = 15;   // 所包含的技能
+}
+// 武器信息
+message WeaponInfo{
+  int64 ID = 1;    //标识
+  string Name = 2;  //名称
+  int32 Type = 3;   //种类
+  int32 Level = 4;  //级别
+  int64 Damage = 5; //伤害值
+  int64 Prob = 6;   //掉落几率
+  int32 Count = 7;  //总数 -1:表示数量无限制
+}
+// 商品信息
+message GoodsInfo{
+  int64 ID = 1;    //标识
+  string Name = 2;  //名称
+  int32 Kind = 3;   //种类
+  int32 Level = 4;  //级别
+  int64 Price = 5;  //价格
+  int64 Store = 6;  //库存
+  int64 Sold = 7;   //已售 (玩家单次购得的数量)
+  int32 Amount = 8; //总数 (玩家已购得的总数量)
+}
+//商品列表
+message GoodsList{
+  repeated GoodsInfo AllGoods = 1;//奖励商品列表
+}
+// 背包信息(单个)
+message KnapsackInfo{
+  int64 ID = 1;    //标识
+  string Name = 2;  //名称
+  repeated WeaponInfo MyWeaponry = 3;//单页最多二十
+  repeated GoodsInfo MyGoods = 4; //商品[房卡]
+  repeated HeroInfo MyHeroList = 5;   //我的武将列表
+  int32 Number = 6;    //编码 (页码)
+}
+//邮箱信息
+message EmailInfo {
+  int64 EmailID = 1; //邮箱ID
+  string AcceptName = 2; //接收者
+  string Sender = 3;//发送者
+  string Cc = 4;//抄送给
+  string Topic = 5;//主题
+  string Content = 6;//内容 300字(最多)
+  bool  IsRead = 7;
+  GoodsList AwardList = 8;//奖励商品列表
+  int64 TimeStamp = 9; //时间戳
+}
+//主页信息
+message MasterInfo{
+  UserInfo UserInfo = 1;          //用户信息
+//  ClassList Classes = 2;          //分类列表
+//  TaskList Tasks = 3;             //任务列表
+}
+/////////////[优秀如你]-->Req:请求 Resp:反馈<--[交互专用]///////////////////////////////////
+/////////////[优秀如你]-->Req:请求 Resp:反馈<--[交互专用]///////////////////////////////////
+/////////////[优秀如你]-->Req:请求 Resp:反馈<--[交互专用]///////////////////////////////////
+//注册
+message RegisterReq{
+  string Name = 1;            //用户
+  string Password = 2;        //密码
+  string SecurityCode = 3;    //验证码
+  string MachineCode = 4;     //机器码
+  string InvitationCode = 5;  //邀请码
+  int64 PlatformID = 6;      //需要注明平台ID (测试用: id == 1)
+  //选填
+  int32 Gender = 7;       //性别
+  int32 Age = 8;          //年龄
+  int32 FaceID = 9;       //头像
+  string PassPortID = 10;  //证件号
+  string RealName = 11;    //真实名字
+  string PhoneNum = 12;    //手机
+  string Email = 13;       //邮箱
+  string Address = 14;     //住址
+}
+message RegisterResp{
+  UserInfo Info = 1;
+}
+//登录
+message LoginReq{
+  string Account = 1;    //账号
+  string Password = 2;    //密码
+  string SecurityCode = 3;  //验证码
+  string MachineCode = 4;  //机器码
+  int64 PlatformID = 5; //需要注明平台ID (测试用: id == 1)
+}
+message LoginResp{
+  MasterInfo MainInfo = 1;
+  int64 InGameID = 2;     //所在游戏ID(=0时,不在任何游戏中)
+  int64 InTableNum = 3;   //所在桌子ID(=0时,没有进桌)
+  string Token = 4;
+}
+//异地
+message AllopatricResp{
+  int64 UserID = 1;
+}
+//重连
+message ReconnectReq{
+  string Account = 1;       //账号
+  string Password = 2;      //密码
+  string MachineCode = 3;   //机器码
+  int64 PlatformID = 4;    //需要注明平台ID (测试用: id == 1)
+}
+message ReconnectResp{
+  MasterInfo MainInfo = 1;
+  int64 InGameID = 2;     //所在游戏ID(=0时,不在任何游戏中)
+  int64 InTableNum = 3;   //所在桌子ID(=0时,没有进桌)
+  string Token = 4;
+}
+//////////////////////签到///////////////////////////////////////////
+//签到
+message CheckInReq{
+  int64 UserID = 1;
+  string Remark = 2;//备注
+}
+message CheckInResp{
+  int64 UserID = 1;
+  string Remark = 2;//备注
+  int64 Timestamp = 3;//签到时间戳
+  GoodsList AwardList = 4;//签到奖励
+}
+//获取签到
+message GetCheckInReq{
+}
+message GetCheckInResp{
+  int64 UserID = 1;
+  repeated CheckInResp AllCheckin = 2;//所有签到次数
+  int32 PageNum = 3;//页码 默认20条一页
+}
+//////////////////////武将/////////////////////////////////////////
+// [招募]抽取武将
+message DrawHeroReq{
+  int32 Amount = 1;//抽取的数量
+}
+message DrawHeroResp{
+  int64 UserID = 1;
+  repeated HeroInfo HeroList = 2;//根据数量返回武将
+}
+// [布阵]获取我的英雄(武将)
+message GetMyHeroReq{
+}
+message GetMyHeroResp{
+  int64 UserID = 1;
+  repeated HeroInfo HeroList = 2;//我的武将列表
+}
+// [选将]选择携带的武将
+message ChooseHeroReq{
+  repeated int64 HeroIDs = 1;
+}
+message ChooseHeroResp{
+  repeated HeroInfo HeroList = 1;//已选的英雄列表
+  string Hint = 2;  // 不成功时,反馈的提示
+}
+//获取全部英雄(武将)
+message GetAllHeroReq{
+}
+message GetAllHeroResp{
+  repeated HeroInfo HeroList = 1;// 全部英雄列表
+}
+// 查找英雄
+message CheckHeroReq{
+  repeated int32 HeroIDs = 1; // 根据ID列表查询
+  string  Name = 2; // 根据ID名称查询
+  int32  Sex = 3;   // 根据性别查询
+  string  Country = 4; // 根据国家查询
+  HeroType Faction = 5;// 根据阵营查询
+}
+message CheckHeroResp{
+  repeated HeroInfo HeroList = 1;
+}
+//////////////////////充值///////////////////////////////////////////
+//充值
+message RechargeReq {
+  int64 UserID = 1;
+  int64 ByiD = 2;
+  int64 Payment = 3;   // 金钱 (客户端统一 */100)
+  int32 Method = 4;    // 充值方式
+  int32 Switch = 5;    // 0:(余额)不转换 1:转元宝 2:转铜钱
+  string Reason = 6;   // 备注详情
+}
+message RechargeResp {
+  int64  UserID = 1;
+  int64  ByiD = 2;
+  int64  PreMoney = 3;  // 充值前的金钱 (客户端统一 */100)
+  int64  Payment = 4;   // 充值金额(客户端统一 */100)
+  int64  Money = 5;     // 当前金额(客户端统一 */100)
+  int64  YuanBao = 6;   // 当前金额(客户端统一 */100)
+  int64  Coin = 7;      // 当前金额(客户端统一 */100)
+  int32  Method = 8;    // 充值方式
+  bool   IsSuccess = 9; //
+  string Order = 10;     //
+  int64  TimeStamp = 11; //
+  string Reason = 12;   // 备注详情
+}
+//获取充值纪录
+message GetRechargesReq {
+}
+message GetRechargesResp {
+  int64 UserID = 1;
+  repeated RechargeResp AllRecharges = 2;
+  int32 PageNum = 3;//页码 默认20条一页
+}
+/////////////////物品/////////////////////////
+//获取商品信息
+message GetGoodsReq {
+  int64 ID = 1;        //标识 =0时 无效
+}
+message GetGoodsResp {
+  int64 UserID = 1;
+  GoodsInfo Info = 2;
+}
+//获取所有商品信息
+message GetAllGoodsReq {
+}
+message GetAllGoodsResp {
+  int64 UserID = 1;
+  repeated GoodsInfo Info = 2;
+  int32 PageNum = 3;//页码 默认20条一页
+}
+//购买商品
+message BuyGoodsReq {
+  int64 ID = 1;         //标识
+  int64 Payment = 2;    //付款 (客户端统一 */100)
+  int64 Count = 3;      // 玩家单次购得的数量)
+}
+message BuyGoodsResp {
+  int64 UserID = 1;
+  GoodsInfo Info = 2;
+}
+//查看背包
+message CheckKnapsackReq {
+  int64 ID = 1;    //背包标识
+  int32 Number = 2;    //编码 (页码) 0时表示获取全部
+}
+message CheckKnapsackResp {
+  int64 UserID = 1;
+  KnapsackInfo Info = 2;
+}
+//物品转换 仅支持通用房卡和超级房卡的转换,游戏房卡之间不能置换
+message BarterReq{
+  int64 ID = 1;         // 物品ID
+  int64 ToID = 2;       // 目标商品ID
+  int32 Amount = 3;      // 置换的个数
+}
+message BarterResp{
+  int64 UserID = 1;
+  KnapsackInfo Info = 2; //返回最新包裹信息
+}
+//转至商城
+message ToShoppingResp{
+  int64  ID = 1;         // 物品ID
+  int32  Count = 2;      // 个数
+  string Reason = 3;     // 转至商城的原因(提示)
+}
+//////////////////邮箱建议////////////////////////////////////
+//邮箱信息
+message EmailReq {
+  int32 PageNum = 1;//页码 默认5条一页;
+}
+message EmailResp {
+  int64 UserID = 1;  //玩家ID
+  repeated EmailInfo Infos = 2;//页码 默认5条一页
+  int32 PageNum = 3;//页码 默认5条一页
+}
+//领取奖励
+message ClaimReq {
+  int64 EmailID = 1;//邮箱ID
+}
+message ClaimResp {
+  int64 UserID = 1;   //玩家ID
+  int64 EmailID = 2;   //邮箱ID
+}
+//建议
+message SuggestReq {
+  string Content = 1;//内容 200字
+}
+message SuggestResp {
+  int64 UserID = 1;   //玩家ID
+  EmailInfo Feedback = 2;//反馈
+}
+//读取邮件
+message EmailReadReq {
+  int64 EmailID = 1;//邮箱ID
+}
+message EmailReadResp {
+  int64 UserID = 1;   //玩家ID
+  int64 EmailID = 2;   //邮箱ID
+}
+//删除邮件
+message EmailDelReq {
+  int64 EmailID = 1;//邮箱ID
+}
+message EmailDelResp {
+  int64 UserID = 1;   //玩家ID
+  int64 EmailID = 2;   //邮箱ID
+}
+//////////////result////////////////////////////////////
+//结果反馈
+message ResultResp{
+  int32 State = 1;      //状态:0成功 1失败
+  string Hints = 2;      //提示信息
+}
+//结果反馈(弹窗)
+message ResultPopResp{
+  int32 Flag = 1;      //状态:0成功 1失败
+  string Title = 2;      //标题
+  string Hints = 3;      //提示信息
+}
+//////////////heart//////////////////////////////////////////
+//心跳包 默认20秒 网关等待读取数据时长为35秒
+message PingReq{
+}
+message PongResp{
+}

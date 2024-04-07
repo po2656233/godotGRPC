@@ -1,0 +1,9 @@
+res://linkServer.tscn
+res://addons/gdscript_formatter/format_shortcut.tres
+res://addons/gdscript_formatter/format_preference.tres
+res://Node.gd
+res://protogd/login.gd
+res://protogd/sanguoxiao.gd
+res://network.gd
+res://GlobalSignal.gd
+res://login.gd
