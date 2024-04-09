@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://fwxjkrxtld5x"]
+
+[ext_resource type="Script" path="res://login/login.gd" id="1_miu3w"]
+
+[node name="loginUI" type="Node2D"]
+script = ExtResource("1_miu3w")

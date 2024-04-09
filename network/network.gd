@@ -1,13 +1,5 @@
 extends Node
-# 协议脚本
-const loginProto = preload("res://protogd/login.gd")
-const commProto = preload("res://protogd/gamecomm.gd")
-const sanguoxiaoProto = preload("res://protogd/sanguoxiao.gd")
 
-#const globalSIG = get_node("res://GlobalSignal.gd")
-# 业务脚本
-@onready var loginNode = get_node("login")
-#@onready var gameNode = get_node("game")
 # tcp实例与接收线程
 var connHandle = StreamPeerTCP.new()
 var recvThread = Thread.new()
@@ -20,6 +12,14 @@ var serverPort :int=9968
 # 重连设置
 var reconnect_timer:Timer = null
 var reconnect_interval = 2.0 # 重连间隔时间，单位秒
+
+# 业务节点列表 通过外部注册进来
+# 注明:【业务转至节点处理，节点脚本上务必有其回包同名的处理函数,否则业务无法处理】
+var nodeList:Array[Node] = []
+# 协议脚本
+const loginProto = preload("res://protogd/login.gd")
+const commProto = preload("res://protogd/gamecomm.gd")
+const sanguoxiaoProto = preload("res://protogd/sanguoxiao.gd")
 # 消息映射
 var msgMap:Variant = {}
 var msgTable:Variant = {}
@@ -29,24 +29,22 @@ var loginMsg:Variant = {}
 var signalFile: String = "res://GlobalSignal.gd"
 #数据接受大小
 var revNum :int = 0
-var firstRun: bool = true
-
 # 信号
 signal connection_closed
 signal connection_error
 
 
-func _ready()->void:
+func _ready() -> void:
+	print("准备")
 	# 消息名称-消息ID
-	msgMap = loadFileContent(msgFile)
-	for key in msgMap:
-		msgTable[msgMap[key]] = key
-		if int(key)<=56:
-			loginMsg[key] = msgMap[key]
-		#add_user_signal(msgMap[key],[{ "name": "param", "type": TYPE_PACKED_BYTE_ARRAY }])
+	loadFileContent(msgFile)
 	# 根据生成全局信号
 	#genGlobalSignal()
-	print("准备")
+	#连接服务器
+	connHandle.set_big_endian(true)
+	start_reconnect()
+	# 开启接受数据的线程
+	start_recv()
 	#定时重连
 	reconnect_timer = Timer.new()
 	reconnect_timer.one_shot = false
@@ -54,22 +52,41 @@ func _ready()->void:
 	reconnect_timer.connect('timeout', checkNetwork)
 	add_child(reconnect_timer)
 	reconnect_timer.start()
-	#连接服务器
-	connHandle.set_big_endian(true)
-	start_reconnect()
-	# 开启接受数据的线程
-	start_recv()
-	
-		
 
-#func _process(_delta: float) -> void:
-	#checkNetwork()
+#################################【外部接口】########################################################
+# 注册业务节点
+func RegisterNode(businessNode:Node):
+	nodeList.append(businessNode)
+
+# 发送数据
+func SendData(data:PackedByteArray,msgName:String="")->bool:
+	if connHandle.get_status() != connHandle.STATUS_CONNECTED:
+		return false
+	if msgName == "":
+		msgName = GetFuncName(1)
+	if msgTable.has(msgName):
+		send_data_packet(msgTable[msgName],data)
+	return true
+
+# 获取层级上的函数名 
+func GetFuncName(index:int=0) -> String:
+	# 获取当前调用堆栈
+	var stack = get_stack()
+	# 获取最后一个堆栈帧，即当前正在执行的函数
+	var size = stack.size()
+	if size - index -2 < 0:
+		return ""
+	return stack[index+1]["function"]
 
 #################################【消息协议】########################################################
 # 加载消息映射文件
-func loadFileContent(fileName:String)->Variant:
+func loadFileContent(fileName:String)->void:
 	# 设置要读取的文件路径 
-	return JSON.parse_string(FileAccess.open(fileName, FileAccess.READ).get_as_text())
+	msgMap = JSON.parse_string(FileAccess.open(fileName, FileAccess.READ).get_as_text())
+	for key in msgMap:
+		msgTable[msgMap[key]] = key
+		if int(key)<=56:
+			loginMsg[key] = msgMap[key]
 
 # 根据消息映射 生成全局的信号
 func genGlobalSignal():
@@ -86,7 +103,6 @@ func genGlobalSignal():
 
 
 #################################【网络连接】########################################################
-#
 # 连接服务器
 func start_reconnect():
 	print("正在连接服务器")
@@ -108,7 +124,6 @@ func _on_ConnectionError():
 	print("连接错误，准备重连")
 	start_reconnect()
 
-
 # 网络检测
 func checkNetwork():
 	connHandle.poll()
@@ -116,7 +131,7 @@ func checkNetwork():
 	match status:
 		connHandle.STATUS_CONNECTED:
 			heartbeat()
-			#print("发起心跳")
+			print("发起心跳")
 		connHandle.STATUS_NONE:
 			emit_signal("connection_closed")
 			print("服务器断开")
@@ -127,16 +142,14 @@ func checkNetwork():
 			print("服务器连接出错")
 		_:
 			print("不匹配任何特定条件")
-	pass
-	
+	return
+#################################【心跳包】########################################################
 # 发送心跳
 func heartbeat():
 	semaphore.post()
-	SendData("PingReq",loginProto.PingReq.new().to_bytes())
-	if firstRun:
-		loginNode.LoginReq("KKK","123456")
-		firstRun = false
-	
+	SendData(loginProto.PingReq.new().to_bytes(),"PingReq")
+
+#################################【线程: 接收数据】########################################################
 # 开启接收线程 【注意:由心跳决定是否接收数据】
 func start_recv():
 	mutex = Mutex.new()
@@ -199,14 +212,13 @@ func doWithRecv():
 func handleMsg(id:int,data:PackedByteArray):
 	var strID = var_to_str(id)
 	if msgMap.has(strID):
-		#解析消息
-		if loginMsg.has(strID) :
-			loginNode.call(msgMap[strID], data)
-			#emit_signal(msgMap[strID], data)
-		else:
-			return
-			#emit_signal(msgMap[strID])
 		print("收到 消息ID:",id," 消息类型:",msgMap[strID]," 内容大小:",data.size())
+		#解析消息 
+		for tempNode in nodeList:
+			#分派给(含处理函数）节点
+			if tempNode.has_method(msgMap[strID]):
+				tempNode.call(msgMap[strID], data)
+			#emit_signal(msgMap[strID])
 	else:
 		print("收到的数据有误",id," data:",data)
 	pass
@@ -235,8 +247,6 @@ func send_data_packet(packet_id :Variant, data:PackedByteArray):
 		print("len:",data_length," id:" ,packet_id," size:",size," data:",data," packet:",packet)
 
 
-func SendData(msgName:String, data:PackedByteArray):
-	send_data_packet(msgTable[msgName],data)
 
 #################################【测试数据】########################################################
 # 测试发送协议

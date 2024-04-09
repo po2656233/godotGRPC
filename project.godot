@@ -10,10 +10,14 @@ config_version=5
 
 [application]
 
-config/name="rpc_test_4.3"
-run/main_scene="res://linkServer.tscn"
+config/name="superman"
+run/main_scene="res://main.tscn"
 config/features=PackedStringArray("4.2", "GL Compatibility")
 config/icon="res://icon.svg"
+
+[autoload]
+
+Network="*res://network/network.gd"
 
 [editor_plugins]
 

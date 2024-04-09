@@ -1,0 +1,126 @@
+[gd_scene load_steps=2 format=3 uid="uid://c5848tw2w6iyq"]
+
+[ext_resource type="Script" path="res://login/login.gd" id="1_s37o2"]
+
+[node name="MainControl" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HintDlg" type="AcceptDialog" parent="."]
+unique_name_in_owner = true
+title = "提示"
+initial_position = 2
+always_on_top = true
+popup_window = true
+content_scale_mode = 1
+
+[node name="Login" type="Node" parent="."]
+script = ExtResource("1_s37o2")
+
+[node name="HBox_login" type="HBoxContainer" parent="Login"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect" type="ColorRect" parent="Login/HBox_login"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+color = Color(0.756863, 0.470588, 0.984314, 1)
+
+[node name="HBoxContainer_username" type="HBoxContainer" parent="Login/HBox_login/ColorRect"]
+custom_minimum_size = Vector2(0, 45)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -86.0
+offset_top = -114.5
+offset_right = 124.0
+offset_bottom = -69.5
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="Lab_username" type="Label" parent="Login/HBox_login/ColorRect/HBoxContainer_username"]
+layout_mode = 2
+text = "用户名:"
+
+[node name="LineEdit_username" type="LineEdit" parent="Login/HBox_login/ColorRect/HBoxContainer_username"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(153, 45)
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "请录入用户名"
+
+[node name="HBoxContainer_password" type="HBoxContainer" parent="Login/HBox_login/ColorRect"]
+custom_minimum_size = Vector2(0, 45)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -86.5
+offset_top = -54.5
+offset_right = 124.5
+offset_bottom = -9.5
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="Lab_password" type="Label" parent="Login/HBox_login/ColorRect/HBoxContainer_password"]
+layout_mode = 2
+text = "密    码:"
+
+[node name="LineEdit_password" type="LineEdit" parent="Login/HBox_login/ColorRect/HBoxContainer_password"]
+unique_name_in_owner = true
+layout_direction = 2
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "请录入密码"
+secret = true
+
+[node name="HBoxContainer_login" type="HBoxContainer" parent="Login/HBox_login/ColorRect"]
+layout_direction = 2
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -59.5
+offset_top = 6.5
+offset_right = 129.5
+offset_bottom = 61.5
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 4
+alignment = 1
+
+[node name="Btn_register" type="Button" parent="Login/HBox_login/ColorRect/HBoxContainer_login"]
+custom_minimum_size = Vector2(80, 40)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+text = "注册"
+
+[node name="Btn_login" type="Button" parent="Login/HBox_login/ColorRect/HBoxContainer_login"]
+custom_minimum_size = Vector2(80, 40)
+layout_mode = 2
+size_flags_horizontal = 6
+size_flags_vertical = 4
+text = "登录"
+
+[connection signal="pressed" from="Login/HBox_login/ColorRect/HBoxContainer_login/Btn_register" to="Login" method="_on_bt_register_pressed"]
+[connection signal="pressed" from="Login/HBox_login/ColorRect/HBoxContainer_login/Btn_login" to="Login" method="_on_bt_login_pressed"]
