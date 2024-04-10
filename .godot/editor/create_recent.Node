@@ -1,3 +1,6 @@
+RichTextLabel
+TextureRect
+TextEdit
 Node
 Control
 HBoxContainer
@@ -5,10 +8,7 @@ ColorRect
 GridContainer
 AcceptDialog
 VBoxContainer
-RichTextLabel
 Label
 Button
 PopupMenu
 Popup
-LineEdit
-TextEdit

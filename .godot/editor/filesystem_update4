@@ -1,6 +1,6 @@
-res://login/login_ui.tscn
+res://main.tscn
 res://addons/gdscript_formatter/format_shortcut.tres
 res://addons/gdscript_formatter/format_preference.tres
-res://network/network.gd
 res://login/login.gd
-res://main.tscn
+res://game.tscn
+res://home.tscn

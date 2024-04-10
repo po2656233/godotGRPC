@@ -13,7 +13,7 @@ func _ready() -> void:
 	pass # Replace with function body.
 
 
-####################################################################
+###########################【显示提示信息】#########################################
 func showHint(content:String,title:String="提示")->void:
 	#确保网络处理在主线程外部
 	call_deferred("_showHint",title,content)
