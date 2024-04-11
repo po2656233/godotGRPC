@@ -218,13 +218,23 @@ message GetMyHeroResp{
   int64 UserID = 1;
   repeated HeroInfo HeroList = 2;//我的武将列表
 }
-// [选将]选择携带的武将
+// [选将]或[更换]选择携带的武将
 message ChooseHeroReq{
-  repeated int64 HeroIDs = 1;
+  int32 Position = 1;//武将的位置
+  int64 HeroID = 2;
 }
 message ChooseHeroResp{
-  repeated HeroInfo HeroList = 1;//已选的英雄列表
-  string Hint = 2;  // 不成功时,反馈的提示
+  int32 Position = 1;//武将的位置
+  HeroInfo Hero = 2;//已选的英雄列表
+}
+// [下阵]选择携带的武将
+message DownHeroReq{
+  int32 Position = 1;//武将的位置
+  int64 HeroID = 2;
+}
+message DownHeroReqResp{
+  int32 Position = 1;//武将的位置
+  int64 HeroID = 2;
 }
 //获取全部英雄(武将)
 message GetAllHeroReq{

@@ -505,12 +505,12 @@ class PBPacker:
 			if tt.ok:
 				offset += tt.offset
 				if data.has(tt.tag):
-					var _service_  : PBServiceField = data[tt.tag]
-					var type : int = pb_type_from_data_type(_service_ .field.type)
-					if type == tt.type || (tt.type == PB_TYPE.LENGTHDEL && _service_ .field.rule == PB_RULE.REPEATED && _service_ .field.option_packed):
-						var res : int = unpack_field(bytes, offset, _service_ .field, type, _service_ .func_ref)
+					var service : PBServiceField = data[tt.tag]
+					var type : int = pb_type_from_data_type(service.field.type)
+					if type == tt.type || (tt.type == PB_TYPE.LENGTHDEL && service.field.rule == PB_RULE.REPEATED && service.field.option_packed):
+						var res : int = unpack_field(bytes, offset, service.field, type, service.func_ref)
 						if res > 0:
-							_service_ .state = PB_SERVICE_STATE.FILLED
+							service.state = PB_SERVICE_STATE.FILLED
 							offset = res
 							if offset == limit:
 								return offset
@@ -2983,22 +2983,35 @@ class ChooseHeroReq:
 	func _init():
 		var service
 		
-		var __HeroIDs_default: Array[int] = []
-		__HeroIDs = PBField.new("HeroIDs", PB_DATA_TYPE.INT64, PB_RULE.REPEATED, 1, true, __HeroIDs_default)
+		__Position = PBField.new("Position", PB_DATA_TYPE.INT32, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT32])
 		service = PBServiceField.new()
-		service.field = __HeroIDs
-		data[__HeroIDs.tag] = service
+		service.field = __Position
+		data[__Position.tag] = service
+		
+		__HeroID = PBField.new("HeroID", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
+		service = PBServiceField.new()
+		service.field = __HeroID
+		data[__HeroID.tag] = service
 		
 	var data = {}
 	
-	var __HeroIDs: PBField
-	func get_HeroIDs() -> Array[int]:
-		return __HeroIDs.value
-	func clear_HeroIDs() -> void:
+	var __Position: PBField
+	func get_Position() -> int:
+		return __Position.value
+	func clear_Position() -> void:
 		data[1].state = PB_SERVICE_STATE.UNFILLED
-		__HeroIDs.value = []
-	func add_HeroIDs(value : int) -> void:
-		__HeroIDs.value.append(value)
+		__Position.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT32]
+	func set_Position(value : int) -> void:
+		__Position.value = value
+	
+	var __HeroID: PBField
+	func get_HeroID() -> int:
+		return __HeroID.value
+	func clear_HeroID() -> void:
+		data[2].state = PB_SERVICE_STATE.UNFILLED
+		__HeroID.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
+	func set_HeroID(value : int) -> void:
+		__HeroID.value = value
 	
 	func _to_string() -> String:
 		return PBPacker.message_to_string(data)
@@ -3025,39 +3038,147 @@ class ChooseHeroResp:
 	func _init():
 		var service
 		
-		var __HeroList_default: Array[HeroInfo] = []
-		__HeroList = PBField.new("HeroList", PB_DATA_TYPE.MESSAGE, PB_RULE.REPEATED, 1, true, __HeroList_default)
+		__Position = PBField.new("Position", PB_DATA_TYPE.INT32, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT32])
 		service = PBServiceField.new()
-		service.field = __HeroList
-		service.func_ref = Callable(self, "add_HeroList")
-		data[__HeroList.tag] = service
+		service.field = __Position
+		data[__Position.tag] = service
 		
-		__Hint = PBField.new("Hint", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
+		__Hero = PBField.new("Hero", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
-		service.field = __Hint
-		data[__Hint.tag] = service
+		service.field = __Hero
+		service.func_ref = Callable(self, "new_Hero")
+		data[__Hero.tag] = service
 		
 	var data = {}
 	
-	var __HeroList: PBField
-	func get_HeroList() -> Array[HeroInfo]:
-		return __HeroList.value
-	func clear_HeroList() -> void:
+	var __Position: PBField
+	func get_Position() -> int:
+		return __Position.value
+	func clear_Position() -> void:
 		data[1].state = PB_SERVICE_STATE.UNFILLED
-		__HeroList.value = []
-	func add_HeroList() -> HeroInfo:
-		var element = HeroInfo.new()
-		__HeroList.value.append(element)
-		return element
+		__Position.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT32]
+	func set_Position(value : int) -> void:
+		__Position.value = value
 	
-	var __Hint: PBField
-	func get_Hint() -> String:
-		return __Hint.value
-	func clear_Hint() -> void:
+	var __Hero: PBField
+	func get_Hero() -> HeroInfo:
+		return __Hero.value
+	func clear_Hero() -> void:
 		data[2].state = PB_SERVICE_STATE.UNFILLED
-		__Hint.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
-	func set_Hint(value : String) -> void:
-		__Hint.value = value
+		__Hero.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+	func new_Hero() -> HeroInfo:
+		__Hero.value = HeroInfo.new()
+		return __Hero.value
+	
+	func _to_string() -> String:
+		return PBPacker.message_to_string(data)
+		
+	func to_bytes() -> PackedByteArray:
+		return PBPacker.pack_message(data)
+		
+	func from_bytes(bytes : PackedByteArray, offset : int = 0, limit : int = -1) -> int:
+		var cur_limit = bytes.size()
+		if limit != -1:
+			cur_limit = limit
+		var result = PBPacker.unpack_message(data, bytes, offset, cur_limit)
+		if result == cur_limit:
+			if PBPacker.check_required(data):
+				if limit == -1:
+					return PB_ERR.NO_ERRORS
+			else:
+				return PB_ERR.REQUIRED_FIELDS
+		elif limit == -1 && result > 0:
+			return PB_ERR.PARSE_INCOMPLETE
+		return result
+	
+class DownHeroReq:
+	func _init():
+		var service
+		
+		__Position = PBField.new("Position", PB_DATA_TYPE.INT32, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT32])
+		service = PBServiceField.new()
+		service.field = __Position
+		data[__Position.tag] = service
+		
+		__HeroID = PBField.new("HeroID", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
+		service = PBServiceField.new()
+		service.field = __HeroID
+		data[__HeroID.tag] = service
+		
+	var data = {}
+	
+	var __Position: PBField
+	func get_Position() -> int:
+		return __Position.value
+	func clear_Position() -> void:
+		data[1].state = PB_SERVICE_STATE.UNFILLED
+		__Position.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT32]
+	func set_Position(value : int) -> void:
+		__Position.value = value
+	
+	var __HeroID: PBField
+	func get_HeroID() -> int:
+		return __HeroID.value
+	func clear_HeroID() -> void:
+		data[2].state = PB_SERVICE_STATE.UNFILLED
+		__HeroID.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
+	func set_HeroID(value : int) -> void:
+		__HeroID.value = value
+	
+	func _to_string() -> String:
+		return PBPacker.message_to_string(data)
+		
+	func to_bytes() -> PackedByteArray:
+		return PBPacker.pack_message(data)
+		
+	func from_bytes(bytes : PackedByteArray, offset : int = 0, limit : int = -1) -> int:
+		var cur_limit = bytes.size()
+		if limit != -1:
+			cur_limit = limit
+		var result = PBPacker.unpack_message(data, bytes, offset, cur_limit)
+		if result == cur_limit:
+			if PBPacker.check_required(data):
+				if limit == -1:
+					return PB_ERR.NO_ERRORS
+			else:
+				return PB_ERR.REQUIRED_FIELDS
+		elif limit == -1 && result > 0:
+			return PB_ERR.PARSE_INCOMPLETE
+		return result
+	
+class DownHeroReqResp:
+	func _init():
+		var service
+		
+		__Position = PBField.new("Position", PB_DATA_TYPE.INT32, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT32])
+		service = PBServiceField.new()
+		service.field = __Position
+		data[__Position.tag] = service
+		
+		__HeroID = PBField.new("HeroID", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
+		service = PBServiceField.new()
+		service.field = __HeroID
+		data[__HeroID.tag] = service
+		
+	var data = {}
+	
+	var __Position: PBField
+	func get_Position() -> int:
+		return __Position.value
+	func clear_Position() -> void:
+		data[1].state = PB_SERVICE_STATE.UNFILLED
+		__Position.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT32]
+	func set_Position(value : int) -> void:
+		__Position.value = value
+	
+	var __HeroID: PBField
+	func get_HeroID() -> int:
+		return __HeroID.value
+	func clear_HeroID() -> void:
+		data[2].state = PB_SERVICE_STATE.UNFILLED
+		__HeroID.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
+	func set_HeroID(value : int) -> void:
+		__HeroID.value = value
 	
 	func _to_string() -> String:
 		return PBPacker.message_to_string(data)
