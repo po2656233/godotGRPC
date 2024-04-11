@@ -1,10 +1,10 @@
+ColorRect
 RichTextLabel
 TextureRect
 TextEdit
 Node
 Control
 HBoxContainer
-ColorRect
 GridContainer
 AcceptDialog
 VBoxContainer

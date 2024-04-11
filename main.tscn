@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://c5848tw2w6iyq"]
+[gd_scene load_steps=6 format=3 uid="uid://c5848tw2w6iyq"]
 
 [ext_resource type="Texture2D" uid="uid://dhbr73joabdq6" path="res://image/eb45d7f1-6e63-47fa-8aea-023131a862f7.e6740.png" id="1_bhiyg"]
 [ext_resource type="Script" path="res://login/login.gd" id="1_s37o2"]
@@ -6,8 +6,6 @@
 [ext_resource type="Texture2D" uid="uid://chrwymla0bi66" path="res://image/e97272a3-5b9e-4dd4-b253-6b897b7ba702.bcf40.png" id="4_gvg4q"]
 
 [sub_resource type="Theme" id="Theme_2d7mg"]
-
-[sub_resource type="SystemFont" id="SystemFont_2kaqw"]
 
 [node name="MainControl" type="Control"]
 layout_mode = 3
@@ -176,6 +174,20 @@ grow_horizontal = 2
 scale = Vector2(0.2, 0.2)
 texture = ExtResource("4_gvg4q")
 
+[node name="RichTextLabel_logo" type="RichTextLabel" parent="TextureRect_logo"]
+top_level = true
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -9.0
+offset_top = 26.0
+offset_right = 43.0
+offset_bottom = 69.0
+grow_horizontal = 2
+theme_override_colors/default_color = Color(1, 1, 0, 1)
+text = "三国消"
+
 [node name="RichTextLabel_gonggao" type="RichTextLabel" parent="."]
 top_level = true
 layout_mode = 1
@@ -191,29 +203,23 @@ offset_bottom = -35.0
 grow_horizontal = 2
 grow_vertical = 0
 theme_override_colors/default_color = Color(0, 0, 0, 1)
-theme_override_fonts/bold_font = SubResource("SystemFont_2kaqw")
 theme_override_font_sizes/normal_font_size = 26
 text = "			   健康游戏忠告
-抵制不良游戏，拒绝盗版游戏。 
-注意自我保护，谨防受骗上当。 
-适度游戏益脑，沉迷游戏伤身。 
-合理安排时间，享受健康生活。"
+ 抵制不良游戏，拒绝盗版游戏。 
+ 注意自我保护，谨防受骗上当。  
+ 适度游戏益脑，沉迷游戏伤身。  
+ 合理安排时间，享受健康生活。 "
 fit_content = true
 autowrap_mode = 0
 
-[node name="RichTextLabel_logo" type="RichTextLabel" parent="."]
-top_level = true
+[node name="ColorRect" type="ColorRect" parent="RichTextLabel_gonggao"]
 layout_mode = 1
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -9.0
-offset_top = 26.0
-offset_right = 43.0
-offset_bottom = 69.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
 grow_horizontal = 2
-theme_override_colors/default_color = Color(1, 1, 0, 1)
-text = "三国消"
+grow_vertical = 2
+color = Color(0.34902, 1, 1, 0.129412)
 
 [connection signal="pressed" from="Login/HBox_login/ColorRect/HBoxContainer_login/Btn_login" to="Login" method="_on_bt_login_pressed"]
 [connection signal="pressed" from="Login/HBox_login/ColorRect/HBoxContainer_login/Btn_register" to="Login" method="_on_bt_register_pressed"]
