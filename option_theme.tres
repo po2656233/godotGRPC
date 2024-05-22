@@ -1,0 +1,17 @@
+[gd_resource type="Theme" load_steps=2 format=3 uid="uid://cnynhk1eba324"]
+
+[sub_resource type="FontFile" id="FontFile_hjgkm"]
+cache/0/16/0/ascent = 0.0
+cache/0/16/0/descent = 0.0
+cache/0/16/0/underline_position = 0.0
+cache/0/16/0/underline_thickness = 0.0
+cache/0/16/0/scale = 1.0
+cache/0/16/0/kerning_overrides/16/0 = Vector2(0, 0)
+
+[resource]
+resource_local_to_scene = true
+default_font = SubResource("FontFile_hjgkm")
+OptionButton/colors/font_color = Color(0.498039, 0.980392, 0.827451, 1)
+OptionButton/colors/font_pressed_color = Color(1, 0.278431, 1, 1)
+OptionButton/constants/arrow_margin = 6
+OptionButton/constants/h_separation = 6

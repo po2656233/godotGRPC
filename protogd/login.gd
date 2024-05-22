@@ -661,8 +661,312 @@ class PBPacker:
 ############### USER DATA BEGIN ################
 
 
+class LoginRequest:
+	func _init():
+		var service
+		
+		__serverId = PBField.new("serverId", PB_DATA_TYPE.INT32, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT32])
+		service = PBServiceField.new()
+		service.field = __serverId
+		data[__serverId.tag] = service
+		
+		__token = PBField.new("token", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
+		service = PBServiceField.new()
+		service.field = __token
+		data[__token.tag] = service
+		
+		var __params_default: Array = []
+		__params = PBField.new("params", PB_DATA_TYPE.MAP, PB_RULE.REPEATED, 3, true, __params_default)
+		service = PBServiceField.new()
+		service.field = __params
+		service.func_ref = Callable(self, "add_empty_params")
+		data[__params.tag] = service
+		
+	var data = {}
+	
+	var __serverId: PBField
+	func get_serverId() -> int:
+		return __serverId.value
+	func clear_serverId() -> void:
+		data[1].state = PB_SERVICE_STATE.UNFILLED
+		__serverId.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT32]
+	func set_serverId(value : int) -> void:
+		__serverId.value = value
+	
+	var __token: PBField
+	func get_token() -> String:
+		return __token.value
+	func clear_token() -> void:
+		data[2].state = PB_SERVICE_STATE.UNFILLED
+		__token.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
+	func set_token(value : String) -> void:
+		__token.value = value
+	
+	var __params: PBField
+	func get_raw_params():
+		return __params.value
+	func get_params():
+		return PBPacker.construct_map(__params.value)
+	func clear_params():
+		data[3].state = PB_SERVICE_STATE.UNFILLED
+		__params.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MAP]
+	func add_empty_params() -> LoginRequest.map_type_params:
+		var element = LoginRequest.map_type_params.new()
+		__params.value.append(element)
+		return element
+	func add_params(a_key, a_value) -> void:
+		var idx = -1
+		for i in range(__params.value.size()):
+			if __params.value[i].get_key() == a_key:
+				idx = i
+				break
+		var element = LoginRequest.map_type_params.new()
+		element.set_key(a_key)
+		element.set_value(a_value)
+		if idx != -1:
+			__params.value[idx] = element
+		else:
+			__params.value.append(element)
+	
+	class map_type_params:
+		func _init():
+			var service
+			
+			__key = PBField.new("key", PB_DATA_TYPE.INT32, PB_RULE.REQUIRED, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT32])
+			__key.is_map_field = true
+			service = PBServiceField.new()
+			service.field = __key
+			data[__key.tag] = service
+			
+			__value = PBField.new("value", PB_DATA_TYPE.STRING, PB_RULE.REQUIRED, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
+			__value.is_map_field = true
+			service = PBServiceField.new()
+			service.field = __value
+			data[__value.tag] = service
+			
+		var data = {}
+		
+		var __key: PBField
+		func get_key() -> int:
+			return __key.value
+		func clear_key() -> void:
+			data[1].state = PB_SERVICE_STATE.UNFILLED
+			__key.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT32]
+		func set_key(value : int) -> void:
+			__key.value = value
+		
+		var __value: PBField
+		func get_value() -> String:
+			return __value.value
+		func clear_value() -> void:
+			data[2].state = PB_SERVICE_STATE.UNFILLED
+			__value.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
+		func set_value(value : String) -> void:
+			__value.value = value
+		
+		func _to_string() -> String:
+			return PBPacker.message_to_string(data)
+			
+		func to_bytes() -> PackedByteArray:
+			return PBPacker.pack_message(data)
+			
+		func from_bytes(bytes : PackedByteArray, offset : int = 0, limit : int = -1) -> int:
+			var cur_limit = bytes.size()
+			if limit != -1:
+				cur_limit = limit
+			var result = PBPacker.unpack_message(data, bytes, offset, cur_limit)
+			if result == cur_limit:
+				if PBPacker.check_required(data):
+					if limit == -1:
+						return PB_ERR.NO_ERRORS
+				else:
+					return PB_ERR.REQUIRED_FIELDS
+			elif limit == -1 && result > 0:
+				return PB_ERR.PARSE_INCOMPLETE
+			return result
+		
+	func _to_string() -> String:
+		return PBPacker.message_to_string(data)
+		
+	func to_bytes() -> PackedByteArray:
+		return PBPacker.pack_message(data)
+		
+	func from_bytes(bytes : PackedByteArray, offset : int = 0, limit : int = -1) -> int:
+		var cur_limit = bytes.size()
+		if limit != -1:
+			cur_limit = limit
+		var result = PBPacker.unpack_message(data, bytes, offset, cur_limit)
+		if result == cur_limit:
+			if PBPacker.check_required(data):
+				if limit == -1:
+					return PB_ERR.NO_ERRORS
+			else:
+				return PB_ERR.REQUIRED_FIELDS
+		elif limit == -1 && result > 0:
+			return PB_ERR.PARSE_INCOMPLETE
+		return result
+	
+class LoginResponse:
+	func _init():
+		var service
+		
+		__uid = PBField.new("uid", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
+		service = PBServiceField.new()
+		service.field = __uid
+		data[__uid.tag] = service
+		
+		__pid = PBField.new("pid", PB_DATA_TYPE.INT32, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT32])
+		service = PBServiceField.new()
+		service.field = __pid
+		data[__pid.tag] = service
+		
+		__openId = PBField.new("openId", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 3, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
+		service = PBServiceField.new()
+		service.field = __openId
+		data[__openId.tag] = service
+		
+		var __params_default: Array = []
+		__params = PBField.new("params", PB_DATA_TYPE.MAP, PB_RULE.REPEATED, 4, true, __params_default)
+		service = PBServiceField.new()
+		service.field = __params
+		service.func_ref = Callable(self, "add_empty_params")
+		data[__params.tag] = service
+		
+	var data = {}
+	
+	var __uid: PBField
+	func get_uid() -> int:
+		return __uid.value
+	func clear_uid() -> void:
+		data[1].state = PB_SERVICE_STATE.UNFILLED
+		__uid.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
+	func set_uid(value : int) -> void:
+		__uid.value = value
+	
+	var __pid: PBField
+	func get_pid() -> int:
+		return __pid.value
+	func clear_pid() -> void:
+		data[2].state = PB_SERVICE_STATE.UNFILLED
+		__pid.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT32]
+	func set_pid(value : int) -> void:
+		__pid.value = value
+	
+	var __openId: PBField
+	func get_openId() -> String:
+		return __openId.value
+	func clear_openId() -> void:
+		data[3].state = PB_SERVICE_STATE.UNFILLED
+		__openId.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
+	func set_openId(value : String) -> void:
+		__openId.value = value
+	
+	var __params: PBField
+	func get_raw_params():
+		return __params.value
+	func get_params():
+		return PBPacker.construct_map(__params.value)
+	func clear_params():
+		data[4].state = PB_SERVICE_STATE.UNFILLED
+		__params.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MAP]
+	func add_empty_params() -> LoginResponse.map_type_params:
+		var element = LoginResponse.map_type_params.new()
+		__params.value.append(element)
+		return element
+	func add_params(a_key, a_value) -> void:
+		var idx = -1
+		for i in range(__params.value.size()):
+			if __params.value[i].get_key() == a_key:
+				idx = i
+				break
+		var element = LoginResponse.map_type_params.new()
+		element.set_key(a_key)
+		element.set_value(a_value)
+		if idx != -1:
+			__params.value[idx] = element
+		else:
+			__params.value.append(element)
+	
+	class map_type_params:
+		func _init():
+			var service
+			
+			__key = PBField.new("key", PB_DATA_TYPE.INT32, PB_RULE.REQUIRED, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT32])
+			__key.is_map_field = true
+			service = PBServiceField.new()
+			service.field = __key
+			data[__key.tag] = service
+			
+			__value = PBField.new("value", PB_DATA_TYPE.STRING, PB_RULE.REQUIRED, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
+			__value.is_map_field = true
+			service = PBServiceField.new()
+			service.field = __value
+			data[__value.tag] = service
+			
+		var data = {}
+		
+		var __key: PBField
+		func get_key() -> int:
+			return __key.value
+		func clear_key() -> void:
+			data[1].state = PB_SERVICE_STATE.UNFILLED
+			__key.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT32]
+		func set_key(value : int) -> void:
+			__key.value = value
+		
+		var __value: PBField
+		func get_value() -> String:
+			return __value.value
+		func clear_value() -> void:
+			data[2].state = PB_SERVICE_STATE.UNFILLED
+			__value.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
+		func set_value(value : String) -> void:
+			__value.value = value
+		
+		func _to_string() -> String:
+			return PBPacker.message_to_string(data)
+			
+		func to_bytes() -> PackedByteArray:
+			return PBPacker.pack_message(data)
+			
+		func from_bytes(bytes : PackedByteArray, offset : int = 0, limit : int = -1) -> int:
+			var cur_limit = bytes.size()
+			if limit != -1:
+				cur_limit = limit
+			var result = PBPacker.unpack_message(data, bytes, offset, cur_limit)
+			if result == cur_limit:
+				if PBPacker.check_required(data):
+					if limit == -1:
+						return PB_ERR.NO_ERRORS
+				else:
+					return PB_ERR.REQUIRED_FIELDS
+			elif limit == -1 && result > 0:
+				return PB_ERR.PARSE_INCOMPLETE
+			return result
+		
+	func _to_string() -> String:
+		return PBPacker.message_to_string(data)
+		
+	func to_bytes() -> PackedByteArray:
+		return PBPacker.pack_message(data)
+		
+	func from_bytes(bytes : PackedByteArray, offset : int = 0, limit : int = -1) -> int:
+		var cur_limit = bytes.size()
+		if limit != -1:
+			cur_limit = limit
+		var result = PBPacker.unpack_message(data, bytes, offset, cur_limit)
+		if result == cur_limit:
+			if PBPacker.check_required(data):
+				if limit == -1:
+					return PB_ERR.NO_ERRORS
+			else:
+				return PB_ERR.REQUIRED_FIELDS
+		elif limit == -1 && result > 0:
+			return PB_ERR.PARSE_INCOMPLETE
+		return result
+	
 enum HeroType {
-	Hero_null = 0,
+	HeroNull = 0,
 	JIN = 1,
 	MU = 2,
 	SHUI = 3,
@@ -683,329 +987,329 @@ class UserInfo:
 	func _init():
 		var service
 		
-		__UserID = PBField.new("UserID", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
+		__userID = PBField.new("userID", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
 		service = PBServiceField.new()
-		service.field = __UserID
-		data[__UserID.tag] = service
+		service.field = __userID
+		data[__userID.tag] = service
 		
-		__Name = PBField.new("Name", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
+		__name = PBField.new("name", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
-		service.field = __Name
-		data[__Name.tag] = service
+		service.field = __name
+		data[__name.tag] = service
 		
-		__Account = PBField.new("Account", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 3, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
+		__account = PBField.new("account", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 3, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
-		service.field = __Account
-		data[__Account.tag] = service
+		service.field = __account
+		data[__account.tag] = service
 		
-		__Password = PBField.new("Password", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 4, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
+		__password = PBField.new("password", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 4, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
-		service.field = __Password
-		data[__Password.tag] = service
+		service.field = __password
+		data[__password.tag] = service
 		
-		__FaceID = PBField.new("FaceID", PB_DATA_TYPE.INT32, PB_RULE.OPTIONAL, 5, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT32])
+		__faceID = PBField.new("faceID", PB_DATA_TYPE.INT32, PB_RULE.OPTIONAL, 5, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT32])
 		service = PBServiceField.new()
-		service.field = __FaceID
-		data[__FaceID.tag] = service
+		service.field = __faceID
+		data[__faceID.tag] = service
 		
-		__Gender = PBField.new("Gender", PB_DATA_TYPE.INT32, PB_RULE.OPTIONAL, 6, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT32])
+		__gender = PBField.new("gender", PB_DATA_TYPE.INT32, PB_RULE.OPTIONAL, 6, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT32])
 		service = PBServiceField.new()
-		service.field = __Gender
-		data[__Gender.tag] = service
+		service.field = __gender
+		data[__gender.tag] = service
 		
-		__Age = PBField.new("Age", PB_DATA_TYPE.INT32, PB_RULE.OPTIONAL, 7, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT32])
+		__age = PBField.new("age", PB_DATA_TYPE.INT32, PB_RULE.OPTIONAL, 7, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT32])
 		service = PBServiceField.new()
-		service.field = __Age
-		data[__Age.tag] = service
+		service.field = __age
+		data[__age.tag] = service
 		
-		__VIP = PBField.new("VIP", PB_DATA_TYPE.INT32, PB_RULE.OPTIONAL, 8, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT32])
+		__vIP = PBField.new("vIP", PB_DATA_TYPE.INT32, PB_RULE.OPTIONAL, 8, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT32])
 		service = PBServiceField.new()
-		service.field = __VIP
-		data[__VIP.tag] = service
+		service.field = __vIP
+		data[__vIP.tag] = service
 		
-		__Level = PBField.new("Level", PB_DATA_TYPE.INT32, PB_RULE.OPTIONAL, 9, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT32])
+		__level = PBField.new("level", PB_DATA_TYPE.INT32, PB_RULE.OPTIONAL, 9, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT32])
 		service = PBServiceField.new()
-		service.field = __Level
-		data[__Level.tag] = service
+		service.field = __level
+		data[__level.tag] = service
 		
-		__YuanBao = PBField.new("YuanBao", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 10, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
+		__yuanBao = PBField.new("yuanBao", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 10, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
 		service = PBServiceField.new()
-		service.field = __YuanBao
-		data[__YuanBao.tag] = service
+		service.field = __yuanBao
+		data[__yuanBao.tag] = service
 		
-		__Coin = PBField.new("Coin", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 11, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
+		__coin = PBField.new("coin", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 11, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
 		service = PBServiceField.new()
-		service.field = __Coin
-		data[__Coin.tag] = service
+		service.field = __coin
+		data[__coin.tag] = service
 		
-		__Money = PBField.new("Money", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 12, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
+		__money = PBField.new("money", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 12, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
 		service = PBServiceField.new()
-		service.field = __Money
-		data[__Money.tag] = service
+		service.field = __money
+		data[__money.tag] = service
 		
-		__PassPortID = PBField.new("PassPortID", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 13, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
+		__passPortID = PBField.new("passPortID", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 13, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
-		service.field = __PassPortID
-		data[__PassPortID.tag] = service
+		service.field = __passPortID
+		data[__passPortID.tag] = service
 		
-		__RealName = PBField.new("RealName", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 14, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
+		__realName = PBField.new("realName", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 14, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
-		service.field = __RealName
-		data[__RealName.tag] = service
+		service.field = __realName
+		data[__realName.tag] = service
 		
-		__PhoneNum = PBField.new("PhoneNum", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 15, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
+		__phoneNum = PBField.new("phoneNum", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 15, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
-		service.field = __PhoneNum
-		data[__PhoneNum.tag] = service
+		service.field = __phoneNum
+		data[__phoneNum.tag] = service
 		
-		__Email = PBField.new("Email", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 16, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
+		__email = PBField.new("email", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 16, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
-		service.field = __Email
-		data[__Email.tag] = service
+		service.field = __email
+		data[__email.tag] = service
 		
-		__Address = PBField.new("Address", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 17, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
+		__address = PBField.new("address", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 17, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
-		service.field = __Address
-		data[__Address.tag] = service
+		service.field = __address
+		data[__address.tag] = service
 		
-		__IDentity = PBField.new("IDentity", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 18, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
+		__iDentity = PBField.new("iDentity", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 18, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
-		service.field = __IDentity
-		data[__IDentity.tag] = service
+		service.field = __iDentity
+		data[__iDentity.tag] = service
 		
-		__AgentID = PBField.new("AgentID", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 19, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
+		__agentID = PBField.new("agentID", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 19, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
 		service = PBServiceField.new()
-		service.field = __AgentID
-		data[__AgentID.tag] = service
+		service.field = __agentID
+		data[__agentID.tag] = service
 		
-		__ReferralCode = PBField.new("ReferralCode", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 20, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
+		__referralCode = PBField.new("referralCode", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 20, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
-		service.field = __ReferralCode
-		data[__ReferralCode.tag] = service
+		service.field = __referralCode
+		data[__referralCode.tag] = service
 		
-		__ClientAddr = PBField.new("ClientAddr", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 21, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
+		__clientAddr = PBField.new("clientAddr", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 21, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
-		service.field = __ClientAddr
-		data[__ClientAddr.tag] = service
+		service.field = __clientAddr
+		data[__clientAddr.tag] = service
 		
-		__ServerAddr = PBField.new("ServerAddr", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 22, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
+		__serverAddr = PBField.new("serverAddr", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 22, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
-		service.field = __ServerAddr
-		data[__ServerAddr.tag] = service
+		service.field = __serverAddr
+		data[__serverAddr.tag] = service
 		
-		__MachineCode = PBField.new("MachineCode", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 23, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
+		__machineCode = PBField.new("machineCode", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 23, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
-		service.field = __MachineCode
-		data[__MachineCode.tag] = service
+		service.field = __machineCode
+		data[__machineCode.tag] = service
 		
 	var data = {}
 	
-	var __UserID: PBField
-	func get_UserID() -> int:
-		return __UserID.value
-	func clear_UserID() -> void:
+	var __userID: PBField
+	func get_userID() -> int:
+		return __userID.value
+	func clear_userID() -> void:
 		data[1].state = PB_SERVICE_STATE.UNFILLED
-		__UserID.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
-	func set_UserID(value : int) -> void:
-		__UserID.value = value
+		__userID.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
+	func set_userID(value : int) -> void:
+		__userID.value = value
 	
-	var __Name: PBField
-	func get_Name() -> String:
-		return __Name.value
-	func clear_Name() -> void:
+	var __name: PBField
+	func get_name() -> String:
+		return __name.value
+	func clear_name() -> void:
 		data[2].state = PB_SERVICE_STATE.UNFILLED
-		__Name.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
-	func set_Name(value : String) -> void:
-		__Name.value = value
+		__name.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
+	func set_name(value : String) -> void:
+		__name.value = value
 	
-	var __Account: PBField
-	func get_Account() -> String:
-		return __Account.value
-	func clear_Account() -> void:
+	var __account: PBField
+	func get_account() -> String:
+		return __account.value
+	func clear_account() -> void:
 		data[3].state = PB_SERVICE_STATE.UNFILLED
-		__Account.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
-	func set_Account(value : String) -> void:
-		__Account.value = value
+		__account.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
+	func set_account(value : String) -> void:
+		__account.value = value
 	
-	var __Password: PBField
-	func get_Password() -> String:
-		return __Password.value
-	func clear_Password() -> void:
+	var __password: PBField
+	func get_password() -> String:
+		return __password.value
+	func clear_password() -> void:
 		data[4].state = PB_SERVICE_STATE.UNFILLED
-		__Password.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
-	func set_Password(value : String) -> void:
-		__Password.value = value
+		__password.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
+	func set_password(value : String) -> void:
+		__password.value = value
 	
-	var __FaceID: PBField
-	func get_FaceID() -> int:
-		return __FaceID.value
-	func clear_FaceID() -> void:
+	var __faceID: PBField
+	func get_faceID() -> int:
+		return __faceID.value
+	func clear_faceID() -> void:
 		data[5].state = PB_SERVICE_STATE.UNFILLED
-		__FaceID.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT32]
-	func set_FaceID(value : int) -> void:
-		__FaceID.value = value
+		__faceID.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT32]
+	func set_faceID(value : int) -> void:
+		__faceID.value = value
 	
-	var __Gender: PBField
-	func get_Gender() -> int:
-		return __Gender.value
-	func clear_Gender() -> void:
+	var __gender: PBField
+	func get_gender() -> int:
+		return __gender.value
+	func clear_gender() -> void:
 		data[6].state = PB_SERVICE_STATE.UNFILLED
-		__Gender.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT32]
-	func set_Gender(value : int) -> void:
-		__Gender.value = value
+		__gender.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT32]
+	func set_gender(value : int) -> void:
+		__gender.value = value
 	
-	var __Age: PBField
-	func get_Age() -> int:
-		return __Age.value
-	func clear_Age() -> void:
+	var __age: PBField
+	func get_age() -> int:
+		return __age.value
+	func clear_age() -> void:
 		data[7].state = PB_SERVICE_STATE.UNFILLED
-		__Age.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT32]
-	func set_Age(value : int) -> void:
-		__Age.value = value
+		__age.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT32]
+	func set_age(value : int) -> void:
+		__age.value = value
 	
-	var __VIP: PBField
-	func get_VIP() -> int:
-		return __VIP.value
-	func clear_VIP() -> void:
+	var __vIP: PBField
+	func get_vIP() -> int:
+		return __vIP.value
+	func clear_vIP() -> void:
 		data[8].state = PB_SERVICE_STATE.UNFILLED
-		__VIP.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT32]
-	func set_VIP(value : int) -> void:
-		__VIP.value = value
+		__vIP.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT32]
+	func set_vIP(value : int) -> void:
+		__vIP.value = value
 	
-	var __Level: PBField
-	func get_Level() -> int:
-		return __Level.value
-	func clear_Level() -> void:
+	var __level: PBField
+	func get_level() -> int:
+		return __level.value
+	func clear_level() -> void:
 		data[9].state = PB_SERVICE_STATE.UNFILLED
-		__Level.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT32]
-	func set_Level(value : int) -> void:
-		__Level.value = value
+		__level.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT32]
+	func set_level(value : int) -> void:
+		__level.value = value
 	
-	var __YuanBao: PBField
-	func get_YuanBao() -> int:
-		return __YuanBao.value
-	func clear_YuanBao() -> void:
+	var __yuanBao: PBField
+	func get_yuanBao() -> int:
+		return __yuanBao.value
+	func clear_yuanBao() -> void:
 		data[10].state = PB_SERVICE_STATE.UNFILLED
-		__YuanBao.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
-	func set_YuanBao(value : int) -> void:
-		__YuanBao.value = value
+		__yuanBao.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
+	func set_yuanBao(value : int) -> void:
+		__yuanBao.value = value
 	
-	var __Coin: PBField
-	func get_Coin() -> int:
-		return __Coin.value
-	func clear_Coin() -> void:
+	var __coin: PBField
+	func get_coin() -> int:
+		return __coin.value
+	func clear_coin() -> void:
 		data[11].state = PB_SERVICE_STATE.UNFILLED
-		__Coin.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
-	func set_Coin(value : int) -> void:
-		__Coin.value = value
+		__coin.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
+	func set_coin(value : int) -> void:
+		__coin.value = value
 	
-	var __Money: PBField
-	func get_Money() -> int:
-		return __Money.value
-	func clear_Money() -> void:
+	var __money: PBField
+	func get_money() -> int:
+		return __money.value
+	func clear_money() -> void:
 		data[12].state = PB_SERVICE_STATE.UNFILLED
-		__Money.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
-	func set_Money(value : int) -> void:
-		__Money.value = value
+		__money.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
+	func set_money(value : int) -> void:
+		__money.value = value
 	
-	var __PassPortID: PBField
-	func get_PassPortID() -> String:
-		return __PassPortID.value
-	func clear_PassPortID() -> void:
+	var __passPortID: PBField
+	func get_passPortID() -> String:
+		return __passPortID.value
+	func clear_passPortID() -> void:
 		data[13].state = PB_SERVICE_STATE.UNFILLED
-		__PassPortID.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
-	func set_PassPortID(value : String) -> void:
-		__PassPortID.value = value
+		__passPortID.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
+	func set_passPortID(value : String) -> void:
+		__passPortID.value = value
 	
-	var __RealName: PBField
-	func get_RealName() -> String:
-		return __RealName.value
-	func clear_RealName() -> void:
+	var __realName: PBField
+	func get_realName() -> String:
+		return __realName.value
+	func clear_realName() -> void:
 		data[14].state = PB_SERVICE_STATE.UNFILLED
-		__RealName.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
-	func set_RealName(value : String) -> void:
-		__RealName.value = value
+		__realName.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
+	func set_realName(value : String) -> void:
+		__realName.value = value
 	
-	var __PhoneNum: PBField
-	func get_PhoneNum() -> String:
-		return __PhoneNum.value
-	func clear_PhoneNum() -> void:
+	var __phoneNum: PBField
+	func get_phoneNum() -> String:
+		return __phoneNum.value
+	func clear_phoneNum() -> void:
 		data[15].state = PB_SERVICE_STATE.UNFILLED
-		__PhoneNum.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
-	func set_PhoneNum(value : String) -> void:
-		__PhoneNum.value = value
+		__phoneNum.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
+	func set_phoneNum(value : String) -> void:
+		__phoneNum.value = value
 	
-	var __Email: PBField
-	func get_Email() -> String:
-		return __Email.value
-	func clear_Email() -> void:
+	var __email: PBField
+	func get_email() -> String:
+		return __email.value
+	func clear_email() -> void:
 		data[16].state = PB_SERVICE_STATE.UNFILLED
-		__Email.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
-	func set_Email(value : String) -> void:
-		__Email.value = value
+		__email.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
+	func set_email(value : String) -> void:
+		__email.value = value
 	
-	var __Address: PBField
-	func get_Address() -> String:
-		return __Address.value
-	func clear_Address() -> void:
+	var __address: PBField
+	func get_address() -> String:
+		return __address.value
+	func clear_address() -> void:
 		data[17].state = PB_SERVICE_STATE.UNFILLED
-		__Address.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
-	func set_Address(value : String) -> void:
-		__Address.value = value
+		__address.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
+	func set_address(value : String) -> void:
+		__address.value = value
 	
-	var __IDentity: PBField
-	func get_IDentity() -> String:
-		return __IDentity.value
-	func clear_IDentity() -> void:
+	var __iDentity: PBField
+	func get_iDentity() -> String:
+		return __iDentity.value
+	func clear_iDentity() -> void:
 		data[18].state = PB_SERVICE_STATE.UNFILLED
-		__IDentity.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
-	func set_IDentity(value : String) -> void:
-		__IDentity.value = value
+		__iDentity.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
+	func set_iDentity(value : String) -> void:
+		__iDentity.value = value
 	
-	var __AgentID: PBField
-	func get_AgentID() -> int:
-		return __AgentID.value
-	func clear_AgentID() -> void:
+	var __agentID: PBField
+	func get_agentID() -> int:
+		return __agentID.value
+	func clear_agentID() -> void:
 		data[19].state = PB_SERVICE_STATE.UNFILLED
-		__AgentID.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
-	func set_AgentID(value : int) -> void:
-		__AgentID.value = value
+		__agentID.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
+	func set_agentID(value : int) -> void:
+		__agentID.value = value
 	
-	var __ReferralCode: PBField
-	func get_ReferralCode() -> String:
-		return __ReferralCode.value
-	func clear_ReferralCode() -> void:
+	var __referralCode: PBField
+	func get_referralCode() -> String:
+		return __referralCode.value
+	func clear_referralCode() -> void:
 		data[20].state = PB_SERVICE_STATE.UNFILLED
-		__ReferralCode.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
-	func set_ReferralCode(value : String) -> void:
-		__ReferralCode.value = value
+		__referralCode.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
+	func set_referralCode(value : String) -> void:
+		__referralCode.value = value
 	
-	var __ClientAddr: PBField
-	func get_ClientAddr() -> String:
-		return __ClientAddr.value
-	func clear_ClientAddr() -> void:
+	var __clientAddr: PBField
+	func get_clientAddr() -> String:
+		return __clientAddr.value
+	func clear_clientAddr() -> void:
 		data[21].state = PB_SERVICE_STATE.UNFILLED
-		__ClientAddr.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
-	func set_ClientAddr(value : String) -> void:
-		__ClientAddr.value = value
+		__clientAddr.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
+	func set_clientAddr(value : String) -> void:
+		__clientAddr.value = value
 	
-	var __ServerAddr: PBField
-	func get_ServerAddr() -> String:
-		return __ServerAddr.value
-	func clear_ServerAddr() -> void:
+	var __serverAddr: PBField
+	func get_serverAddr() -> String:
+		return __serverAddr.value
+	func clear_serverAddr() -> void:
 		data[22].state = PB_SERVICE_STATE.UNFILLED
-		__ServerAddr.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
-	func set_ServerAddr(value : String) -> void:
-		__ServerAddr.value = value
+		__serverAddr.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
+	func set_serverAddr(value : String) -> void:
+		__serverAddr.value = value
 	
-	var __MachineCode: PBField
-	func get_MachineCode() -> String:
-		return __MachineCode.value
-	func clear_MachineCode() -> void:
+	var __machineCode: PBField
+	func get_machineCode() -> String:
+		return __machineCode.value
+	func clear_machineCode() -> void:
 		data[23].state = PB_SERVICE_STATE.UNFILLED
-		__MachineCode.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
-	func set_MachineCode(value : String) -> void:
-		__MachineCode.value = value
+		__machineCode.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
+	func set_machineCode(value : String) -> void:
+		__machineCode.value = value
 	
 	func _to_string() -> String:
 		return PBPacker.message_to_string(data)
@@ -1032,218 +1336,218 @@ class HeroInfo:
 	func _init():
 		var service
 		
-		__ID = PBField.new("ID", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
+		__iD = PBField.new("iD", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
 		service = PBServiceField.new()
-		service.field = __ID
-		data[__ID.tag] = service
+		service.field = __iD
+		data[__iD.tag] = service
 		
-		__HeadId = PBField.new("HeadId", PB_DATA_TYPE.INT32, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT32])
+		__headId = PBField.new("headId", PB_DATA_TYPE.INT32, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT32])
 		service = PBServiceField.new()
-		service.field = __HeadId
-		data[__HeadId.tag] = service
+		service.field = __headId
+		data[__headId.tag] = service
 		
-		__Name = PBField.new("Name", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 3, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
+		__name = PBField.new("name", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 3, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
-		service.field = __Name
-		data[__Name.tag] = service
+		service.field = __name
+		data[__name.tag] = service
 		
-		__Sex = PBField.new("Sex", PB_DATA_TYPE.INT32, PB_RULE.OPTIONAL, 4, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT32])
+		__sex = PBField.new("sex", PB_DATA_TYPE.INT32, PB_RULE.OPTIONAL, 4, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT32])
 		service = PBServiceField.new()
-		service.field = __Sex
-		data[__Sex.tag] = service
+		service.field = __sex
+		data[__sex.tag] = service
 		
-		__Rarity = PBField.new("Rarity", PB_DATA_TYPE.INT32, PB_RULE.OPTIONAL, 5, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT32])
+		__rarity = PBField.new("rarity", PB_DATA_TYPE.INT32, PB_RULE.OPTIONAL, 5, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT32])
 		service = PBServiceField.new()
-		service.field = __Rarity
-		data[__Rarity.tag] = service
+		service.field = __rarity
+		data[__rarity.tag] = service
 		
-		__Faction = PBField.new("Faction", PB_DATA_TYPE.ENUM, PB_RULE.OPTIONAL, 6, true, DEFAULT_VALUES_3[PB_DATA_TYPE.ENUM])
+		__faction = PBField.new("faction", PB_DATA_TYPE.ENUM, PB_RULE.OPTIONAL, 6, true, DEFAULT_VALUES_3[PB_DATA_TYPE.ENUM])
 		service = PBServiceField.new()
-		service.field = __Faction
-		data[__Faction.tag] = service
+		service.field = __faction
+		data[__faction.tag] = service
 		
-		__HealthPoint = PBField.new("HealthPoint", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 7, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
+		__healthPoint = PBField.new("healthPoint", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 7, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
 		service = PBServiceField.new()
-		service.field = __HealthPoint
-		data[__HealthPoint.tag] = service
+		service.field = __healthPoint
+		data[__healthPoint.tag] = service
 		
-		__HealthPointFull = PBField.new("HealthPointFull", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 8, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
+		__healthPointFull = PBField.new("healthPointFull", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 8, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
 		service = PBServiceField.new()
-		service.field = __HealthPointFull
-		data[__HealthPointFull.tag] = service
+		service.field = __healthPointFull
+		data[__healthPointFull.tag] = service
 		
-		__Strength = PBField.new("Strength", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 9, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
+		__strength = PBField.new("strength", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 9, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
 		service = PBServiceField.new()
-		service.field = __Strength
-		data[__Strength.tag] = service
+		service.field = __strength
+		data[__strength.tag] = service
 		
-		__Agility = PBField.new("Agility", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 10, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
+		__agility = PBField.new("agility", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 10, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
 		service = PBServiceField.new()
-		service.field = __Agility
-		data[__Agility.tag] = service
+		service.field = __agility
+		data[__agility.tag] = service
 		
-		__Intelligence = PBField.new("Intelligence", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 11, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
+		__intelligence = PBField.new("intelligence", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 11, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
 		service = PBServiceField.new()
-		service.field = __Intelligence
-		data[__Intelligence.tag] = service
+		service.field = __intelligence
+		data[__intelligence.tag] = service
 		
-		__AttackPoint = PBField.new("AttackPoint", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 12, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
+		__attackPoint = PBField.new("attackPoint", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 12, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
 		service = PBServiceField.new()
-		service.field = __AttackPoint
-		data[__AttackPoint.tag] = service
+		service.field = __attackPoint
+		data[__attackPoint.tag] = service
 		
-		__ArmorPoint = PBField.new("ArmorPoint", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 13, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
+		__armorPoint = PBField.new("armorPoint", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 13, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
 		service = PBServiceField.new()
-		service.field = __ArmorPoint
-		data[__ArmorPoint.tag] = service
+		service.field = __armorPoint
+		data[__armorPoint.tag] = service
 		
-		__SpellPower = PBField.new("SpellPower", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 14, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
+		__spellPower = PBField.new("spellPower", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 14, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
 		service = PBServiceField.new()
-		service.field = __SpellPower
-		data[__SpellPower.tag] = service
+		service.field = __spellPower
+		data[__spellPower.tag] = service
 		
-		var __Skills_default: Array[int] = []
-		__Skills = PBField.new("Skills", PB_DATA_TYPE.INT64, PB_RULE.REPEATED, 15, true, __Skills_default)
+		var __skills_default: Array[int] = []
+		__skills = PBField.new("skills", PB_DATA_TYPE.INT64, PB_RULE.REPEATED, 15, true, __skills_default)
 		service = PBServiceField.new()
-		service.field = __Skills
-		data[__Skills.tag] = service
+		service.field = __skills
+		data[__skills.tag] = service
 		
 	var data = {}
 	
-	var __ID: PBField
-	func get_ID() -> int:
-		return __ID.value
-	func clear_ID() -> void:
+	var __iD: PBField
+	func get_iD() -> int:
+		return __iD.value
+	func clear_iD() -> void:
 		data[1].state = PB_SERVICE_STATE.UNFILLED
-		__ID.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
-	func set_ID(value : int) -> void:
-		__ID.value = value
+		__iD.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
+	func set_iD(value : int) -> void:
+		__iD.value = value
 	
-	var __HeadId: PBField
-	func get_HeadId() -> int:
-		return __HeadId.value
-	func clear_HeadId() -> void:
+	var __headId: PBField
+	func get_headId() -> int:
+		return __headId.value
+	func clear_headId() -> void:
 		data[2].state = PB_SERVICE_STATE.UNFILLED
-		__HeadId.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT32]
-	func set_HeadId(value : int) -> void:
-		__HeadId.value = value
+		__headId.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT32]
+	func set_headId(value : int) -> void:
+		__headId.value = value
 	
-	var __Name: PBField
-	func get_Name() -> String:
-		return __Name.value
-	func clear_Name() -> void:
+	var __name: PBField
+	func get_name() -> String:
+		return __name.value
+	func clear_name() -> void:
 		data[3].state = PB_SERVICE_STATE.UNFILLED
-		__Name.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
-	func set_Name(value : String) -> void:
-		__Name.value = value
+		__name.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
+	func set_name(value : String) -> void:
+		__name.value = value
 	
-	var __Sex: PBField
-	func get_Sex() -> int:
-		return __Sex.value
-	func clear_Sex() -> void:
+	var __sex: PBField
+	func get_sex() -> int:
+		return __sex.value
+	func clear_sex() -> void:
 		data[4].state = PB_SERVICE_STATE.UNFILLED
-		__Sex.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT32]
-	func set_Sex(value : int) -> void:
-		__Sex.value = value
+		__sex.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT32]
+	func set_sex(value : int) -> void:
+		__sex.value = value
 	
-	var __Rarity: PBField
-	func get_Rarity() -> int:
-		return __Rarity.value
-	func clear_Rarity() -> void:
+	var __rarity: PBField
+	func get_rarity() -> int:
+		return __rarity.value
+	func clear_rarity() -> void:
 		data[5].state = PB_SERVICE_STATE.UNFILLED
-		__Rarity.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT32]
-	func set_Rarity(value : int) -> void:
-		__Rarity.value = value
+		__rarity.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT32]
+	func set_rarity(value : int) -> void:
+		__rarity.value = value
 	
-	var __Faction: PBField
-	func get_Faction():
-		return __Faction.value
-	func clear_Faction() -> void:
+	var __faction: PBField
+	func get_faction():
+		return __faction.value
+	func clear_faction() -> void:
 		data[6].state = PB_SERVICE_STATE.UNFILLED
-		__Faction.value = DEFAULT_VALUES_3[PB_DATA_TYPE.ENUM]
-	func set_Faction(value) -> void:
-		__Faction.value = value
+		__faction.value = DEFAULT_VALUES_3[PB_DATA_TYPE.ENUM]
+	func set_faction(value) -> void:
+		__faction.value = value
 	
-	var __HealthPoint: PBField
-	func get_HealthPoint() -> int:
-		return __HealthPoint.value
-	func clear_HealthPoint() -> void:
+	var __healthPoint: PBField
+	func get_healthPoint() -> int:
+		return __healthPoint.value
+	func clear_healthPoint() -> void:
 		data[7].state = PB_SERVICE_STATE.UNFILLED
-		__HealthPoint.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
-	func set_HealthPoint(value : int) -> void:
-		__HealthPoint.value = value
+		__healthPoint.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
+	func set_healthPoint(value : int) -> void:
+		__healthPoint.value = value
 	
-	var __HealthPointFull: PBField
-	func get_HealthPointFull() -> int:
-		return __HealthPointFull.value
-	func clear_HealthPointFull() -> void:
+	var __healthPointFull: PBField
+	func get_healthPointFull() -> int:
+		return __healthPointFull.value
+	func clear_healthPointFull() -> void:
 		data[8].state = PB_SERVICE_STATE.UNFILLED
-		__HealthPointFull.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
-	func set_HealthPointFull(value : int) -> void:
-		__HealthPointFull.value = value
+		__healthPointFull.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
+	func set_healthPointFull(value : int) -> void:
+		__healthPointFull.value = value
 	
-	var __Strength: PBField
-	func get_Strength() -> int:
-		return __Strength.value
-	func clear_Strength() -> void:
+	var __strength: PBField
+	func get_strength() -> int:
+		return __strength.value
+	func clear_strength() -> void:
 		data[9].state = PB_SERVICE_STATE.UNFILLED
-		__Strength.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
-	func set_Strength(value : int) -> void:
-		__Strength.value = value
+		__strength.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
+	func set_strength(value : int) -> void:
+		__strength.value = value
 	
-	var __Agility: PBField
-	func get_Agility() -> int:
-		return __Agility.value
-	func clear_Agility() -> void:
+	var __agility: PBField
+	func get_agility() -> int:
+		return __agility.value
+	func clear_agility() -> void:
 		data[10].state = PB_SERVICE_STATE.UNFILLED
-		__Agility.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
-	func set_Agility(value : int) -> void:
-		__Agility.value = value
+		__agility.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
+	func set_agility(value : int) -> void:
+		__agility.value = value
 	
-	var __Intelligence: PBField
-	func get_Intelligence() -> int:
-		return __Intelligence.value
-	func clear_Intelligence() -> void:
+	var __intelligence: PBField
+	func get_intelligence() -> int:
+		return __intelligence.value
+	func clear_intelligence() -> void:
 		data[11].state = PB_SERVICE_STATE.UNFILLED
-		__Intelligence.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
-	func set_Intelligence(value : int) -> void:
-		__Intelligence.value = value
+		__intelligence.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
+	func set_intelligence(value : int) -> void:
+		__intelligence.value = value
 	
-	var __AttackPoint: PBField
-	func get_AttackPoint() -> int:
-		return __AttackPoint.value
-	func clear_AttackPoint() -> void:
+	var __attackPoint: PBField
+	func get_attackPoint() -> int:
+		return __attackPoint.value
+	func clear_attackPoint() -> void:
 		data[12].state = PB_SERVICE_STATE.UNFILLED
-		__AttackPoint.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
-	func set_AttackPoint(value : int) -> void:
-		__AttackPoint.value = value
+		__attackPoint.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
+	func set_attackPoint(value : int) -> void:
+		__attackPoint.value = value
 	
-	var __ArmorPoint: PBField
-	func get_ArmorPoint() -> int:
-		return __ArmorPoint.value
-	func clear_ArmorPoint() -> void:
+	var __armorPoint: PBField
+	func get_armorPoint() -> int:
+		return __armorPoint.value
+	func clear_armorPoint() -> void:
 		data[13].state = PB_SERVICE_STATE.UNFILLED
-		__ArmorPoint.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
-	func set_ArmorPoint(value : int) -> void:
-		__ArmorPoint.value = value
+		__armorPoint.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
+	func set_armorPoint(value : int) -> void:
+		__armorPoint.value = value
 	
-	var __SpellPower: PBField
-	func get_SpellPower() -> int:
-		return __SpellPower.value
-	func clear_SpellPower() -> void:
+	var __spellPower: PBField
+	func get_spellPower() -> int:
+		return __spellPower.value
+	func clear_spellPower() -> void:
 		data[14].state = PB_SERVICE_STATE.UNFILLED
-		__SpellPower.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
-	func set_SpellPower(value : int) -> void:
-		__SpellPower.value = value
+		__spellPower.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
+	func set_spellPower(value : int) -> void:
+		__spellPower.value = value
 	
-	var __Skills: PBField
-	func get_Skills() -> Array[int]:
-		return __Skills.value
-	func clear_Skills() -> void:
+	var __skills: PBField
+	func get_skills() -> Array[int]:
+		return __skills.value
+	func clear_skills() -> void:
 		data[15].state = PB_SERVICE_STATE.UNFILLED
-		__Skills.value = []
-	func add_Skills(value : int) -> void:
-		__Skills.value.append(value)
+		__skills.value = []
+	func add_skills(value : int) -> void:
+		__skills.value.append(value)
 	
 	func _to_string() -> String:
 		return PBPacker.message_to_string(data)
@@ -1270,105 +1574,105 @@ class WeaponInfo:
 	func _init():
 		var service
 		
-		__ID = PBField.new("ID", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
+		__iD = PBField.new("iD", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
 		service = PBServiceField.new()
-		service.field = __ID
-		data[__ID.tag] = service
+		service.field = __iD
+		data[__iD.tag] = service
 		
-		__Name = PBField.new("Name", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
+		__name = PBField.new("name", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
-		service.field = __Name
-		data[__Name.tag] = service
+		service.field = __name
+		data[__name.tag] = service
 		
-		__Type = PBField.new("Type", PB_DATA_TYPE.INT32, PB_RULE.OPTIONAL, 3, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT32])
+		__type = PBField.new("type", PB_DATA_TYPE.INT32, PB_RULE.OPTIONAL, 3, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT32])
 		service = PBServiceField.new()
-		service.field = __Type
-		data[__Type.tag] = service
+		service.field = __type
+		data[__type.tag] = service
 		
-		__Level = PBField.new("Level", PB_DATA_TYPE.INT32, PB_RULE.OPTIONAL, 4, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT32])
+		__level = PBField.new("level", PB_DATA_TYPE.INT32, PB_RULE.OPTIONAL, 4, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT32])
 		service = PBServiceField.new()
-		service.field = __Level
-		data[__Level.tag] = service
+		service.field = __level
+		data[__level.tag] = service
 		
-		__Damage = PBField.new("Damage", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 5, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
+		__damage = PBField.new("damage", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 5, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
 		service = PBServiceField.new()
-		service.field = __Damage
-		data[__Damage.tag] = service
+		service.field = __damage
+		data[__damage.tag] = service
 		
-		__Prob = PBField.new("Prob", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 6, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
+		__prob = PBField.new("prob", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 6, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
 		service = PBServiceField.new()
-		service.field = __Prob
-		data[__Prob.tag] = service
+		service.field = __prob
+		data[__prob.tag] = service
 		
-		__Count = PBField.new("Count", PB_DATA_TYPE.INT32, PB_RULE.OPTIONAL, 7, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT32])
+		__count = PBField.new("count", PB_DATA_TYPE.INT32, PB_RULE.OPTIONAL, 7, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT32])
 		service = PBServiceField.new()
-		service.field = __Count
-		data[__Count.tag] = service
+		service.field = __count
+		data[__count.tag] = service
 		
 	var data = {}
 	
-	var __ID: PBField
-	func get_ID() -> int:
-		return __ID.value
-	func clear_ID() -> void:
+	var __iD: PBField
+	func get_iD() -> int:
+		return __iD.value
+	func clear_iD() -> void:
 		data[1].state = PB_SERVICE_STATE.UNFILLED
-		__ID.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
-	func set_ID(value : int) -> void:
-		__ID.value = value
+		__iD.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
+	func set_iD(value : int) -> void:
+		__iD.value = value
 	
-	var __Name: PBField
-	func get_Name() -> String:
-		return __Name.value
-	func clear_Name() -> void:
+	var __name: PBField
+	func get_name() -> String:
+		return __name.value
+	func clear_name() -> void:
 		data[2].state = PB_SERVICE_STATE.UNFILLED
-		__Name.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
-	func set_Name(value : String) -> void:
-		__Name.value = value
+		__name.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
+	func set_name(value : String) -> void:
+		__name.value = value
 	
-	var __Type: PBField
-	func get_Type() -> int:
-		return __Type.value
-	func clear_Type() -> void:
+	var __type: PBField
+	func get_type() -> int:
+		return __type.value
+	func clear_type() -> void:
 		data[3].state = PB_SERVICE_STATE.UNFILLED
-		__Type.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT32]
-	func set_Type(value : int) -> void:
-		__Type.value = value
+		__type.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT32]
+	func set_type(value : int) -> void:
+		__type.value = value
 	
-	var __Level: PBField
-	func get_Level() -> int:
-		return __Level.value
-	func clear_Level() -> void:
+	var __level: PBField
+	func get_level() -> int:
+		return __level.value
+	func clear_level() -> void:
 		data[4].state = PB_SERVICE_STATE.UNFILLED
-		__Level.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT32]
-	func set_Level(value : int) -> void:
-		__Level.value = value
+		__level.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT32]
+	func set_level(value : int) -> void:
+		__level.value = value
 	
-	var __Damage: PBField
-	func get_Damage() -> int:
-		return __Damage.value
-	func clear_Damage() -> void:
+	var __damage: PBField
+	func get_damage() -> int:
+		return __damage.value
+	func clear_damage() -> void:
 		data[5].state = PB_SERVICE_STATE.UNFILLED
-		__Damage.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
-	func set_Damage(value : int) -> void:
-		__Damage.value = value
+		__damage.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
+	func set_damage(value : int) -> void:
+		__damage.value = value
 	
-	var __Prob: PBField
-	func get_Prob() -> int:
-		return __Prob.value
-	func clear_Prob() -> void:
+	var __prob: PBField
+	func get_prob() -> int:
+		return __prob.value
+	func clear_prob() -> void:
 		data[6].state = PB_SERVICE_STATE.UNFILLED
-		__Prob.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
-	func set_Prob(value : int) -> void:
-		__Prob.value = value
+		__prob.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
+	func set_prob(value : int) -> void:
+		__prob.value = value
 	
-	var __Count: PBField
-	func get_Count() -> int:
-		return __Count.value
-	func clear_Count() -> void:
+	var __count: PBField
+	func get_count() -> int:
+		return __count.value
+	func clear_count() -> void:
 		data[7].state = PB_SERVICE_STATE.UNFILLED
-		__Count.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT32]
-	func set_Count(value : int) -> void:
-		__Count.value = value
+		__count.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT32]
+	func set_count(value : int) -> void:
+		__count.value = value
 	
 	func _to_string() -> String:
 		return PBPacker.message_to_string(data)
@@ -1395,119 +1699,119 @@ class GoodsInfo:
 	func _init():
 		var service
 		
-		__ID = PBField.new("ID", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
+		__iD = PBField.new("iD", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
 		service = PBServiceField.new()
-		service.field = __ID
-		data[__ID.tag] = service
+		service.field = __iD
+		data[__iD.tag] = service
 		
-		__Name = PBField.new("Name", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
+		__name = PBField.new("name", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
-		service.field = __Name
-		data[__Name.tag] = service
+		service.field = __name
+		data[__name.tag] = service
 		
-		__Kind = PBField.new("Kind", PB_DATA_TYPE.INT32, PB_RULE.OPTIONAL, 3, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT32])
+		__kind = PBField.new("kind", PB_DATA_TYPE.INT32, PB_RULE.OPTIONAL, 3, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT32])
 		service = PBServiceField.new()
-		service.field = __Kind
-		data[__Kind.tag] = service
+		service.field = __kind
+		data[__kind.tag] = service
 		
-		__Level = PBField.new("Level", PB_DATA_TYPE.INT32, PB_RULE.OPTIONAL, 4, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT32])
+		__level = PBField.new("level", PB_DATA_TYPE.INT32, PB_RULE.OPTIONAL, 4, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT32])
 		service = PBServiceField.new()
-		service.field = __Level
-		data[__Level.tag] = service
+		service.field = __level
+		data[__level.tag] = service
 		
-		__Price = PBField.new("Price", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 5, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
+		__price = PBField.new("price", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 5, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
 		service = PBServiceField.new()
-		service.field = __Price
-		data[__Price.tag] = service
+		service.field = __price
+		data[__price.tag] = service
 		
-		__Store = PBField.new("Store", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 6, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
+		__store = PBField.new("store", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 6, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
 		service = PBServiceField.new()
-		service.field = __Store
-		data[__Store.tag] = service
+		service.field = __store
+		data[__store.tag] = service
 		
-		__Sold = PBField.new("Sold", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 7, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
+		__sold = PBField.new("sold", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 7, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
 		service = PBServiceField.new()
-		service.field = __Sold
-		data[__Sold.tag] = service
+		service.field = __sold
+		data[__sold.tag] = service
 		
-		__Amount = PBField.new("Amount", PB_DATA_TYPE.INT32, PB_RULE.OPTIONAL, 8, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT32])
+		__amount = PBField.new("amount", PB_DATA_TYPE.INT32, PB_RULE.OPTIONAL, 8, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT32])
 		service = PBServiceField.new()
-		service.field = __Amount
-		data[__Amount.tag] = service
+		service.field = __amount
+		data[__amount.tag] = service
 		
 	var data = {}
 	
-	var __ID: PBField
-	func get_ID() -> int:
-		return __ID.value
-	func clear_ID() -> void:
+	var __iD: PBField
+	func get_iD() -> int:
+		return __iD.value
+	func clear_iD() -> void:
 		data[1].state = PB_SERVICE_STATE.UNFILLED
-		__ID.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
-	func set_ID(value : int) -> void:
-		__ID.value = value
+		__iD.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
+	func set_iD(value : int) -> void:
+		__iD.value = value
 	
-	var __Name: PBField
-	func get_Name() -> String:
-		return __Name.value
-	func clear_Name() -> void:
+	var __name: PBField
+	func get_name() -> String:
+		return __name.value
+	func clear_name() -> void:
 		data[2].state = PB_SERVICE_STATE.UNFILLED
-		__Name.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
-	func set_Name(value : String) -> void:
-		__Name.value = value
+		__name.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
+	func set_name(value : String) -> void:
+		__name.value = value
 	
-	var __Kind: PBField
-	func get_Kind() -> int:
-		return __Kind.value
-	func clear_Kind() -> void:
+	var __kind: PBField
+	func get_kind() -> int:
+		return __kind.value
+	func clear_kind() -> void:
 		data[3].state = PB_SERVICE_STATE.UNFILLED
-		__Kind.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT32]
-	func set_Kind(value : int) -> void:
-		__Kind.value = value
+		__kind.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT32]
+	func set_kind(value : int) -> void:
+		__kind.value = value
 	
-	var __Level: PBField
-	func get_Level() -> int:
-		return __Level.value
-	func clear_Level() -> void:
+	var __level: PBField
+	func get_level() -> int:
+		return __level.value
+	func clear_level() -> void:
 		data[4].state = PB_SERVICE_STATE.UNFILLED
-		__Level.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT32]
-	func set_Level(value : int) -> void:
-		__Level.value = value
+		__level.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT32]
+	func set_level(value : int) -> void:
+		__level.value = value
 	
-	var __Price: PBField
-	func get_Price() -> int:
-		return __Price.value
-	func clear_Price() -> void:
+	var __price: PBField
+	func get_price() -> int:
+		return __price.value
+	func clear_price() -> void:
 		data[5].state = PB_SERVICE_STATE.UNFILLED
-		__Price.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
-	func set_Price(value : int) -> void:
-		__Price.value = value
+		__price.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
+	func set_price(value : int) -> void:
+		__price.value = value
 	
-	var __Store: PBField
-	func get_Store() -> int:
-		return __Store.value
-	func clear_Store() -> void:
+	var __store: PBField
+	func get_store() -> int:
+		return __store.value
+	func clear_store() -> void:
 		data[6].state = PB_SERVICE_STATE.UNFILLED
-		__Store.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
-	func set_Store(value : int) -> void:
-		__Store.value = value
+		__store.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
+	func set_store(value : int) -> void:
+		__store.value = value
 	
-	var __Sold: PBField
-	func get_Sold() -> int:
-		return __Sold.value
-	func clear_Sold() -> void:
+	var __sold: PBField
+	func get_sold() -> int:
+		return __sold.value
+	func clear_sold() -> void:
 		data[7].state = PB_SERVICE_STATE.UNFILLED
-		__Sold.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
-	func set_Sold(value : int) -> void:
-		__Sold.value = value
+		__sold.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
+	func set_sold(value : int) -> void:
+		__sold.value = value
 	
-	var __Amount: PBField
-	func get_Amount() -> int:
-		return __Amount.value
-	func clear_Amount() -> void:
+	var __amount: PBField
+	func get_amount() -> int:
+		return __amount.value
+	func clear_amount() -> void:
 		data[8].state = PB_SERVICE_STATE.UNFILLED
-		__Amount.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT32]
-	func set_Amount(value : int) -> void:
-		__Amount.value = value
+		__amount.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT32]
+	func set_amount(value : int) -> void:
+		__amount.value = value
 	
 	func _to_string() -> String:
 		return PBPacker.message_to_string(data)
@@ -1534,24 +1838,24 @@ class GoodsList:
 	func _init():
 		var service
 		
-		var __AllGoods_default: Array[GoodsInfo] = []
-		__AllGoods = PBField.new("AllGoods", PB_DATA_TYPE.MESSAGE, PB_RULE.REPEATED, 1, true, __AllGoods_default)
+		var __allGoods_default: Array[GoodsInfo] = []
+		__allGoods = PBField.new("allGoods", PB_DATA_TYPE.MESSAGE, PB_RULE.REPEATED, 1, true, __allGoods_default)
 		service = PBServiceField.new()
-		service.field = __AllGoods
-		service.func_ref = Callable(self, "add_AllGoods")
-		data[__AllGoods.tag] = service
+		service.field = __allGoods
+		service.func_ref = Callable(self, "add_allGoods")
+		data[__allGoods.tag] = service
 		
 	var data = {}
 	
-	var __AllGoods: PBField
-	func get_AllGoods() -> Array[GoodsInfo]:
-		return __AllGoods.value
-	func clear_AllGoods() -> void:
+	var __allGoods: PBField
+	func get_allGoods() -> Array[GoodsInfo]:
+		return __allGoods.value
+	func clear_allGoods() -> void:
 		data[1].state = PB_SERVICE_STATE.UNFILLED
-		__AllGoods.value = []
-	func add_AllGoods() -> GoodsInfo:
+		__allGoods.value = []
+	func add_allGoods() -> GoodsInfo:
 		var element = GoodsInfo.new()
-		__AllGoods.value.append(element)
+		__allGoods.value.append(element)
 		return element
 	
 	func _to_string() -> String:
@@ -1579,103 +1883,103 @@ class KnapsackInfo:
 	func _init():
 		var service
 		
-		__ID = PBField.new("ID", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
+		__iD = PBField.new("iD", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
 		service = PBServiceField.new()
-		service.field = __ID
-		data[__ID.tag] = service
+		service.field = __iD
+		data[__iD.tag] = service
 		
-		__Name = PBField.new("Name", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
+		__name = PBField.new("name", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
-		service.field = __Name
-		data[__Name.tag] = service
+		service.field = __name
+		data[__name.tag] = service
 		
-		var __MyWeaponry_default: Array[WeaponInfo] = []
-		__MyWeaponry = PBField.new("MyWeaponry", PB_DATA_TYPE.MESSAGE, PB_RULE.REPEATED, 3, true, __MyWeaponry_default)
+		var __myWeaponry_default: Array[WeaponInfo] = []
+		__myWeaponry = PBField.new("myWeaponry", PB_DATA_TYPE.MESSAGE, PB_RULE.REPEATED, 3, true, __myWeaponry_default)
 		service = PBServiceField.new()
-		service.field = __MyWeaponry
-		service.func_ref = Callable(self, "add_MyWeaponry")
-		data[__MyWeaponry.tag] = service
+		service.field = __myWeaponry
+		service.func_ref = Callable(self, "add_myWeaponry")
+		data[__myWeaponry.tag] = service
 		
-		var __MyGoods_default: Array[GoodsInfo] = []
-		__MyGoods = PBField.new("MyGoods", PB_DATA_TYPE.MESSAGE, PB_RULE.REPEATED, 4, true, __MyGoods_default)
+		var __myGoods_default: Array[GoodsInfo] = []
+		__myGoods = PBField.new("myGoods", PB_DATA_TYPE.MESSAGE, PB_RULE.REPEATED, 4, true, __myGoods_default)
 		service = PBServiceField.new()
-		service.field = __MyGoods
-		service.func_ref = Callable(self, "add_MyGoods")
-		data[__MyGoods.tag] = service
+		service.field = __myGoods
+		service.func_ref = Callable(self, "add_myGoods")
+		data[__myGoods.tag] = service
 		
-		var __MyHeroList_default: Array[HeroInfo] = []
-		__MyHeroList = PBField.new("MyHeroList", PB_DATA_TYPE.MESSAGE, PB_RULE.REPEATED, 5, true, __MyHeroList_default)
+		var __myHeroList_default: Array[HeroInfo] = []
+		__myHeroList = PBField.new("myHeroList", PB_DATA_TYPE.MESSAGE, PB_RULE.REPEATED, 5, true, __myHeroList_default)
 		service = PBServiceField.new()
-		service.field = __MyHeroList
-		service.func_ref = Callable(self, "add_MyHeroList")
-		data[__MyHeroList.tag] = service
+		service.field = __myHeroList
+		service.func_ref = Callable(self, "add_myHeroList")
+		data[__myHeroList.tag] = service
 		
-		__Number = PBField.new("Number", PB_DATA_TYPE.INT32, PB_RULE.OPTIONAL, 6, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT32])
+		__number = PBField.new("number", PB_DATA_TYPE.INT32, PB_RULE.OPTIONAL, 6, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT32])
 		service = PBServiceField.new()
-		service.field = __Number
-		data[__Number.tag] = service
+		service.field = __number
+		data[__number.tag] = service
 		
 	var data = {}
 	
-	var __ID: PBField
-	func get_ID() -> int:
-		return __ID.value
-	func clear_ID() -> void:
+	var __iD: PBField
+	func get_iD() -> int:
+		return __iD.value
+	func clear_iD() -> void:
 		data[1].state = PB_SERVICE_STATE.UNFILLED
-		__ID.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
-	func set_ID(value : int) -> void:
-		__ID.value = value
+		__iD.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
+	func set_iD(value : int) -> void:
+		__iD.value = value
 	
-	var __Name: PBField
-	func get_Name() -> String:
-		return __Name.value
-	func clear_Name() -> void:
+	var __name: PBField
+	func get_name() -> String:
+		return __name.value
+	func clear_name() -> void:
 		data[2].state = PB_SERVICE_STATE.UNFILLED
-		__Name.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
-	func set_Name(value : String) -> void:
-		__Name.value = value
+		__name.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
+	func set_name(value : String) -> void:
+		__name.value = value
 	
-	var __MyWeaponry: PBField
-	func get_MyWeaponry() -> Array[WeaponInfo]:
-		return __MyWeaponry.value
-	func clear_MyWeaponry() -> void:
+	var __myWeaponry: PBField
+	func get_myWeaponry() -> Array[WeaponInfo]:
+		return __myWeaponry.value
+	func clear_myWeaponry() -> void:
 		data[3].state = PB_SERVICE_STATE.UNFILLED
-		__MyWeaponry.value = []
-	func add_MyWeaponry() -> WeaponInfo:
+		__myWeaponry.value = []
+	func add_myWeaponry() -> WeaponInfo:
 		var element = WeaponInfo.new()
-		__MyWeaponry.value.append(element)
+		__myWeaponry.value.append(element)
 		return element
 	
-	var __MyGoods: PBField
-	func get_MyGoods() -> Array[GoodsInfo]:
-		return __MyGoods.value
-	func clear_MyGoods() -> void:
+	var __myGoods: PBField
+	func get_myGoods() -> Array[GoodsInfo]:
+		return __myGoods.value
+	func clear_myGoods() -> void:
 		data[4].state = PB_SERVICE_STATE.UNFILLED
-		__MyGoods.value = []
-	func add_MyGoods() -> GoodsInfo:
+		__myGoods.value = []
+	func add_myGoods() -> GoodsInfo:
 		var element = GoodsInfo.new()
-		__MyGoods.value.append(element)
+		__myGoods.value.append(element)
 		return element
 	
-	var __MyHeroList: PBField
-	func get_MyHeroList() -> Array[HeroInfo]:
-		return __MyHeroList.value
-	func clear_MyHeroList() -> void:
+	var __myHeroList: PBField
+	func get_myHeroList() -> Array[HeroInfo]:
+		return __myHeroList.value
+	func clear_myHeroList() -> void:
 		data[5].state = PB_SERVICE_STATE.UNFILLED
-		__MyHeroList.value = []
-	func add_MyHeroList() -> HeroInfo:
+		__myHeroList.value = []
+	func add_myHeroList() -> HeroInfo:
 		var element = HeroInfo.new()
-		__MyHeroList.value.append(element)
+		__myHeroList.value.append(element)
 		return element
 	
-	var __Number: PBField
-	func get_Number() -> int:
-		return __Number.value
-	func clear_Number() -> void:
+	var __number: PBField
+	func get_number() -> int:
+		return __number.value
+	func clear_number() -> void:
 		data[6].state = PB_SERVICE_STATE.UNFILLED
-		__Number.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT32]
-	func set_Number(value : int) -> void:
-		__Number.value = value
+		__number.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT32]
+	func set_number(value : int) -> void:
+		__number.value = value
 	
 	func _to_string() -> String:
 		return PBPacker.message_to_string(data)
@@ -1702,135 +2006,135 @@ class EmailInfo:
 	func _init():
 		var service
 		
-		__EmailID = PBField.new("EmailID", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
+		__emailID = PBField.new("emailID", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
 		service = PBServiceField.new()
-		service.field = __EmailID
-		data[__EmailID.tag] = service
+		service.field = __emailID
+		data[__emailID.tag] = service
 		
-		__AcceptName = PBField.new("AcceptName", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
+		__acceptName = PBField.new("acceptName", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
-		service.field = __AcceptName
-		data[__AcceptName.tag] = service
+		service.field = __acceptName
+		data[__acceptName.tag] = service
 		
-		__Sender = PBField.new("Sender", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 3, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
+		__sender = PBField.new("sender", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 3, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
-		service.field = __Sender
-		data[__Sender.tag] = service
+		service.field = __sender
+		data[__sender.tag] = service
 		
-		__Cc = PBField.new("Cc", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 4, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
+		__cc = PBField.new("cc", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 4, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
-		service.field = __Cc
-		data[__Cc.tag] = service
+		service.field = __cc
+		data[__cc.tag] = service
 		
-		__Topic = PBField.new("Topic", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 5, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
+		__topic = PBField.new("topic", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 5, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
-		service.field = __Topic
-		data[__Topic.tag] = service
+		service.field = __topic
+		data[__topic.tag] = service
 		
-		__Content = PBField.new("Content", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 6, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
+		__content = PBField.new("content", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 6, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
-		service.field = __Content
-		data[__Content.tag] = service
+		service.field = __content
+		data[__content.tag] = service
 		
-		__IsRead = PBField.new("IsRead", PB_DATA_TYPE.BOOL, PB_RULE.OPTIONAL, 7, true, DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL])
+		__isRead = PBField.new("isRead", PB_DATA_TYPE.BOOL, PB_RULE.OPTIONAL, 7, true, DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL])
 		service = PBServiceField.new()
-		service.field = __IsRead
-		data[__IsRead.tag] = service
+		service.field = __isRead
+		data[__isRead.tag] = service
 		
-		__AwardList = PBField.new("AwardList", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 8, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
+		__awardList = PBField.new("awardList", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 8, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
-		service.field = __AwardList
-		service.func_ref = Callable(self, "new_AwardList")
-		data[__AwardList.tag] = service
+		service.field = __awardList
+		service.func_ref = Callable(self, "new_awardList")
+		data[__awardList.tag] = service
 		
-		__TimeStamp = PBField.new("TimeStamp", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 9, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
+		__timeStamp = PBField.new("timeStamp", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 9, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
 		service = PBServiceField.new()
-		service.field = __TimeStamp
-		data[__TimeStamp.tag] = service
+		service.field = __timeStamp
+		data[__timeStamp.tag] = service
 		
 	var data = {}
 	
-	var __EmailID: PBField
-	func get_EmailID() -> int:
-		return __EmailID.value
-	func clear_EmailID() -> void:
+	var __emailID: PBField
+	func get_emailID() -> int:
+		return __emailID.value
+	func clear_emailID() -> void:
 		data[1].state = PB_SERVICE_STATE.UNFILLED
-		__EmailID.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
-	func set_EmailID(value : int) -> void:
-		__EmailID.value = value
+		__emailID.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
+	func set_emailID(value : int) -> void:
+		__emailID.value = value
 	
-	var __AcceptName: PBField
-	func get_AcceptName() -> String:
-		return __AcceptName.value
-	func clear_AcceptName() -> void:
+	var __acceptName: PBField
+	func get_acceptName() -> String:
+		return __acceptName.value
+	func clear_acceptName() -> void:
 		data[2].state = PB_SERVICE_STATE.UNFILLED
-		__AcceptName.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
-	func set_AcceptName(value : String) -> void:
-		__AcceptName.value = value
+		__acceptName.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
+	func set_acceptName(value : String) -> void:
+		__acceptName.value = value
 	
-	var __Sender: PBField
-	func get_Sender() -> String:
-		return __Sender.value
-	func clear_Sender() -> void:
+	var __sender: PBField
+	func get_sender() -> String:
+		return __sender.value
+	func clear_sender() -> void:
 		data[3].state = PB_SERVICE_STATE.UNFILLED
-		__Sender.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
-	func set_Sender(value : String) -> void:
-		__Sender.value = value
+		__sender.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
+	func set_sender(value : String) -> void:
+		__sender.value = value
 	
-	var __Cc: PBField
-	func get_Cc() -> String:
-		return __Cc.value
-	func clear_Cc() -> void:
+	var __cc: PBField
+	func get_cc() -> String:
+		return __cc.value
+	func clear_cc() -> void:
 		data[4].state = PB_SERVICE_STATE.UNFILLED
-		__Cc.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
-	func set_Cc(value : String) -> void:
-		__Cc.value = value
+		__cc.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
+	func set_cc(value : String) -> void:
+		__cc.value = value
 	
-	var __Topic: PBField
-	func get_Topic() -> String:
-		return __Topic.value
-	func clear_Topic() -> void:
+	var __topic: PBField
+	func get_topic() -> String:
+		return __topic.value
+	func clear_topic() -> void:
 		data[5].state = PB_SERVICE_STATE.UNFILLED
-		__Topic.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
-	func set_Topic(value : String) -> void:
-		__Topic.value = value
+		__topic.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
+	func set_topic(value : String) -> void:
+		__topic.value = value
 	
-	var __Content: PBField
-	func get_Content() -> String:
-		return __Content.value
-	func clear_Content() -> void:
+	var __content: PBField
+	func get_content() -> String:
+		return __content.value
+	func clear_content() -> void:
 		data[6].state = PB_SERVICE_STATE.UNFILLED
-		__Content.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
-	func set_Content(value : String) -> void:
-		__Content.value = value
+		__content.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
+	func set_content(value : String) -> void:
+		__content.value = value
 	
-	var __IsRead: PBField
-	func get_IsRead() -> bool:
-		return __IsRead.value
-	func clear_IsRead() -> void:
+	var __isRead: PBField
+	func get_isRead() -> bool:
+		return __isRead.value
+	func clear_isRead() -> void:
 		data[7].state = PB_SERVICE_STATE.UNFILLED
-		__IsRead.value = DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL]
-	func set_IsRead(value : bool) -> void:
-		__IsRead.value = value
+		__isRead.value = DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL]
+	func set_isRead(value : bool) -> void:
+		__isRead.value = value
 	
-	var __AwardList: PBField
-	func get_AwardList() -> GoodsList:
-		return __AwardList.value
-	func clear_AwardList() -> void:
+	var __awardList: PBField
+	func get_awardList() -> GoodsList:
+		return __awardList.value
+	func clear_awardList() -> void:
 		data[8].state = PB_SERVICE_STATE.UNFILLED
-		__AwardList.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
-	func new_AwardList() -> GoodsList:
-		__AwardList.value = GoodsList.new()
-		return __AwardList.value
+		__awardList.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+	func new_awardList() -> GoodsList:
+		__awardList.value = GoodsList.new()
+		return __awardList.value
 	
-	var __TimeStamp: PBField
-	func get_TimeStamp() -> int:
-		return __TimeStamp.value
-	func clear_TimeStamp() -> void:
+	var __timeStamp: PBField
+	func get_timeStamp() -> int:
+		return __timeStamp.value
+	func clear_timeStamp() -> void:
 		data[9].state = PB_SERVICE_STATE.UNFILLED
-		__TimeStamp.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
-	func set_TimeStamp(value : int) -> void:
-		__TimeStamp.value = value
+		__timeStamp.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
+	func set_timeStamp(value : int) -> void:
+		__timeStamp.value = value
 	
 	func _to_string() -> String:
 		return PBPacker.message_to_string(data)
@@ -1857,23 +2161,23 @@ class MasterInfo:
 	func _init():
 		var service
 		
-		__UserInfo = PBField.new("UserInfo", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
+		__userInfo = PBField.new("userInfo", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
-		service.field = __UserInfo
-		service.func_ref = Callable(self, "new_UserInfo")
-		data[__UserInfo.tag] = service
+		service.field = __userInfo
+		service.func_ref = Callable(self, "new_userInfo")
+		data[__userInfo.tag] = service
 		
 	var data = {}
 	
-	var __UserInfo: PBField
-	func get_UserInfo() -> UserInfo:
-		return __UserInfo.value
-	func clear_UserInfo() -> void:
+	var __userInfo: PBField
+	func get_userInfo() -> UserInfo:
+		return __userInfo.value
+	func clear_userInfo() -> void:
 		data[1].state = PB_SERVICE_STATE.UNFILLED
-		__UserInfo.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
-	func new_UserInfo() -> UserInfo:
-		__UserInfo.value = UserInfo.new()
-		return __UserInfo.value
+		__userInfo.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+	func new_userInfo() -> UserInfo:
+		__userInfo.value = UserInfo.new()
+		return __userInfo.value
 	
 	func _to_string() -> String:
 		return PBPacker.message_to_string(data)
@@ -1900,203 +2204,203 @@ class RegisterReq:
 	func _init():
 		var service
 		
-		__Name = PBField.new("Name", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
+		__name = PBField.new("name", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
-		service.field = __Name
-		data[__Name.tag] = service
+		service.field = __name
+		data[__name.tag] = service
 		
-		__Password = PBField.new("Password", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
+		__password = PBField.new("password", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
-		service.field = __Password
-		data[__Password.tag] = service
+		service.field = __password
+		data[__password.tag] = service
 		
-		__SecurityCode = PBField.new("SecurityCode", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 3, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
+		__securityCode = PBField.new("securityCode", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 3, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
-		service.field = __SecurityCode
-		data[__SecurityCode.tag] = service
+		service.field = __securityCode
+		data[__securityCode.tag] = service
 		
-		__MachineCode = PBField.new("MachineCode", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 4, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
+		__machineCode = PBField.new("machineCode", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 4, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
-		service.field = __MachineCode
-		data[__MachineCode.tag] = service
+		service.field = __machineCode
+		data[__machineCode.tag] = service
 		
-		__InvitationCode = PBField.new("InvitationCode", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 5, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
+		__invitationCode = PBField.new("invitationCode", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 5, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
-		service.field = __InvitationCode
-		data[__InvitationCode.tag] = service
+		service.field = __invitationCode
+		data[__invitationCode.tag] = service
 		
-		__PlatformID = PBField.new("PlatformID", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 6, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
+		__platformID = PBField.new("platformID", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 6, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
 		service = PBServiceField.new()
-		service.field = __PlatformID
-		data[__PlatformID.tag] = service
+		service.field = __platformID
+		data[__platformID.tag] = service
 		
-		__Gender = PBField.new("Gender", PB_DATA_TYPE.INT32, PB_RULE.OPTIONAL, 7, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT32])
+		__gender = PBField.new("gender", PB_DATA_TYPE.INT32, PB_RULE.OPTIONAL, 7, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT32])
 		service = PBServiceField.new()
-		service.field = __Gender
-		data[__Gender.tag] = service
+		service.field = __gender
+		data[__gender.tag] = service
 		
-		__Age = PBField.new("Age", PB_DATA_TYPE.INT32, PB_RULE.OPTIONAL, 8, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT32])
+		__age = PBField.new("age", PB_DATA_TYPE.INT32, PB_RULE.OPTIONAL, 8, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT32])
 		service = PBServiceField.new()
-		service.field = __Age
-		data[__Age.tag] = service
+		service.field = __age
+		data[__age.tag] = service
 		
-		__FaceID = PBField.new("FaceID", PB_DATA_TYPE.INT32, PB_RULE.OPTIONAL, 9, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT32])
+		__faceID = PBField.new("faceID", PB_DATA_TYPE.INT32, PB_RULE.OPTIONAL, 9, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT32])
 		service = PBServiceField.new()
-		service.field = __FaceID
-		data[__FaceID.tag] = service
+		service.field = __faceID
+		data[__faceID.tag] = service
 		
-		__PassPortID = PBField.new("PassPortID", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 10, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
+		__passPortID = PBField.new("passPortID", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 10, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
-		service.field = __PassPortID
-		data[__PassPortID.tag] = service
+		service.field = __passPortID
+		data[__passPortID.tag] = service
 		
-		__RealName = PBField.new("RealName", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 11, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
+		__realName = PBField.new("realName", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 11, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
-		service.field = __RealName
-		data[__RealName.tag] = service
+		service.field = __realName
+		data[__realName.tag] = service
 		
-		__PhoneNum = PBField.new("PhoneNum", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 12, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
+		__phoneNum = PBField.new("phoneNum", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 12, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
-		service.field = __PhoneNum
-		data[__PhoneNum.tag] = service
+		service.field = __phoneNum
+		data[__phoneNum.tag] = service
 		
-		__Email = PBField.new("Email", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 13, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
+		__email = PBField.new("email", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 13, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
-		service.field = __Email
-		data[__Email.tag] = service
+		service.field = __email
+		data[__email.tag] = service
 		
-		__Address = PBField.new("Address", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 14, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
+		__address = PBField.new("address", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 14, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
-		service.field = __Address
-		data[__Address.tag] = service
+		service.field = __address
+		data[__address.tag] = service
 		
 	var data = {}
 	
-	var __Name: PBField
-	func get_Name() -> String:
-		return __Name.value
-	func clear_Name() -> void:
+	var __name: PBField
+	func get_name() -> String:
+		return __name.value
+	func clear_name() -> void:
 		data[1].state = PB_SERVICE_STATE.UNFILLED
-		__Name.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
-	func set_Name(value : String) -> void:
-		__Name.value = value
+		__name.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
+	func set_name(value : String) -> void:
+		__name.value = value
 	
-	var __Password: PBField
-	func get_Password() -> String:
-		return __Password.value
-	func clear_Password() -> void:
+	var __password: PBField
+	func get_password() -> String:
+		return __password.value
+	func clear_password() -> void:
 		data[2].state = PB_SERVICE_STATE.UNFILLED
-		__Password.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
-	func set_Password(value : String) -> void:
-		__Password.value = value
+		__password.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
+	func set_password(value : String) -> void:
+		__password.value = value
 	
-	var __SecurityCode: PBField
-	func get_SecurityCode() -> String:
-		return __SecurityCode.value
-	func clear_SecurityCode() -> void:
+	var __securityCode: PBField
+	func get_securityCode() -> String:
+		return __securityCode.value
+	func clear_securityCode() -> void:
 		data[3].state = PB_SERVICE_STATE.UNFILLED
-		__SecurityCode.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
-	func set_SecurityCode(value : String) -> void:
-		__SecurityCode.value = value
+		__securityCode.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
+	func set_securityCode(value : String) -> void:
+		__securityCode.value = value
 	
-	var __MachineCode: PBField
-	func get_MachineCode() -> String:
-		return __MachineCode.value
-	func clear_MachineCode() -> void:
+	var __machineCode: PBField
+	func get_machineCode() -> String:
+		return __machineCode.value
+	func clear_machineCode() -> void:
 		data[4].state = PB_SERVICE_STATE.UNFILLED
-		__MachineCode.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
-	func set_MachineCode(value : String) -> void:
-		__MachineCode.value = value
+		__machineCode.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
+	func set_machineCode(value : String) -> void:
+		__machineCode.value = value
 	
-	var __InvitationCode: PBField
-	func get_InvitationCode() -> String:
-		return __InvitationCode.value
-	func clear_InvitationCode() -> void:
+	var __invitationCode: PBField
+	func get_invitationCode() -> String:
+		return __invitationCode.value
+	func clear_invitationCode() -> void:
 		data[5].state = PB_SERVICE_STATE.UNFILLED
-		__InvitationCode.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
-	func set_InvitationCode(value : String) -> void:
-		__InvitationCode.value = value
+		__invitationCode.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
+	func set_invitationCode(value : String) -> void:
+		__invitationCode.value = value
 	
-	var __PlatformID: PBField
-	func get_PlatformID() -> int:
-		return __PlatformID.value
-	func clear_PlatformID() -> void:
+	var __platformID: PBField
+	func get_platformID() -> int:
+		return __platformID.value
+	func clear_platformID() -> void:
 		data[6].state = PB_SERVICE_STATE.UNFILLED
-		__PlatformID.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
-	func set_PlatformID(value : int) -> void:
-		__PlatformID.value = value
+		__platformID.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
+	func set_platformID(value : int) -> void:
+		__platformID.value = value
 	
-	var __Gender: PBField
-	func get_Gender() -> int:
-		return __Gender.value
-	func clear_Gender() -> void:
+	var __gender: PBField
+	func get_gender() -> int:
+		return __gender.value
+	func clear_gender() -> void:
 		data[7].state = PB_SERVICE_STATE.UNFILLED
-		__Gender.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT32]
-	func set_Gender(value : int) -> void:
-		__Gender.value = value
+		__gender.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT32]
+	func set_gender(value : int) -> void:
+		__gender.value = value
 	
-	var __Age: PBField
-	func get_Age() -> int:
-		return __Age.value
-	func clear_Age() -> void:
+	var __age: PBField
+	func get_age() -> int:
+		return __age.value
+	func clear_age() -> void:
 		data[8].state = PB_SERVICE_STATE.UNFILLED
-		__Age.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT32]
-	func set_Age(value : int) -> void:
-		__Age.value = value
+		__age.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT32]
+	func set_age(value : int) -> void:
+		__age.value = value
 	
-	var __FaceID: PBField
-	func get_FaceID() -> int:
-		return __FaceID.value
-	func clear_FaceID() -> void:
+	var __faceID: PBField
+	func get_faceID() -> int:
+		return __faceID.value
+	func clear_faceID() -> void:
 		data[9].state = PB_SERVICE_STATE.UNFILLED
-		__FaceID.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT32]
-	func set_FaceID(value : int) -> void:
-		__FaceID.value = value
+		__faceID.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT32]
+	func set_faceID(value : int) -> void:
+		__faceID.value = value
 	
-	var __PassPortID: PBField
-	func get_PassPortID() -> String:
-		return __PassPortID.value
-	func clear_PassPortID() -> void:
+	var __passPortID: PBField
+	func get_passPortID() -> String:
+		return __passPortID.value
+	func clear_passPortID() -> void:
 		data[10].state = PB_SERVICE_STATE.UNFILLED
-		__PassPortID.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
-	func set_PassPortID(value : String) -> void:
-		__PassPortID.value = value
+		__passPortID.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
+	func set_passPortID(value : String) -> void:
+		__passPortID.value = value
 	
-	var __RealName: PBField
-	func get_RealName() -> String:
-		return __RealName.value
-	func clear_RealName() -> void:
+	var __realName: PBField
+	func get_realName() -> String:
+		return __realName.value
+	func clear_realName() -> void:
 		data[11].state = PB_SERVICE_STATE.UNFILLED
-		__RealName.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
-	func set_RealName(value : String) -> void:
-		__RealName.value = value
+		__realName.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
+	func set_realName(value : String) -> void:
+		__realName.value = value
 	
-	var __PhoneNum: PBField
-	func get_PhoneNum() -> String:
-		return __PhoneNum.value
-	func clear_PhoneNum() -> void:
+	var __phoneNum: PBField
+	func get_phoneNum() -> String:
+		return __phoneNum.value
+	func clear_phoneNum() -> void:
 		data[12].state = PB_SERVICE_STATE.UNFILLED
-		__PhoneNum.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
-	func set_PhoneNum(value : String) -> void:
-		__PhoneNum.value = value
+		__phoneNum.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
+	func set_phoneNum(value : String) -> void:
+		__phoneNum.value = value
 	
-	var __Email: PBField
-	func get_Email() -> String:
-		return __Email.value
-	func clear_Email() -> void:
+	var __email: PBField
+	func get_email() -> String:
+		return __email.value
+	func clear_email() -> void:
 		data[13].state = PB_SERVICE_STATE.UNFILLED
-		__Email.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
-	func set_Email(value : String) -> void:
-		__Email.value = value
+		__email.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
+	func set_email(value : String) -> void:
+		__email.value = value
 	
-	var __Address: PBField
-	func get_Address() -> String:
-		return __Address.value
-	func clear_Address() -> void:
+	var __address: PBField
+	func get_address() -> String:
+		return __address.value
+	func clear_address() -> void:
 		data[14].state = PB_SERVICE_STATE.UNFILLED
-		__Address.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
-	func set_Address(value : String) -> void:
-		__Address.value = value
+		__address.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
+	func set_address(value : String) -> void:
+		__address.value = value
 	
 	func _to_string() -> String:
 		return PBPacker.message_to_string(data)
@@ -2123,23 +2427,93 @@ class RegisterResp:
 	func _init():
 		var service
 		
-		__Info = PBField.new("Info", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
+		__info = PBField.new("info", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
-		service.field = __Info
-		service.func_ref = Callable(self, "new_Info")
-		data[__Info.tag] = service
+		service.field = __info
+		service.func_ref = Callable(self, "new_info")
+		data[__info.tag] = service
+		
+		__sdkId = PBField.new("sdkId", PB_DATA_TYPE.INT32, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT32])
+		service = PBServiceField.new()
+		service.field = __sdkId
+		data[__sdkId.tag] = service
+		
+		__pid = PBField.new("pid", PB_DATA_TYPE.INT32, PB_RULE.OPTIONAL, 3, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT32])
+		service = PBServiceField.new()
+		service.field = __pid
+		data[__pid.tag] = service
+		
+		__openId = PBField.new("openId", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 4, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
+		service = PBServiceField.new()
+		service.field = __openId
+		data[__openId.tag] = service
+		
+		__serverId = PBField.new("serverId", PB_DATA_TYPE.INT32, PB_RULE.OPTIONAL, 5, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT32])
+		service = PBServiceField.new()
+		service.field = __serverId
+		data[__serverId.tag] = service
+		
+		__ip = PBField.new("ip", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 6, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
+		service = PBServiceField.new()
+		service.field = __ip
+		data[__ip.tag] = service
 		
 	var data = {}
 	
-	var __Info: PBField
-	func get_Info() -> UserInfo:
-		return __Info.value
-	func clear_Info() -> void:
+	var __info: PBField
+	func get_info() -> UserInfo:
+		return __info.value
+	func clear_info() -> void:
 		data[1].state = PB_SERVICE_STATE.UNFILLED
-		__Info.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
-	func new_Info() -> UserInfo:
-		__Info.value = UserInfo.new()
-		return __Info.value
+		__info.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+	func new_info() -> UserInfo:
+		__info.value = UserInfo.new()
+		return __info.value
+	
+	var __sdkId: PBField
+	func get_sdkId() -> int:
+		return __sdkId.value
+	func clear_sdkId() -> void:
+		data[2].state = PB_SERVICE_STATE.UNFILLED
+		__sdkId.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT32]
+	func set_sdkId(value : int) -> void:
+		__sdkId.value = value
+	
+	var __pid: PBField
+	func get_pid() -> int:
+		return __pid.value
+	func clear_pid() -> void:
+		data[3].state = PB_SERVICE_STATE.UNFILLED
+		__pid.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT32]
+	func set_pid(value : int) -> void:
+		__pid.value = value
+	
+	var __openId: PBField
+	func get_openId() -> String:
+		return __openId.value
+	func clear_openId() -> void:
+		data[4].state = PB_SERVICE_STATE.UNFILLED
+		__openId.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
+	func set_openId(value : String) -> void:
+		__openId.value = value
+	
+	var __serverId: PBField
+	func get_serverId() -> int:
+		return __serverId.value
+	func clear_serverId() -> void:
+		data[5].state = PB_SERVICE_STATE.UNFILLED
+		__serverId.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT32]
+	func set_serverId(value : int) -> void:
+		__serverId.value = value
+	
+	var __ip: PBField
+	func get_ip() -> String:
+		return __ip.value
+	func clear_ip() -> void:
+		data[6].state = PB_SERVICE_STATE.UNFILLED
+		__ip.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
+	func set_ip(value : String) -> void:
+		__ip.value = value
 	
 	func _to_string() -> String:
 		return PBPacker.message_to_string(data)
@@ -2166,77 +2540,77 @@ class LoginReq:
 	func _init():
 		var service
 		
-		__Account = PBField.new("Account", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
+		__account = PBField.new("account", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
-		service.field = __Account
-		data[__Account.tag] = service
+		service.field = __account
+		data[__account.tag] = service
 		
-		__Password = PBField.new("Password", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
+		__password = PBField.new("password", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
-		service.field = __Password
-		data[__Password.tag] = service
+		service.field = __password
+		data[__password.tag] = service
 		
-		__SecurityCode = PBField.new("SecurityCode", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 3, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
+		__securityCode = PBField.new("securityCode", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 3, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
-		service.field = __SecurityCode
-		data[__SecurityCode.tag] = service
+		service.field = __securityCode
+		data[__securityCode.tag] = service
 		
-		__MachineCode = PBField.new("MachineCode", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 4, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
+		__machineCode = PBField.new("machineCode", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 4, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
-		service.field = __MachineCode
-		data[__MachineCode.tag] = service
+		service.field = __machineCode
+		data[__machineCode.tag] = service
 		
-		__PlatformID = PBField.new("PlatformID", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 5, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
+		__platformID = PBField.new("platformID", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 5, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
 		service = PBServiceField.new()
-		service.field = __PlatformID
-		data[__PlatformID.tag] = service
+		service.field = __platformID
+		data[__platformID.tag] = service
 		
 	var data = {}
 	
-	var __Account: PBField
-	func get_Account() -> String:
-		return __Account.value
-	func clear_Account() -> void:
+	var __account: PBField
+	func get_account() -> String:
+		return __account.value
+	func clear_account() -> void:
 		data[1].state = PB_SERVICE_STATE.UNFILLED
-		__Account.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
-	func set_Account(value : String) -> void:
-		__Account.value = value
+		__account.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
+	func set_account(value : String) -> void:
+		__account.value = value
 	
-	var __Password: PBField
-	func get_Password() -> String:
-		return __Password.value
-	func clear_Password() -> void:
+	var __password: PBField
+	func get_password() -> String:
+		return __password.value
+	func clear_password() -> void:
 		data[2].state = PB_SERVICE_STATE.UNFILLED
-		__Password.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
-	func set_Password(value : String) -> void:
-		__Password.value = value
+		__password.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
+	func set_password(value : String) -> void:
+		__password.value = value
 	
-	var __SecurityCode: PBField
-	func get_SecurityCode() -> String:
-		return __SecurityCode.value
-	func clear_SecurityCode() -> void:
+	var __securityCode: PBField
+	func get_securityCode() -> String:
+		return __securityCode.value
+	func clear_securityCode() -> void:
 		data[3].state = PB_SERVICE_STATE.UNFILLED
-		__SecurityCode.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
-	func set_SecurityCode(value : String) -> void:
-		__SecurityCode.value = value
+		__securityCode.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
+	func set_securityCode(value : String) -> void:
+		__securityCode.value = value
 	
-	var __MachineCode: PBField
-	func get_MachineCode() -> String:
-		return __MachineCode.value
-	func clear_MachineCode() -> void:
+	var __machineCode: PBField
+	func get_machineCode() -> String:
+		return __machineCode.value
+	func clear_machineCode() -> void:
 		data[4].state = PB_SERVICE_STATE.UNFILLED
-		__MachineCode.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
-	func set_MachineCode(value : String) -> void:
-		__MachineCode.value = value
+		__machineCode.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
+	func set_machineCode(value : String) -> void:
+		__machineCode.value = value
 	
-	var __PlatformID: PBField
-	func get_PlatformID() -> int:
-		return __PlatformID.value
-	func clear_PlatformID() -> void:
+	var __platformID: PBField
+	func get_platformID() -> int:
+		return __platformID.value
+	func clear_platformID() -> void:
 		data[5].state = PB_SERVICE_STATE.UNFILLED
-		__PlatformID.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
-	func set_PlatformID(value : int) -> void:
-		__PlatformID.value = value
+		__platformID.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
+	func set_platformID(value : int) -> void:
+		__platformID.value = value
 	
 	func _to_string() -> String:
 		return PBPacker.message_to_string(data)
@@ -2263,65 +2637,65 @@ class LoginResp:
 	func _init():
 		var service
 		
-		__MainInfo = PBField.new("MainInfo", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
+		__mainInfo = PBField.new("mainInfo", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
-		service.field = __MainInfo
-		service.func_ref = Callable(self, "new_MainInfo")
-		data[__MainInfo.tag] = service
+		service.field = __mainInfo
+		service.func_ref = Callable(self, "new_mainInfo")
+		data[__mainInfo.tag] = service
 		
-		__InGameID = PBField.new("InGameID", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
+		__inGameID = PBField.new("inGameID", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
 		service = PBServiceField.new()
-		service.field = __InGameID
-		data[__InGameID.tag] = service
+		service.field = __inGameID
+		data[__inGameID.tag] = service
 		
-		__InTableNum = PBField.new("InTableNum", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 3, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
+		__inTableNum = PBField.new("inTableNum", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 3, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
 		service = PBServiceField.new()
-		service.field = __InTableNum
-		data[__InTableNum.tag] = service
+		service.field = __inTableNum
+		data[__inTableNum.tag] = service
 		
-		__Token = PBField.new("Token", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 4, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
+		__token = PBField.new("token", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 4, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
-		service.field = __Token
-		data[__Token.tag] = service
+		service.field = __token
+		data[__token.tag] = service
 		
 	var data = {}
 	
-	var __MainInfo: PBField
-	func get_MainInfo() -> MasterInfo:
-		return __MainInfo.value
-	func clear_MainInfo() -> void:
+	var __mainInfo: PBField
+	func get_mainInfo() -> MasterInfo:
+		return __mainInfo.value
+	func clear_mainInfo() -> void:
 		data[1].state = PB_SERVICE_STATE.UNFILLED
-		__MainInfo.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
-	func new_MainInfo() -> MasterInfo:
-		__MainInfo.value = MasterInfo.new()
-		return __MainInfo.value
+		__mainInfo.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+	func new_mainInfo() -> MasterInfo:
+		__mainInfo.value = MasterInfo.new()
+		return __mainInfo.value
 	
-	var __InGameID: PBField
-	func get_InGameID() -> int:
-		return __InGameID.value
-	func clear_InGameID() -> void:
+	var __inGameID: PBField
+	func get_inGameID() -> int:
+		return __inGameID.value
+	func clear_inGameID() -> void:
 		data[2].state = PB_SERVICE_STATE.UNFILLED
-		__InGameID.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
-	func set_InGameID(value : int) -> void:
-		__InGameID.value = value
+		__inGameID.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
+	func set_inGameID(value : int) -> void:
+		__inGameID.value = value
 	
-	var __InTableNum: PBField
-	func get_InTableNum() -> int:
-		return __InTableNum.value
-	func clear_InTableNum() -> void:
+	var __inTableNum: PBField
+	func get_inTableNum() -> int:
+		return __inTableNum.value
+	func clear_inTableNum() -> void:
 		data[3].state = PB_SERVICE_STATE.UNFILLED
-		__InTableNum.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
-	func set_InTableNum(value : int) -> void:
-		__InTableNum.value = value
+		__inTableNum.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
+	func set_inTableNum(value : int) -> void:
+		__inTableNum.value = value
 	
-	var __Token: PBField
-	func get_Token() -> String:
-		return __Token.value
-	func clear_Token() -> void:
+	var __token: PBField
+	func get_token() -> String:
+		return __token.value
+	func clear_token() -> void:
 		data[4].state = PB_SERVICE_STATE.UNFILLED
-		__Token.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
-	func set_Token(value : String) -> void:
-		__Token.value = value
+		__token.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
+	func set_token(value : String) -> void:
+		__token.value = value
 	
 	func _to_string() -> String:
 		return PBPacker.message_to_string(data)
@@ -2348,21 +2722,21 @@ class AllopatricResp:
 	func _init():
 		var service
 		
-		__UserID = PBField.new("UserID", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
+		__userID = PBField.new("userID", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
 		service = PBServiceField.new()
-		service.field = __UserID
-		data[__UserID.tag] = service
+		service.field = __userID
+		data[__userID.tag] = service
 		
 	var data = {}
 	
-	var __UserID: PBField
-	func get_UserID() -> int:
-		return __UserID.value
-	func clear_UserID() -> void:
+	var __userID: PBField
+	func get_userID() -> int:
+		return __userID.value
+	func clear_userID() -> void:
 		data[1].state = PB_SERVICE_STATE.UNFILLED
-		__UserID.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
-	func set_UserID(value : int) -> void:
-		__UserID.value = value
+		__userID.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
+	func set_userID(value : int) -> void:
+		__userID.value = value
 	
 	func _to_string() -> String:
 		return PBPacker.message_to_string(data)
@@ -2389,63 +2763,63 @@ class ReconnectReq:
 	func _init():
 		var service
 		
-		__Account = PBField.new("Account", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
+		__account = PBField.new("account", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
-		service.field = __Account
-		data[__Account.tag] = service
+		service.field = __account
+		data[__account.tag] = service
 		
-		__Password = PBField.new("Password", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
+		__password = PBField.new("password", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
-		service.field = __Password
-		data[__Password.tag] = service
+		service.field = __password
+		data[__password.tag] = service
 		
-		__MachineCode = PBField.new("MachineCode", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 3, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
+		__machineCode = PBField.new("machineCode", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 3, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
-		service.field = __MachineCode
-		data[__MachineCode.tag] = service
+		service.field = __machineCode
+		data[__machineCode.tag] = service
 		
-		__PlatformID = PBField.new("PlatformID", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 4, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
+		__platformID = PBField.new("platformID", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 4, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
 		service = PBServiceField.new()
-		service.field = __PlatformID
-		data[__PlatformID.tag] = service
+		service.field = __platformID
+		data[__platformID.tag] = service
 		
 	var data = {}
 	
-	var __Account: PBField
-	func get_Account() -> String:
-		return __Account.value
-	func clear_Account() -> void:
+	var __account: PBField
+	func get_account() -> String:
+		return __account.value
+	func clear_account() -> void:
 		data[1].state = PB_SERVICE_STATE.UNFILLED
-		__Account.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
-	func set_Account(value : String) -> void:
-		__Account.value = value
+		__account.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
+	func set_account(value : String) -> void:
+		__account.value = value
 	
-	var __Password: PBField
-	func get_Password() -> String:
-		return __Password.value
-	func clear_Password() -> void:
+	var __password: PBField
+	func get_password() -> String:
+		return __password.value
+	func clear_password() -> void:
 		data[2].state = PB_SERVICE_STATE.UNFILLED
-		__Password.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
-	func set_Password(value : String) -> void:
-		__Password.value = value
+		__password.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
+	func set_password(value : String) -> void:
+		__password.value = value
 	
-	var __MachineCode: PBField
-	func get_MachineCode() -> String:
-		return __MachineCode.value
-	func clear_MachineCode() -> void:
+	var __machineCode: PBField
+	func get_machineCode() -> String:
+		return __machineCode.value
+	func clear_machineCode() -> void:
 		data[3].state = PB_SERVICE_STATE.UNFILLED
-		__MachineCode.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
-	func set_MachineCode(value : String) -> void:
-		__MachineCode.value = value
+		__machineCode.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
+	func set_machineCode(value : String) -> void:
+		__machineCode.value = value
 	
-	var __PlatformID: PBField
-	func get_PlatformID() -> int:
-		return __PlatformID.value
-	func clear_PlatformID() -> void:
+	var __platformID: PBField
+	func get_platformID() -> int:
+		return __platformID.value
+	func clear_platformID() -> void:
 		data[4].state = PB_SERVICE_STATE.UNFILLED
-		__PlatformID.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
-	func set_PlatformID(value : int) -> void:
-		__PlatformID.value = value
+		__platformID.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
+	func set_platformID(value : int) -> void:
+		__platformID.value = value
 	
 	func _to_string() -> String:
 		return PBPacker.message_to_string(data)
@@ -2472,65 +2846,65 @@ class ReconnectResp:
 	func _init():
 		var service
 		
-		__MainInfo = PBField.new("MainInfo", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
+		__mainInfo = PBField.new("mainInfo", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
-		service.field = __MainInfo
-		service.func_ref = Callable(self, "new_MainInfo")
-		data[__MainInfo.tag] = service
+		service.field = __mainInfo
+		service.func_ref = Callable(self, "new_mainInfo")
+		data[__mainInfo.tag] = service
 		
-		__InGameID = PBField.new("InGameID", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
+		__inGameID = PBField.new("inGameID", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
 		service = PBServiceField.new()
-		service.field = __InGameID
-		data[__InGameID.tag] = service
+		service.field = __inGameID
+		data[__inGameID.tag] = service
 		
-		__InTableNum = PBField.new("InTableNum", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 3, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
+		__inTableNum = PBField.new("inTableNum", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 3, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
 		service = PBServiceField.new()
-		service.field = __InTableNum
-		data[__InTableNum.tag] = service
+		service.field = __inTableNum
+		data[__inTableNum.tag] = service
 		
-		__Token = PBField.new("Token", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 4, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
+		__token = PBField.new("token", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 4, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
-		service.field = __Token
-		data[__Token.tag] = service
+		service.field = __token
+		data[__token.tag] = service
 		
 	var data = {}
 	
-	var __MainInfo: PBField
-	func get_MainInfo() -> MasterInfo:
-		return __MainInfo.value
-	func clear_MainInfo() -> void:
+	var __mainInfo: PBField
+	func get_mainInfo() -> MasterInfo:
+		return __mainInfo.value
+	func clear_mainInfo() -> void:
 		data[1].state = PB_SERVICE_STATE.UNFILLED
-		__MainInfo.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
-	func new_MainInfo() -> MasterInfo:
-		__MainInfo.value = MasterInfo.new()
-		return __MainInfo.value
+		__mainInfo.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+	func new_mainInfo() -> MasterInfo:
+		__mainInfo.value = MasterInfo.new()
+		return __mainInfo.value
 	
-	var __InGameID: PBField
-	func get_InGameID() -> int:
-		return __InGameID.value
-	func clear_InGameID() -> void:
+	var __inGameID: PBField
+	func get_inGameID() -> int:
+		return __inGameID.value
+	func clear_inGameID() -> void:
 		data[2].state = PB_SERVICE_STATE.UNFILLED
-		__InGameID.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
-	func set_InGameID(value : int) -> void:
-		__InGameID.value = value
+		__inGameID.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
+	func set_inGameID(value : int) -> void:
+		__inGameID.value = value
 	
-	var __InTableNum: PBField
-	func get_InTableNum() -> int:
-		return __InTableNum.value
-	func clear_InTableNum() -> void:
+	var __inTableNum: PBField
+	func get_inTableNum() -> int:
+		return __inTableNum.value
+	func clear_inTableNum() -> void:
 		data[3].state = PB_SERVICE_STATE.UNFILLED
-		__InTableNum.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
-	func set_InTableNum(value : int) -> void:
-		__InTableNum.value = value
+		__inTableNum.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
+	func set_inTableNum(value : int) -> void:
+		__inTableNum.value = value
 	
-	var __Token: PBField
-	func get_Token() -> String:
-		return __Token.value
-	func clear_Token() -> void:
+	var __token: PBField
+	func get_token() -> String:
+		return __token.value
+	func clear_token() -> void:
 		data[4].state = PB_SERVICE_STATE.UNFILLED
-		__Token.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
-	func set_Token(value : String) -> void:
-		__Token.value = value
+		__token.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
+	func set_token(value : String) -> void:
+		__token.value = value
 	
 	func _to_string() -> String:
 		return PBPacker.message_to_string(data)
@@ -2557,35 +2931,35 @@ class CheckInReq:
 	func _init():
 		var service
 		
-		__UserID = PBField.new("UserID", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
+		__userID = PBField.new("userID", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
 		service = PBServiceField.new()
-		service.field = __UserID
-		data[__UserID.tag] = service
+		service.field = __userID
+		data[__userID.tag] = service
 		
-		__Remark = PBField.new("Remark", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
+		__remark = PBField.new("remark", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
-		service.field = __Remark
-		data[__Remark.tag] = service
+		service.field = __remark
+		data[__remark.tag] = service
 		
 	var data = {}
 	
-	var __UserID: PBField
-	func get_UserID() -> int:
-		return __UserID.value
-	func clear_UserID() -> void:
+	var __userID: PBField
+	func get_userID() -> int:
+		return __userID.value
+	func clear_userID() -> void:
 		data[1].state = PB_SERVICE_STATE.UNFILLED
-		__UserID.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
-	func set_UserID(value : int) -> void:
-		__UserID.value = value
+		__userID.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
+	func set_userID(value : int) -> void:
+		__userID.value = value
 	
-	var __Remark: PBField
-	func get_Remark() -> String:
-		return __Remark.value
-	func clear_Remark() -> void:
+	var __remark: PBField
+	func get_remark() -> String:
+		return __remark.value
+	func clear_remark() -> void:
 		data[2].state = PB_SERVICE_STATE.UNFILLED
-		__Remark.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
-	func set_Remark(value : String) -> void:
-		__Remark.value = value
+		__remark.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
+	func set_remark(value : String) -> void:
+		__remark.value = value
 	
 	func _to_string() -> String:
 		return PBPacker.message_to_string(data)
@@ -2612,65 +2986,65 @@ class CheckInResp:
 	func _init():
 		var service
 		
-		__UserID = PBField.new("UserID", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
+		__userID = PBField.new("userID", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
 		service = PBServiceField.new()
-		service.field = __UserID
-		data[__UserID.tag] = service
+		service.field = __userID
+		data[__userID.tag] = service
 		
-		__Remark = PBField.new("Remark", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
+		__remark = PBField.new("remark", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
-		service.field = __Remark
-		data[__Remark.tag] = service
+		service.field = __remark
+		data[__remark.tag] = service
 		
-		__Timestamp = PBField.new("Timestamp", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 3, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
+		__timestamp = PBField.new("timestamp", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 3, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
 		service = PBServiceField.new()
-		service.field = __Timestamp
-		data[__Timestamp.tag] = service
+		service.field = __timestamp
+		data[__timestamp.tag] = service
 		
-		__AwardList = PBField.new("AwardList", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 4, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
+		__awardList = PBField.new("awardList", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 4, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
-		service.field = __AwardList
-		service.func_ref = Callable(self, "new_AwardList")
-		data[__AwardList.tag] = service
+		service.field = __awardList
+		service.func_ref = Callable(self, "new_awardList")
+		data[__awardList.tag] = service
 		
 	var data = {}
 	
-	var __UserID: PBField
-	func get_UserID() -> int:
-		return __UserID.value
-	func clear_UserID() -> void:
+	var __userID: PBField
+	func get_userID() -> int:
+		return __userID.value
+	func clear_userID() -> void:
 		data[1].state = PB_SERVICE_STATE.UNFILLED
-		__UserID.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
-	func set_UserID(value : int) -> void:
-		__UserID.value = value
+		__userID.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
+	func set_userID(value : int) -> void:
+		__userID.value = value
 	
-	var __Remark: PBField
-	func get_Remark() -> String:
-		return __Remark.value
-	func clear_Remark() -> void:
+	var __remark: PBField
+	func get_remark() -> String:
+		return __remark.value
+	func clear_remark() -> void:
 		data[2].state = PB_SERVICE_STATE.UNFILLED
-		__Remark.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
-	func set_Remark(value : String) -> void:
-		__Remark.value = value
+		__remark.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
+	func set_remark(value : String) -> void:
+		__remark.value = value
 	
-	var __Timestamp: PBField
-	func get_Timestamp() -> int:
-		return __Timestamp.value
-	func clear_Timestamp() -> void:
+	var __timestamp: PBField
+	func get_timestamp() -> int:
+		return __timestamp.value
+	func clear_timestamp() -> void:
 		data[3].state = PB_SERVICE_STATE.UNFILLED
-		__Timestamp.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
-	func set_Timestamp(value : int) -> void:
-		__Timestamp.value = value
+		__timestamp.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
+	func set_timestamp(value : int) -> void:
+		__timestamp.value = value
 	
-	var __AwardList: PBField
-	func get_AwardList() -> GoodsList:
-		return __AwardList.value
-	func clear_AwardList() -> void:
+	var __awardList: PBField
+	func get_awardList() -> GoodsList:
+		return __awardList.value
+	func clear_awardList() -> void:
 		data[4].state = PB_SERVICE_STATE.UNFILLED
-		__AwardList.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
-	func new_AwardList() -> GoodsList:
-		__AwardList.value = GoodsList.new()
-		return __AwardList.value
+		__awardList.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+	func new_awardList() -> GoodsList:
+		__awardList.value = GoodsList.new()
+		return __awardList.value
 	
 	func _to_string() -> String:
 		return PBPacker.message_to_string(data)
@@ -2695,7 +3069,7 @@ class CheckInResp:
 	
 class GetCheckInReq:
 	func _init():
-		var service
+		pass
 		
 	var data = {}
 	
@@ -2724,53 +3098,53 @@ class GetCheckInResp:
 	func _init():
 		var service
 		
-		__UserID = PBField.new("UserID", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
+		__userID = PBField.new("userID", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
 		service = PBServiceField.new()
-		service.field = __UserID
-		data[__UserID.tag] = service
+		service.field = __userID
+		data[__userID.tag] = service
 		
-		var __AllCheckin_default: Array[CheckInResp] = []
-		__AllCheckin = PBField.new("AllCheckin", PB_DATA_TYPE.MESSAGE, PB_RULE.REPEATED, 2, true, __AllCheckin_default)
+		var __allCheckin_default: Array[CheckInResp] = []
+		__allCheckin = PBField.new("allCheckin", PB_DATA_TYPE.MESSAGE, PB_RULE.REPEATED, 2, true, __allCheckin_default)
 		service = PBServiceField.new()
-		service.field = __AllCheckin
-		service.func_ref = Callable(self, "add_AllCheckin")
-		data[__AllCheckin.tag] = service
+		service.field = __allCheckin
+		service.func_ref = Callable(self, "add_allCheckin")
+		data[__allCheckin.tag] = service
 		
-		__PageNum = PBField.new("PageNum", PB_DATA_TYPE.INT32, PB_RULE.OPTIONAL, 3, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT32])
+		__pageNum = PBField.new("pageNum", PB_DATA_TYPE.INT32, PB_RULE.OPTIONAL, 3, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT32])
 		service = PBServiceField.new()
-		service.field = __PageNum
-		data[__PageNum.tag] = service
+		service.field = __pageNum
+		data[__pageNum.tag] = service
 		
 	var data = {}
 	
-	var __UserID: PBField
-	func get_UserID() -> int:
-		return __UserID.value
-	func clear_UserID() -> void:
+	var __userID: PBField
+	func get_userID() -> int:
+		return __userID.value
+	func clear_userID() -> void:
 		data[1].state = PB_SERVICE_STATE.UNFILLED
-		__UserID.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
-	func set_UserID(value : int) -> void:
-		__UserID.value = value
+		__userID.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
+	func set_userID(value : int) -> void:
+		__userID.value = value
 	
-	var __AllCheckin: PBField
-	func get_AllCheckin() -> Array[CheckInResp]:
-		return __AllCheckin.value
-	func clear_AllCheckin() -> void:
+	var __allCheckin: PBField
+	func get_allCheckin() -> Array[CheckInResp]:
+		return __allCheckin.value
+	func clear_allCheckin() -> void:
 		data[2].state = PB_SERVICE_STATE.UNFILLED
-		__AllCheckin.value = []
-	func add_AllCheckin() -> CheckInResp:
+		__allCheckin.value = []
+	func add_allCheckin() -> CheckInResp:
 		var element = CheckInResp.new()
-		__AllCheckin.value.append(element)
+		__allCheckin.value.append(element)
 		return element
 	
-	var __PageNum: PBField
-	func get_PageNum() -> int:
-		return __PageNum.value
-	func clear_PageNum() -> void:
+	var __pageNum: PBField
+	func get_pageNum() -> int:
+		return __pageNum.value
+	func clear_pageNum() -> void:
 		data[3].state = PB_SERVICE_STATE.UNFILLED
-		__PageNum.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT32]
-	func set_PageNum(value : int) -> void:
-		__PageNum.value = value
+		__pageNum.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT32]
+	func set_pageNum(value : int) -> void:
+		__pageNum.value = value
 	
 	func _to_string() -> String:
 		return PBPacker.message_to_string(data)
@@ -2797,21 +3171,21 @@ class DrawHeroReq:
 	func _init():
 		var service
 		
-		__Amount = PBField.new("Amount", PB_DATA_TYPE.INT32, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT32])
+		__amount = PBField.new("amount", PB_DATA_TYPE.INT32, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT32])
 		service = PBServiceField.new()
-		service.field = __Amount
-		data[__Amount.tag] = service
+		service.field = __amount
+		data[__amount.tag] = service
 		
 	var data = {}
 	
-	var __Amount: PBField
-	func get_Amount() -> int:
-		return __Amount.value
-	func clear_Amount() -> void:
+	var __amount: PBField
+	func get_amount() -> int:
+		return __amount.value
+	func clear_amount() -> void:
 		data[1].state = PB_SERVICE_STATE.UNFILLED
-		__Amount.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT32]
-	func set_Amount(value : int) -> void:
-		__Amount.value = value
+		__amount.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT32]
+	func set_amount(value : int) -> void:
+		__amount.value = value
 	
 	func _to_string() -> String:
 		return PBPacker.message_to_string(data)
@@ -2838,38 +3212,38 @@ class DrawHeroResp:
 	func _init():
 		var service
 		
-		__UserID = PBField.new("UserID", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
+		__userID = PBField.new("userID", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
 		service = PBServiceField.new()
-		service.field = __UserID
-		data[__UserID.tag] = service
+		service.field = __userID
+		data[__userID.tag] = service
 		
-		var __HeroList_default: Array[HeroInfo] = []
-		__HeroList = PBField.new("HeroList", PB_DATA_TYPE.MESSAGE, PB_RULE.REPEATED, 2, true, __HeroList_default)
+		var __heroList_default: Array[HeroInfo] = []
+		__heroList = PBField.new("heroList", PB_DATA_TYPE.MESSAGE, PB_RULE.REPEATED, 2, true, __heroList_default)
 		service = PBServiceField.new()
-		service.field = __HeroList
-		service.func_ref = Callable(self, "add_HeroList")
-		data[__HeroList.tag] = service
+		service.field = __heroList
+		service.func_ref = Callable(self, "add_heroList")
+		data[__heroList.tag] = service
 		
 	var data = {}
 	
-	var __UserID: PBField
-	func get_UserID() -> int:
-		return __UserID.value
-	func clear_UserID() -> void:
+	var __userID: PBField
+	func get_userID() -> int:
+		return __userID.value
+	func clear_userID() -> void:
 		data[1].state = PB_SERVICE_STATE.UNFILLED
-		__UserID.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
-	func set_UserID(value : int) -> void:
-		__UserID.value = value
+		__userID.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
+	func set_userID(value : int) -> void:
+		__userID.value = value
 	
-	var __HeroList: PBField
-	func get_HeroList() -> Array[HeroInfo]:
-		return __HeroList.value
-	func clear_HeroList() -> void:
+	var __heroList: PBField
+	func get_heroList() -> Array[HeroInfo]:
+		return __heroList.value
+	func clear_heroList() -> void:
 		data[2].state = PB_SERVICE_STATE.UNFILLED
-		__HeroList.value = []
-	func add_HeroList() -> HeroInfo:
+		__heroList.value = []
+	func add_heroList() -> HeroInfo:
 		var element = HeroInfo.new()
-		__HeroList.value.append(element)
+		__heroList.value.append(element)
 		return element
 	
 	func _to_string() -> String:
@@ -2895,7 +3269,7 @@ class DrawHeroResp:
 	
 class GetMyHeroReq:
 	func _init():
-		var service
+		pass
 		
 	var data = {}
 	
@@ -2924,38 +3298,38 @@ class GetMyHeroResp:
 	func _init():
 		var service
 		
-		__UserID = PBField.new("UserID", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
+		__userID = PBField.new("userID", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
 		service = PBServiceField.new()
-		service.field = __UserID
-		data[__UserID.tag] = service
+		service.field = __userID
+		data[__userID.tag] = service
 		
-		var __HeroList_default: Array[HeroInfo] = []
-		__HeroList = PBField.new("HeroList", PB_DATA_TYPE.MESSAGE, PB_RULE.REPEATED, 2, true, __HeroList_default)
+		var __heroList_default: Array[HeroInfo] = []
+		__heroList = PBField.new("heroList", PB_DATA_TYPE.MESSAGE, PB_RULE.REPEATED, 2, true, __heroList_default)
 		service = PBServiceField.new()
-		service.field = __HeroList
-		service.func_ref = Callable(self, "add_HeroList")
-		data[__HeroList.tag] = service
+		service.field = __heroList
+		service.func_ref = Callable(self, "add_heroList")
+		data[__heroList.tag] = service
 		
 	var data = {}
 	
-	var __UserID: PBField
-	func get_UserID() -> int:
-		return __UserID.value
-	func clear_UserID() -> void:
+	var __userID: PBField
+	func get_userID() -> int:
+		return __userID.value
+	func clear_userID() -> void:
 		data[1].state = PB_SERVICE_STATE.UNFILLED
-		__UserID.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
-	func set_UserID(value : int) -> void:
-		__UserID.value = value
+		__userID.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
+	func set_userID(value : int) -> void:
+		__userID.value = value
 	
-	var __HeroList: PBField
-	func get_HeroList() -> Array[HeroInfo]:
-		return __HeroList.value
-	func clear_HeroList() -> void:
+	var __heroList: PBField
+	func get_heroList() -> Array[HeroInfo]:
+		return __heroList.value
+	func clear_heroList() -> void:
 		data[2].state = PB_SERVICE_STATE.UNFILLED
-		__HeroList.value = []
-	func add_HeroList() -> HeroInfo:
+		__heroList.value = []
+	func add_heroList() -> HeroInfo:
 		var element = HeroInfo.new()
-		__HeroList.value.append(element)
+		__heroList.value.append(element)
 		return element
 	
 	func _to_string() -> String:
@@ -2983,35 +3357,35 @@ class ChooseHeroReq:
 	func _init():
 		var service
 		
-		__Position = PBField.new("Position", PB_DATA_TYPE.INT32, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT32])
+		__position = PBField.new("position", PB_DATA_TYPE.INT32, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT32])
 		service = PBServiceField.new()
-		service.field = __Position
-		data[__Position.tag] = service
+		service.field = __position
+		data[__position.tag] = service
 		
-		__HeroID = PBField.new("HeroID", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
+		__heroID = PBField.new("heroID", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
 		service = PBServiceField.new()
-		service.field = __HeroID
-		data[__HeroID.tag] = service
+		service.field = __heroID
+		data[__heroID.tag] = service
 		
 	var data = {}
 	
-	var __Position: PBField
-	func get_Position() -> int:
-		return __Position.value
-	func clear_Position() -> void:
+	var __position: PBField
+	func get_position() -> int:
+		return __position.value
+	func clear_position() -> void:
 		data[1].state = PB_SERVICE_STATE.UNFILLED
-		__Position.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT32]
-	func set_Position(value : int) -> void:
-		__Position.value = value
+		__position.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT32]
+	func set_position(value : int) -> void:
+		__position.value = value
 	
-	var __HeroID: PBField
-	func get_HeroID() -> int:
-		return __HeroID.value
-	func clear_HeroID() -> void:
+	var __heroID: PBField
+	func get_heroID() -> int:
+		return __heroID.value
+	func clear_heroID() -> void:
 		data[2].state = PB_SERVICE_STATE.UNFILLED
-		__HeroID.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
-	func set_HeroID(value : int) -> void:
-		__HeroID.value = value
+		__heroID.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
+	func set_heroID(value : int) -> void:
+		__heroID.value = value
 	
 	func _to_string() -> String:
 		return PBPacker.message_to_string(data)
@@ -3038,37 +3412,37 @@ class ChooseHeroResp:
 	func _init():
 		var service
 		
-		__Position = PBField.new("Position", PB_DATA_TYPE.INT32, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT32])
+		__position = PBField.new("position", PB_DATA_TYPE.INT32, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT32])
 		service = PBServiceField.new()
-		service.field = __Position
-		data[__Position.tag] = service
+		service.field = __position
+		data[__position.tag] = service
 		
-		__Hero = PBField.new("Hero", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
+		__hero = PBField.new("hero", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
-		service.field = __Hero
-		service.func_ref = Callable(self, "new_Hero")
-		data[__Hero.tag] = service
+		service.field = __hero
+		service.func_ref = Callable(self, "new_hero")
+		data[__hero.tag] = service
 		
 	var data = {}
 	
-	var __Position: PBField
-	func get_Position() -> int:
-		return __Position.value
-	func clear_Position() -> void:
+	var __position: PBField
+	func get_position() -> int:
+		return __position.value
+	func clear_position() -> void:
 		data[1].state = PB_SERVICE_STATE.UNFILLED
-		__Position.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT32]
-	func set_Position(value : int) -> void:
-		__Position.value = value
+		__position.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT32]
+	func set_position(value : int) -> void:
+		__position.value = value
 	
-	var __Hero: PBField
-	func get_Hero() -> HeroInfo:
-		return __Hero.value
-	func clear_Hero() -> void:
+	var __hero: PBField
+	func get_hero() -> HeroInfo:
+		return __hero.value
+	func clear_hero() -> void:
 		data[2].state = PB_SERVICE_STATE.UNFILLED
-		__Hero.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
-	func new_Hero() -> HeroInfo:
-		__Hero.value = HeroInfo.new()
-		return __Hero.value
+		__hero.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+	func new_hero() -> HeroInfo:
+		__hero.value = HeroInfo.new()
+		return __hero.value
 	
 	func _to_string() -> String:
 		return PBPacker.message_to_string(data)
@@ -3095,35 +3469,35 @@ class DownHeroReq:
 	func _init():
 		var service
 		
-		__Position = PBField.new("Position", PB_DATA_TYPE.INT32, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT32])
+		__position = PBField.new("position", PB_DATA_TYPE.INT32, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT32])
 		service = PBServiceField.new()
-		service.field = __Position
-		data[__Position.tag] = service
+		service.field = __position
+		data[__position.tag] = service
 		
-		__HeroID = PBField.new("HeroID", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
+		__heroID = PBField.new("heroID", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
 		service = PBServiceField.new()
-		service.field = __HeroID
-		data[__HeroID.tag] = service
+		service.field = __heroID
+		data[__heroID.tag] = service
 		
 	var data = {}
 	
-	var __Position: PBField
-	func get_Position() -> int:
-		return __Position.value
-	func clear_Position() -> void:
+	var __position: PBField
+	func get_position() -> int:
+		return __position.value
+	func clear_position() -> void:
 		data[1].state = PB_SERVICE_STATE.UNFILLED
-		__Position.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT32]
-	func set_Position(value : int) -> void:
-		__Position.value = value
+		__position.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT32]
+	func set_position(value : int) -> void:
+		__position.value = value
 	
-	var __HeroID: PBField
-	func get_HeroID() -> int:
-		return __HeroID.value
-	func clear_HeroID() -> void:
+	var __heroID: PBField
+	func get_heroID() -> int:
+		return __heroID.value
+	func clear_heroID() -> void:
 		data[2].state = PB_SERVICE_STATE.UNFILLED
-		__HeroID.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
-	func set_HeroID(value : int) -> void:
-		__HeroID.value = value
+		__heroID.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
+	func set_heroID(value : int) -> void:
+		__heroID.value = value
 	
 	func _to_string() -> String:
 		return PBPacker.message_to_string(data)
@@ -3150,35 +3524,35 @@ class DownHeroReqResp:
 	func _init():
 		var service
 		
-		__Position = PBField.new("Position", PB_DATA_TYPE.INT32, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT32])
+		__position = PBField.new("position", PB_DATA_TYPE.INT32, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT32])
 		service = PBServiceField.new()
-		service.field = __Position
-		data[__Position.tag] = service
+		service.field = __position
+		data[__position.tag] = service
 		
-		__HeroID = PBField.new("HeroID", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
+		__heroID = PBField.new("heroID", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
 		service = PBServiceField.new()
-		service.field = __HeroID
-		data[__HeroID.tag] = service
+		service.field = __heroID
+		data[__heroID.tag] = service
 		
 	var data = {}
 	
-	var __Position: PBField
-	func get_Position() -> int:
-		return __Position.value
-	func clear_Position() -> void:
+	var __position: PBField
+	func get_position() -> int:
+		return __position.value
+	func clear_position() -> void:
 		data[1].state = PB_SERVICE_STATE.UNFILLED
-		__Position.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT32]
-	func set_Position(value : int) -> void:
-		__Position.value = value
+		__position.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT32]
+	func set_position(value : int) -> void:
+		__position.value = value
 	
-	var __HeroID: PBField
-	func get_HeroID() -> int:
-		return __HeroID.value
-	func clear_HeroID() -> void:
+	var __heroID: PBField
+	func get_heroID() -> int:
+		return __heroID.value
+	func clear_heroID() -> void:
 		data[2].state = PB_SERVICE_STATE.UNFILLED
-		__HeroID.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
-	func set_HeroID(value : int) -> void:
-		__HeroID.value = value
+		__heroID.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
+	func set_heroID(value : int) -> void:
+		__heroID.value = value
 	
 	func _to_string() -> String:
 		return PBPacker.message_to_string(data)
@@ -3203,7 +3577,7 @@ class DownHeroReqResp:
 	
 class GetAllHeroReq:
 	func _init():
-		var service
+		pass
 		
 	var data = {}
 	
@@ -3232,24 +3606,24 @@ class GetAllHeroResp:
 	func _init():
 		var service
 		
-		var __HeroList_default: Array[HeroInfo] = []
-		__HeroList = PBField.new("HeroList", PB_DATA_TYPE.MESSAGE, PB_RULE.REPEATED, 1, true, __HeroList_default)
+		var __heroList_default: Array[HeroInfo] = []
+		__heroList = PBField.new("heroList", PB_DATA_TYPE.MESSAGE, PB_RULE.REPEATED, 1, true, __heroList_default)
 		service = PBServiceField.new()
-		service.field = __HeroList
-		service.func_ref = Callable(self, "add_HeroList")
-		data[__HeroList.tag] = service
+		service.field = __heroList
+		service.func_ref = Callable(self, "add_heroList")
+		data[__heroList.tag] = service
 		
 	var data = {}
 	
-	var __HeroList: PBField
-	func get_HeroList() -> Array[HeroInfo]:
-		return __HeroList.value
-	func clear_HeroList() -> void:
+	var __heroList: PBField
+	func get_heroList() -> Array[HeroInfo]:
+		return __heroList.value
+	func clear_heroList() -> void:
 		data[1].state = PB_SERVICE_STATE.UNFILLED
-		__HeroList.value = []
-	func add_HeroList() -> HeroInfo:
+		__heroList.value = []
+	func add_heroList() -> HeroInfo:
 		var element = HeroInfo.new()
-		__HeroList.value.append(element)
+		__heroList.value.append(element)
 		return element
 	
 	func _to_string() -> String:
@@ -3277,78 +3651,78 @@ class CheckHeroReq:
 	func _init():
 		var service
 		
-		var __HeroIDs_default: Array[int] = []
-		__HeroIDs = PBField.new("HeroIDs", PB_DATA_TYPE.INT32, PB_RULE.REPEATED, 1, true, __HeroIDs_default)
+		var __heroIDs_default: Array[int] = []
+		__heroIDs = PBField.new("heroIDs", PB_DATA_TYPE.INT32, PB_RULE.REPEATED, 1, true, __heroIDs_default)
 		service = PBServiceField.new()
-		service.field = __HeroIDs
-		data[__HeroIDs.tag] = service
+		service.field = __heroIDs
+		data[__heroIDs.tag] = service
 		
-		__Name = PBField.new("Name", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
+		__name = PBField.new("name", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
-		service.field = __Name
-		data[__Name.tag] = service
+		service.field = __name
+		data[__name.tag] = service
 		
-		__Sex = PBField.new("Sex", PB_DATA_TYPE.INT32, PB_RULE.OPTIONAL, 3, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT32])
+		__sex = PBField.new("sex", PB_DATA_TYPE.INT32, PB_RULE.OPTIONAL, 3, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT32])
 		service = PBServiceField.new()
-		service.field = __Sex
-		data[__Sex.tag] = service
+		service.field = __sex
+		data[__sex.tag] = service
 		
-		__Country = PBField.new("Country", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 4, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
+		__country = PBField.new("country", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 4, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
-		service.field = __Country
-		data[__Country.tag] = service
+		service.field = __country
+		data[__country.tag] = service
 		
-		__Faction = PBField.new("Faction", PB_DATA_TYPE.ENUM, PB_RULE.OPTIONAL, 5, true, DEFAULT_VALUES_3[PB_DATA_TYPE.ENUM])
+		__faction = PBField.new("faction", PB_DATA_TYPE.ENUM, PB_RULE.OPTIONAL, 5, true, DEFAULT_VALUES_3[PB_DATA_TYPE.ENUM])
 		service = PBServiceField.new()
-		service.field = __Faction
-		data[__Faction.tag] = service
+		service.field = __faction
+		data[__faction.tag] = service
 		
 	var data = {}
 	
-	var __HeroIDs: PBField
-	func get_HeroIDs() -> Array[int]:
-		return __HeroIDs.value
-	func clear_HeroIDs() -> void:
+	var __heroIDs: PBField
+	func get_heroIDs() -> Array[int]:
+		return __heroIDs.value
+	func clear_heroIDs() -> void:
 		data[1].state = PB_SERVICE_STATE.UNFILLED
-		__HeroIDs.value = []
-	func add_HeroIDs(value : int) -> void:
-		__HeroIDs.value.append(value)
+		__heroIDs.value = []
+	func add_heroIDs(value : int) -> void:
+		__heroIDs.value.append(value)
 	
-	var __Name: PBField
-	func get_Name() -> String:
-		return __Name.value
-	func clear_Name() -> void:
+	var __name: PBField
+	func get_name() -> String:
+		return __name.value
+	func clear_name() -> void:
 		data[2].state = PB_SERVICE_STATE.UNFILLED
-		__Name.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
-	func set_Name(value : String) -> void:
-		__Name.value = value
+		__name.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
+	func set_name(value : String) -> void:
+		__name.value = value
 	
-	var __Sex: PBField
-	func get_Sex() -> int:
-		return __Sex.value
-	func clear_Sex() -> void:
+	var __sex: PBField
+	func get_sex() -> int:
+		return __sex.value
+	func clear_sex() -> void:
 		data[3].state = PB_SERVICE_STATE.UNFILLED
-		__Sex.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT32]
-	func set_Sex(value : int) -> void:
-		__Sex.value = value
+		__sex.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT32]
+	func set_sex(value : int) -> void:
+		__sex.value = value
 	
-	var __Country: PBField
-	func get_Country() -> String:
-		return __Country.value
-	func clear_Country() -> void:
+	var __country: PBField
+	func get_country() -> String:
+		return __country.value
+	func clear_country() -> void:
 		data[4].state = PB_SERVICE_STATE.UNFILLED
-		__Country.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
-	func set_Country(value : String) -> void:
-		__Country.value = value
+		__country.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
+	func set_country(value : String) -> void:
+		__country.value = value
 	
-	var __Faction: PBField
-	func get_Faction():
-		return __Faction.value
-	func clear_Faction() -> void:
+	var __faction: PBField
+	func get_faction():
+		return __faction.value
+	func clear_faction() -> void:
 		data[5].state = PB_SERVICE_STATE.UNFILLED
-		__Faction.value = DEFAULT_VALUES_3[PB_DATA_TYPE.ENUM]
-	func set_Faction(value) -> void:
-		__Faction.value = value
+		__faction.value = DEFAULT_VALUES_3[PB_DATA_TYPE.ENUM]
+	func set_faction(value) -> void:
+		__faction.value = value
 	
 	func _to_string() -> String:
 		return PBPacker.message_to_string(data)
@@ -3375,24 +3749,24 @@ class CheckHeroResp:
 	func _init():
 		var service
 		
-		var __HeroList_default: Array[HeroInfo] = []
-		__HeroList = PBField.new("HeroList", PB_DATA_TYPE.MESSAGE, PB_RULE.REPEATED, 1, true, __HeroList_default)
+		var __heroList_default: Array[HeroInfo] = []
+		__heroList = PBField.new("heroList", PB_DATA_TYPE.MESSAGE, PB_RULE.REPEATED, 1, true, __heroList_default)
 		service = PBServiceField.new()
-		service.field = __HeroList
-		service.func_ref = Callable(self, "add_HeroList")
-		data[__HeroList.tag] = service
+		service.field = __heroList
+		service.func_ref = Callable(self, "add_heroList")
+		data[__heroList.tag] = service
 		
 	var data = {}
 	
-	var __HeroList: PBField
-	func get_HeroList() -> Array[HeroInfo]:
-		return __HeroList.value
-	func clear_HeroList() -> void:
+	var __heroList: PBField
+	func get_heroList() -> Array[HeroInfo]:
+		return __heroList.value
+	func clear_heroList() -> void:
 		data[1].state = PB_SERVICE_STATE.UNFILLED
-		__HeroList.value = []
-	func add_HeroList() -> HeroInfo:
+		__heroList.value = []
+	func add_heroList() -> HeroInfo:
 		var element = HeroInfo.new()
-		__HeroList.value.append(element)
+		__heroList.value.append(element)
 		return element
 	
 	func _to_string() -> String:
@@ -3420,91 +3794,91 @@ class RechargeReq:
 	func _init():
 		var service
 		
-		__UserID = PBField.new("UserID", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
+		__userID = PBField.new("userID", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
 		service = PBServiceField.new()
-		service.field = __UserID
-		data[__UserID.tag] = service
+		service.field = __userID
+		data[__userID.tag] = service
 		
-		__ByiD = PBField.new("ByiD", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
+		__byiD = PBField.new("byiD", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
 		service = PBServiceField.new()
-		service.field = __ByiD
-		data[__ByiD.tag] = service
+		service.field = __byiD
+		data[__byiD.tag] = service
 		
-		__Payment = PBField.new("Payment", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 3, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
+		__payment = PBField.new("payment", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 3, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
 		service = PBServiceField.new()
-		service.field = __Payment
-		data[__Payment.tag] = service
+		service.field = __payment
+		data[__payment.tag] = service
 		
-		__Method = PBField.new("Method", PB_DATA_TYPE.INT32, PB_RULE.OPTIONAL, 4, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT32])
+		__method = PBField.new("method", PB_DATA_TYPE.INT32, PB_RULE.OPTIONAL, 4, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT32])
 		service = PBServiceField.new()
-		service.field = __Method
-		data[__Method.tag] = service
+		service.field = __method
+		data[__method.tag] = service
 		
-		__Switch = PBField.new("Switch", PB_DATA_TYPE.INT32, PB_RULE.OPTIONAL, 5, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT32])
+		__switch = PBField.new("switch", PB_DATA_TYPE.INT32, PB_RULE.OPTIONAL, 5, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT32])
 		service = PBServiceField.new()
-		service.field = __Switch
-		data[__Switch.tag] = service
+		service.field = __switch
+		data[__switch.tag] = service
 		
-		__Reason = PBField.new("Reason", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 6, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
+		__reason = PBField.new("reason", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 6, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
-		service.field = __Reason
-		data[__Reason.tag] = service
+		service.field = __reason
+		data[__reason.tag] = service
 		
 	var data = {}
 	
-	var __UserID: PBField
-	func get_UserID() -> int:
-		return __UserID.value
-	func clear_UserID() -> void:
+	var __userID: PBField
+	func get_userID() -> int:
+		return __userID.value
+	func clear_userID() -> void:
 		data[1].state = PB_SERVICE_STATE.UNFILLED
-		__UserID.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
-	func set_UserID(value : int) -> void:
-		__UserID.value = value
+		__userID.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
+	func set_userID(value : int) -> void:
+		__userID.value = value
 	
-	var __ByiD: PBField
-	func get_ByiD() -> int:
-		return __ByiD.value
-	func clear_ByiD() -> void:
+	var __byiD: PBField
+	func get_byiD() -> int:
+		return __byiD.value
+	func clear_byiD() -> void:
 		data[2].state = PB_SERVICE_STATE.UNFILLED
-		__ByiD.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
-	func set_ByiD(value : int) -> void:
-		__ByiD.value = value
+		__byiD.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
+	func set_byiD(value : int) -> void:
+		__byiD.value = value
 	
-	var __Payment: PBField
-	func get_Payment() -> int:
-		return __Payment.value
-	func clear_Payment() -> void:
+	var __payment: PBField
+	func get_payment() -> int:
+		return __payment.value
+	func clear_payment() -> void:
 		data[3].state = PB_SERVICE_STATE.UNFILLED
-		__Payment.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
-	func set_Payment(value : int) -> void:
-		__Payment.value = value
+		__payment.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
+	func set_payment(value : int) -> void:
+		__payment.value = value
 	
-	var __Method: PBField
-	func get_Method() -> int:
-		return __Method.value
-	func clear_Method() -> void:
+	var __method: PBField
+	func get_method() -> int:
+		return __method.value
+	func clear_method() -> void:
 		data[4].state = PB_SERVICE_STATE.UNFILLED
-		__Method.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT32]
-	func set_Method(value : int) -> void:
-		__Method.value = value
+		__method.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT32]
+	func set_method(value : int) -> void:
+		__method.value = value
 	
-	var __Switch: PBField
-	func get_Switch() -> int:
-		return __Switch.value
-	func clear_Switch() -> void:
+	var __switch: PBField
+	func get_switch() -> int:
+		return __switch.value
+	func clear_switch() -> void:
 		data[5].state = PB_SERVICE_STATE.UNFILLED
-		__Switch.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT32]
-	func set_Switch(value : int) -> void:
-		__Switch.value = value
+		__switch.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT32]
+	func set_switch(value : int) -> void:
+		__switch.value = value
 	
-	var __Reason: PBField
-	func get_Reason() -> String:
-		return __Reason.value
-	func clear_Reason() -> void:
+	var __reason: PBField
+	func get_reason() -> String:
+		return __reason.value
+	func clear_reason() -> void:
 		data[6].state = PB_SERVICE_STATE.UNFILLED
-		__Reason.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
-	func set_Reason(value : String) -> void:
-		__Reason.value = value
+		__reason.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
+	func set_reason(value : String) -> void:
+		__reason.value = value
 	
 	func _to_string() -> String:
 		return PBPacker.message_to_string(data)
@@ -3531,175 +3905,175 @@ class RechargeResp:
 	func _init():
 		var service
 		
-		__UserID = PBField.new("UserID", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
+		__userID = PBField.new("userID", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
 		service = PBServiceField.new()
-		service.field = __UserID
-		data[__UserID.tag] = service
+		service.field = __userID
+		data[__userID.tag] = service
 		
-		__ByiD = PBField.new("ByiD", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
+		__byiD = PBField.new("byiD", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
 		service = PBServiceField.new()
-		service.field = __ByiD
-		data[__ByiD.tag] = service
+		service.field = __byiD
+		data[__byiD.tag] = service
 		
-		__PreMoney = PBField.new("PreMoney", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 3, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
+		__preMoney = PBField.new("preMoney", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 3, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
 		service = PBServiceField.new()
-		service.field = __PreMoney
-		data[__PreMoney.tag] = service
+		service.field = __preMoney
+		data[__preMoney.tag] = service
 		
-		__Payment = PBField.new("Payment", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 4, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
+		__payment = PBField.new("payment", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 4, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
 		service = PBServiceField.new()
-		service.field = __Payment
-		data[__Payment.tag] = service
+		service.field = __payment
+		data[__payment.tag] = service
 		
-		__Money = PBField.new("Money", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 5, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
+		__money = PBField.new("money", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 5, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
 		service = PBServiceField.new()
-		service.field = __Money
-		data[__Money.tag] = service
+		service.field = __money
+		data[__money.tag] = service
 		
-		__YuanBao = PBField.new("YuanBao", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 6, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
+		__yuanBao = PBField.new("yuanBao", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 6, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
 		service = PBServiceField.new()
-		service.field = __YuanBao
-		data[__YuanBao.tag] = service
+		service.field = __yuanBao
+		data[__yuanBao.tag] = service
 		
-		__Coin = PBField.new("Coin", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 7, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
+		__coin = PBField.new("coin", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 7, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
 		service = PBServiceField.new()
-		service.field = __Coin
-		data[__Coin.tag] = service
+		service.field = __coin
+		data[__coin.tag] = service
 		
-		__Method = PBField.new("Method", PB_DATA_TYPE.INT32, PB_RULE.OPTIONAL, 8, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT32])
+		__method = PBField.new("method", PB_DATA_TYPE.INT32, PB_RULE.OPTIONAL, 8, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT32])
 		service = PBServiceField.new()
-		service.field = __Method
-		data[__Method.tag] = service
+		service.field = __method
+		data[__method.tag] = service
 		
-		__IsSuccess = PBField.new("IsSuccess", PB_DATA_TYPE.BOOL, PB_RULE.OPTIONAL, 9, true, DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL])
+		__isSuccess = PBField.new("isSuccess", PB_DATA_TYPE.BOOL, PB_RULE.OPTIONAL, 9, true, DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL])
 		service = PBServiceField.new()
-		service.field = __IsSuccess
-		data[__IsSuccess.tag] = service
+		service.field = __isSuccess
+		data[__isSuccess.tag] = service
 		
-		__Order = PBField.new("Order", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 10, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
+		__order = PBField.new("order", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 10, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
-		service.field = __Order
-		data[__Order.tag] = service
+		service.field = __order
+		data[__order.tag] = service
 		
-		__TimeStamp = PBField.new("TimeStamp", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 11, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
+		__timeStamp = PBField.new("timeStamp", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 11, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
 		service = PBServiceField.new()
-		service.field = __TimeStamp
-		data[__TimeStamp.tag] = service
+		service.field = __timeStamp
+		data[__timeStamp.tag] = service
 		
-		__Reason = PBField.new("Reason", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 12, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
+		__reason = PBField.new("reason", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 12, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
-		service.field = __Reason
-		data[__Reason.tag] = service
+		service.field = __reason
+		data[__reason.tag] = service
 		
 	var data = {}
 	
-	var __UserID: PBField
-	func get_UserID() -> int:
-		return __UserID.value
-	func clear_UserID() -> void:
+	var __userID: PBField
+	func get_userID() -> int:
+		return __userID.value
+	func clear_userID() -> void:
 		data[1].state = PB_SERVICE_STATE.UNFILLED
-		__UserID.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
-	func set_UserID(value : int) -> void:
-		__UserID.value = value
+		__userID.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
+	func set_userID(value : int) -> void:
+		__userID.value = value
 	
-	var __ByiD: PBField
-	func get_ByiD() -> int:
-		return __ByiD.value
-	func clear_ByiD() -> void:
+	var __byiD: PBField
+	func get_byiD() -> int:
+		return __byiD.value
+	func clear_byiD() -> void:
 		data[2].state = PB_SERVICE_STATE.UNFILLED
-		__ByiD.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
-	func set_ByiD(value : int) -> void:
-		__ByiD.value = value
+		__byiD.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
+	func set_byiD(value : int) -> void:
+		__byiD.value = value
 	
-	var __PreMoney: PBField
-	func get_PreMoney() -> int:
-		return __PreMoney.value
-	func clear_PreMoney() -> void:
+	var __preMoney: PBField
+	func get_preMoney() -> int:
+		return __preMoney.value
+	func clear_preMoney() -> void:
 		data[3].state = PB_SERVICE_STATE.UNFILLED
-		__PreMoney.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
-	func set_PreMoney(value : int) -> void:
-		__PreMoney.value = value
+		__preMoney.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
+	func set_preMoney(value : int) -> void:
+		__preMoney.value = value
 	
-	var __Payment: PBField
-	func get_Payment() -> int:
-		return __Payment.value
-	func clear_Payment() -> void:
+	var __payment: PBField
+	func get_payment() -> int:
+		return __payment.value
+	func clear_payment() -> void:
 		data[4].state = PB_SERVICE_STATE.UNFILLED
-		__Payment.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
-	func set_Payment(value : int) -> void:
-		__Payment.value = value
+		__payment.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
+	func set_payment(value : int) -> void:
+		__payment.value = value
 	
-	var __Money: PBField
-	func get_Money() -> int:
-		return __Money.value
-	func clear_Money() -> void:
+	var __money: PBField
+	func get_money() -> int:
+		return __money.value
+	func clear_money() -> void:
 		data[5].state = PB_SERVICE_STATE.UNFILLED
-		__Money.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
-	func set_Money(value : int) -> void:
-		__Money.value = value
+		__money.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
+	func set_money(value : int) -> void:
+		__money.value = value
 	
-	var __YuanBao: PBField
-	func get_YuanBao() -> int:
-		return __YuanBao.value
-	func clear_YuanBao() -> void:
+	var __yuanBao: PBField
+	func get_yuanBao() -> int:
+		return __yuanBao.value
+	func clear_yuanBao() -> void:
 		data[6].state = PB_SERVICE_STATE.UNFILLED
-		__YuanBao.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
-	func set_YuanBao(value : int) -> void:
-		__YuanBao.value = value
+		__yuanBao.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
+	func set_yuanBao(value : int) -> void:
+		__yuanBao.value = value
 	
-	var __Coin: PBField
-	func get_Coin() -> int:
-		return __Coin.value
-	func clear_Coin() -> void:
+	var __coin: PBField
+	func get_coin() -> int:
+		return __coin.value
+	func clear_coin() -> void:
 		data[7].state = PB_SERVICE_STATE.UNFILLED
-		__Coin.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
-	func set_Coin(value : int) -> void:
-		__Coin.value = value
+		__coin.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
+	func set_coin(value : int) -> void:
+		__coin.value = value
 	
-	var __Method: PBField
-	func get_Method() -> int:
-		return __Method.value
-	func clear_Method() -> void:
+	var __method: PBField
+	func get_method() -> int:
+		return __method.value
+	func clear_method() -> void:
 		data[8].state = PB_SERVICE_STATE.UNFILLED
-		__Method.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT32]
-	func set_Method(value : int) -> void:
-		__Method.value = value
+		__method.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT32]
+	func set_method(value : int) -> void:
+		__method.value = value
 	
-	var __IsSuccess: PBField
-	func get_IsSuccess() -> bool:
-		return __IsSuccess.value
-	func clear_IsSuccess() -> void:
+	var __isSuccess: PBField
+	func get_isSuccess() -> bool:
+		return __isSuccess.value
+	func clear_isSuccess() -> void:
 		data[9].state = PB_SERVICE_STATE.UNFILLED
-		__IsSuccess.value = DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL]
-	func set_IsSuccess(value : bool) -> void:
-		__IsSuccess.value = value
+		__isSuccess.value = DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL]
+	func set_isSuccess(value : bool) -> void:
+		__isSuccess.value = value
 	
-	var __Order: PBField
-	func get_Order() -> String:
-		return __Order.value
-	func clear_Order() -> void:
+	var __order: PBField
+	func get_order() -> String:
+		return __order.value
+	func clear_order() -> void:
 		data[10].state = PB_SERVICE_STATE.UNFILLED
-		__Order.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
-	func set_Order(value : String) -> void:
-		__Order.value = value
+		__order.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
+	func set_order(value : String) -> void:
+		__order.value = value
 	
-	var __TimeStamp: PBField
-	func get_TimeStamp() -> int:
-		return __TimeStamp.value
-	func clear_TimeStamp() -> void:
+	var __timeStamp: PBField
+	func get_timeStamp() -> int:
+		return __timeStamp.value
+	func clear_timeStamp() -> void:
 		data[11].state = PB_SERVICE_STATE.UNFILLED
-		__TimeStamp.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
-	func set_TimeStamp(value : int) -> void:
-		__TimeStamp.value = value
+		__timeStamp.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
+	func set_timeStamp(value : int) -> void:
+		__timeStamp.value = value
 	
-	var __Reason: PBField
-	func get_Reason() -> String:
-		return __Reason.value
-	func clear_Reason() -> void:
+	var __reason: PBField
+	func get_reason() -> String:
+		return __reason.value
+	func clear_reason() -> void:
 		data[12].state = PB_SERVICE_STATE.UNFILLED
-		__Reason.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
-	func set_Reason(value : String) -> void:
-		__Reason.value = value
+		__reason.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
+	func set_reason(value : String) -> void:
+		__reason.value = value
 	
 	func _to_string() -> String:
 		return PBPacker.message_to_string(data)
@@ -3724,7 +4098,7 @@ class RechargeResp:
 	
 class GetRechargesReq:
 	func _init():
-		var service
+		pass
 		
 	var data = {}
 	
@@ -3753,53 +4127,53 @@ class GetRechargesResp:
 	func _init():
 		var service
 		
-		__UserID = PBField.new("UserID", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
+		__userID = PBField.new("userID", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
 		service = PBServiceField.new()
-		service.field = __UserID
-		data[__UserID.tag] = service
+		service.field = __userID
+		data[__userID.tag] = service
 		
-		var __AllRecharges_default: Array[RechargeResp] = []
-		__AllRecharges = PBField.new("AllRecharges", PB_DATA_TYPE.MESSAGE, PB_RULE.REPEATED, 2, true, __AllRecharges_default)
+		var __allRecharges_default: Array[RechargeResp] = []
+		__allRecharges = PBField.new("allRecharges", PB_DATA_TYPE.MESSAGE, PB_RULE.REPEATED, 2, true, __allRecharges_default)
 		service = PBServiceField.new()
-		service.field = __AllRecharges
-		service.func_ref = Callable(self, "add_AllRecharges")
-		data[__AllRecharges.tag] = service
+		service.field = __allRecharges
+		service.func_ref = Callable(self, "add_allRecharges")
+		data[__allRecharges.tag] = service
 		
-		__PageNum = PBField.new("PageNum", PB_DATA_TYPE.INT32, PB_RULE.OPTIONAL, 3, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT32])
+		__pageNum = PBField.new("pageNum", PB_DATA_TYPE.INT32, PB_RULE.OPTIONAL, 3, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT32])
 		service = PBServiceField.new()
-		service.field = __PageNum
-		data[__PageNum.tag] = service
+		service.field = __pageNum
+		data[__pageNum.tag] = service
 		
 	var data = {}
 	
-	var __UserID: PBField
-	func get_UserID() -> int:
-		return __UserID.value
-	func clear_UserID() -> void:
+	var __userID: PBField
+	func get_userID() -> int:
+		return __userID.value
+	func clear_userID() -> void:
 		data[1].state = PB_SERVICE_STATE.UNFILLED
-		__UserID.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
-	func set_UserID(value : int) -> void:
-		__UserID.value = value
+		__userID.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
+	func set_userID(value : int) -> void:
+		__userID.value = value
 	
-	var __AllRecharges: PBField
-	func get_AllRecharges() -> Array[RechargeResp]:
-		return __AllRecharges.value
-	func clear_AllRecharges() -> void:
+	var __allRecharges: PBField
+	func get_allRecharges() -> Array[RechargeResp]:
+		return __allRecharges.value
+	func clear_allRecharges() -> void:
 		data[2].state = PB_SERVICE_STATE.UNFILLED
-		__AllRecharges.value = []
-	func add_AllRecharges() -> RechargeResp:
+		__allRecharges.value = []
+	func add_allRecharges() -> RechargeResp:
 		var element = RechargeResp.new()
-		__AllRecharges.value.append(element)
+		__allRecharges.value.append(element)
 		return element
 	
-	var __PageNum: PBField
-	func get_PageNum() -> int:
-		return __PageNum.value
-	func clear_PageNum() -> void:
+	var __pageNum: PBField
+	func get_pageNum() -> int:
+		return __pageNum.value
+	func clear_pageNum() -> void:
 		data[3].state = PB_SERVICE_STATE.UNFILLED
-		__PageNum.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT32]
-	func set_PageNum(value : int) -> void:
-		__PageNum.value = value
+		__pageNum.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT32]
+	func set_pageNum(value : int) -> void:
+		__pageNum.value = value
 	
 	func _to_string() -> String:
 		return PBPacker.message_to_string(data)
@@ -3826,21 +4200,21 @@ class GetGoodsReq:
 	func _init():
 		var service
 		
-		__ID = PBField.new("ID", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
+		__iD = PBField.new("iD", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
 		service = PBServiceField.new()
-		service.field = __ID
-		data[__ID.tag] = service
+		service.field = __iD
+		data[__iD.tag] = service
 		
 	var data = {}
 	
-	var __ID: PBField
-	func get_ID() -> int:
-		return __ID.value
-	func clear_ID() -> void:
+	var __iD: PBField
+	func get_iD() -> int:
+		return __iD.value
+	func clear_iD() -> void:
 		data[1].state = PB_SERVICE_STATE.UNFILLED
-		__ID.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
-	func set_ID(value : int) -> void:
-		__ID.value = value
+		__iD.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
+	func set_iD(value : int) -> void:
+		__iD.value = value
 	
 	func _to_string() -> String:
 		return PBPacker.message_to_string(data)
@@ -3867,37 +4241,37 @@ class GetGoodsResp:
 	func _init():
 		var service
 		
-		__UserID = PBField.new("UserID", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
+		__userID = PBField.new("userID", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
 		service = PBServiceField.new()
-		service.field = __UserID
-		data[__UserID.tag] = service
+		service.field = __userID
+		data[__userID.tag] = service
 		
-		__Info = PBField.new("Info", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
+		__info = PBField.new("info", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
-		service.field = __Info
-		service.func_ref = Callable(self, "new_Info")
-		data[__Info.tag] = service
+		service.field = __info
+		service.func_ref = Callable(self, "new_info")
+		data[__info.tag] = service
 		
 	var data = {}
 	
-	var __UserID: PBField
-	func get_UserID() -> int:
-		return __UserID.value
-	func clear_UserID() -> void:
+	var __userID: PBField
+	func get_userID() -> int:
+		return __userID.value
+	func clear_userID() -> void:
 		data[1].state = PB_SERVICE_STATE.UNFILLED
-		__UserID.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
-	func set_UserID(value : int) -> void:
-		__UserID.value = value
+		__userID.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
+	func set_userID(value : int) -> void:
+		__userID.value = value
 	
-	var __Info: PBField
-	func get_Info() -> GoodsInfo:
-		return __Info.value
-	func clear_Info() -> void:
+	var __info: PBField
+	func get_info() -> GoodsInfo:
+		return __info.value
+	func clear_info() -> void:
 		data[2].state = PB_SERVICE_STATE.UNFILLED
-		__Info.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
-	func new_Info() -> GoodsInfo:
-		__Info.value = GoodsInfo.new()
-		return __Info.value
+		__info.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+	func new_info() -> GoodsInfo:
+		__info.value = GoodsInfo.new()
+		return __info.value
 	
 	func _to_string() -> String:
 		return PBPacker.message_to_string(data)
@@ -3922,7 +4296,7 @@ class GetGoodsResp:
 	
 class GetAllGoodsReq:
 	func _init():
-		var service
+		pass
 		
 	var data = {}
 	
@@ -3951,53 +4325,53 @@ class GetAllGoodsResp:
 	func _init():
 		var service
 		
-		__UserID = PBField.new("UserID", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
+		__userID = PBField.new("userID", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
 		service = PBServiceField.new()
-		service.field = __UserID
-		data[__UserID.tag] = service
+		service.field = __userID
+		data[__userID.tag] = service
 		
-		var __Info_default: Array[GoodsInfo] = []
-		__Info = PBField.new("Info", PB_DATA_TYPE.MESSAGE, PB_RULE.REPEATED, 2, true, __Info_default)
+		var __info_default: Array[GoodsInfo] = []
+		__info = PBField.new("info", PB_DATA_TYPE.MESSAGE, PB_RULE.REPEATED, 2, true, __info_default)
 		service = PBServiceField.new()
-		service.field = __Info
-		service.func_ref = Callable(self, "add_Info")
-		data[__Info.tag] = service
+		service.field = __info
+		service.func_ref = Callable(self, "add_info")
+		data[__info.tag] = service
 		
-		__PageNum = PBField.new("PageNum", PB_DATA_TYPE.INT32, PB_RULE.OPTIONAL, 3, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT32])
+		__pageNum = PBField.new("pageNum", PB_DATA_TYPE.INT32, PB_RULE.OPTIONAL, 3, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT32])
 		service = PBServiceField.new()
-		service.field = __PageNum
-		data[__PageNum.tag] = service
+		service.field = __pageNum
+		data[__pageNum.tag] = service
 		
 	var data = {}
 	
-	var __UserID: PBField
-	func get_UserID() -> int:
-		return __UserID.value
-	func clear_UserID() -> void:
+	var __userID: PBField
+	func get_userID() -> int:
+		return __userID.value
+	func clear_userID() -> void:
 		data[1].state = PB_SERVICE_STATE.UNFILLED
-		__UserID.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
-	func set_UserID(value : int) -> void:
-		__UserID.value = value
+		__userID.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
+	func set_userID(value : int) -> void:
+		__userID.value = value
 	
-	var __Info: PBField
-	func get_Info() -> Array[GoodsInfo]:
-		return __Info.value
-	func clear_Info() -> void:
+	var __info: PBField
+	func get_info() -> Array[GoodsInfo]:
+		return __info.value
+	func clear_info() -> void:
 		data[2].state = PB_SERVICE_STATE.UNFILLED
-		__Info.value = []
-	func add_Info() -> GoodsInfo:
+		__info.value = []
+	func add_info() -> GoodsInfo:
 		var element = GoodsInfo.new()
-		__Info.value.append(element)
+		__info.value.append(element)
 		return element
 	
-	var __PageNum: PBField
-	func get_PageNum() -> int:
-		return __PageNum.value
-	func clear_PageNum() -> void:
+	var __pageNum: PBField
+	func get_pageNum() -> int:
+		return __pageNum.value
+	func clear_pageNum() -> void:
 		data[3].state = PB_SERVICE_STATE.UNFILLED
-		__PageNum.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT32]
-	func set_PageNum(value : int) -> void:
-		__PageNum.value = value
+		__pageNum.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT32]
+	func set_pageNum(value : int) -> void:
+		__pageNum.value = value
 	
 	func _to_string() -> String:
 		return PBPacker.message_to_string(data)
@@ -4024,49 +4398,49 @@ class BuyGoodsReq:
 	func _init():
 		var service
 		
-		__ID = PBField.new("ID", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
+		__iD = PBField.new("iD", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
 		service = PBServiceField.new()
-		service.field = __ID
-		data[__ID.tag] = service
+		service.field = __iD
+		data[__iD.tag] = service
 		
-		__Payment = PBField.new("Payment", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
+		__payment = PBField.new("payment", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
 		service = PBServiceField.new()
-		service.field = __Payment
-		data[__Payment.tag] = service
+		service.field = __payment
+		data[__payment.tag] = service
 		
-		__Count = PBField.new("Count", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 3, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
+		__count = PBField.new("count", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 3, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
 		service = PBServiceField.new()
-		service.field = __Count
-		data[__Count.tag] = service
+		service.field = __count
+		data[__count.tag] = service
 		
 	var data = {}
 	
-	var __ID: PBField
-	func get_ID() -> int:
-		return __ID.value
-	func clear_ID() -> void:
+	var __iD: PBField
+	func get_iD() -> int:
+		return __iD.value
+	func clear_iD() -> void:
 		data[1].state = PB_SERVICE_STATE.UNFILLED
-		__ID.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
-	func set_ID(value : int) -> void:
-		__ID.value = value
+		__iD.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
+	func set_iD(value : int) -> void:
+		__iD.value = value
 	
-	var __Payment: PBField
-	func get_Payment() -> int:
-		return __Payment.value
-	func clear_Payment() -> void:
+	var __payment: PBField
+	func get_payment() -> int:
+		return __payment.value
+	func clear_payment() -> void:
 		data[2].state = PB_SERVICE_STATE.UNFILLED
-		__Payment.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
-	func set_Payment(value : int) -> void:
-		__Payment.value = value
+		__payment.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
+	func set_payment(value : int) -> void:
+		__payment.value = value
 	
-	var __Count: PBField
-	func get_Count() -> int:
-		return __Count.value
-	func clear_Count() -> void:
+	var __count: PBField
+	func get_count() -> int:
+		return __count.value
+	func clear_count() -> void:
 		data[3].state = PB_SERVICE_STATE.UNFILLED
-		__Count.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
-	func set_Count(value : int) -> void:
-		__Count.value = value
+		__count.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
+	func set_count(value : int) -> void:
+		__count.value = value
 	
 	func _to_string() -> String:
 		return PBPacker.message_to_string(data)
@@ -4093,37 +4467,37 @@ class BuyGoodsResp:
 	func _init():
 		var service
 		
-		__UserID = PBField.new("UserID", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
+		__userID = PBField.new("userID", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
 		service = PBServiceField.new()
-		service.field = __UserID
-		data[__UserID.tag] = service
+		service.field = __userID
+		data[__userID.tag] = service
 		
-		__Info = PBField.new("Info", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
+		__info = PBField.new("info", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
-		service.field = __Info
-		service.func_ref = Callable(self, "new_Info")
-		data[__Info.tag] = service
+		service.field = __info
+		service.func_ref = Callable(self, "new_info")
+		data[__info.tag] = service
 		
 	var data = {}
 	
-	var __UserID: PBField
-	func get_UserID() -> int:
-		return __UserID.value
-	func clear_UserID() -> void:
+	var __userID: PBField
+	func get_userID() -> int:
+		return __userID.value
+	func clear_userID() -> void:
 		data[1].state = PB_SERVICE_STATE.UNFILLED
-		__UserID.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
-	func set_UserID(value : int) -> void:
-		__UserID.value = value
+		__userID.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
+	func set_userID(value : int) -> void:
+		__userID.value = value
 	
-	var __Info: PBField
-	func get_Info() -> GoodsInfo:
-		return __Info.value
-	func clear_Info() -> void:
+	var __info: PBField
+	func get_info() -> GoodsInfo:
+		return __info.value
+	func clear_info() -> void:
 		data[2].state = PB_SERVICE_STATE.UNFILLED
-		__Info.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
-	func new_Info() -> GoodsInfo:
-		__Info.value = GoodsInfo.new()
-		return __Info.value
+		__info.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+	func new_info() -> GoodsInfo:
+		__info.value = GoodsInfo.new()
+		return __info.value
 	
 	func _to_string() -> String:
 		return PBPacker.message_to_string(data)
@@ -4150,35 +4524,35 @@ class CheckKnapsackReq:
 	func _init():
 		var service
 		
-		__ID = PBField.new("ID", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
+		__iD = PBField.new("iD", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
 		service = PBServiceField.new()
-		service.field = __ID
-		data[__ID.tag] = service
+		service.field = __iD
+		data[__iD.tag] = service
 		
-		__Number = PBField.new("Number", PB_DATA_TYPE.INT32, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT32])
+		__number = PBField.new("number", PB_DATA_TYPE.INT32, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT32])
 		service = PBServiceField.new()
-		service.field = __Number
-		data[__Number.tag] = service
+		service.field = __number
+		data[__number.tag] = service
 		
 	var data = {}
 	
-	var __ID: PBField
-	func get_ID() -> int:
-		return __ID.value
-	func clear_ID() -> void:
+	var __iD: PBField
+	func get_iD() -> int:
+		return __iD.value
+	func clear_iD() -> void:
 		data[1].state = PB_SERVICE_STATE.UNFILLED
-		__ID.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
-	func set_ID(value : int) -> void:
-		__ID.value = value
+		__iD.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
+	func set_iD(value : int) -> void:
+		__iD.value = value
 	
-	var __Number: PBField
-	func get_Number() -> int:
-		return __Number.value
-	func clear_Number() -> void:
+	var __number: PBField
+	func get_number() -> int:
+		return __number.value
+	func clear_number() -> void:
 		data[2].state = PB_SERVICE_STATE.UNFILLED
-		__Number.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT32]
-	func set_Number(value : int) -> void:
-		__Number.value = value
+		__number.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT32]
+	func set_number(value : int) -> void:
+		__number.value = value
 	
 	func _to_string() -> String:
 		return PBPacker.message_to_string(data)
@@ -4205,37 +4579,37 @@ class CheckKnapsackResp:
 	func _init():
 		var service
 		
-		__UserID = PBField.new("UserID", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
+		__userID = PBField.new("userID", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
 		service = PBServiceField.new()
-		service.field = __UserID
-		data[__UserID.tag] = service
+		service.field = __userID
+		data[__userID.tag] = service
 		
-		__Info = PBField.new("Info", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
+		__info = PBField.new("info", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
-		service.field = __Info
-		service.func_ref = Callable(self, "new_Info")
-		data[__Info.tag] = service
+		service.field = __info
+		service.func_ref = Callable(self, "new_info")
+		data[__info.tag] = service
 		
 	var data = {}
 	
-	var __UserID: PBField
-	func get_UserID() -> int:
-		return __UserID.value
-	func clear_UserID() -> void:
+	var __userID: PBField
+	func get_userID() -> int:
+		return __userID.value
+	func clear_userID() -> void:
 		data[1].state = PB_SERVICE_STATE.UNFILLED
-		__UserID.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
-	func set_UserID(value : int) -> void:
-		__UserID.value = value
+		__userID.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
+	func set_userID(value : int) -> void:
+		__userID.value = value
 	
-	var __Info: PBField
-	func get_Info() -> KnapsackInfo:
-		return __Info.value
-	func clear_Info() -> void:
+	var __info: PBField
+	func get_info() -> KnapsackInfo:
+		return __info.value
+	func clear_info() -> void:
 		data[2].state = PB_SERVICE_STATE.UNFILLED
-		__Info.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
-	func new_Info() -> KnapsackInfo:
-		__Info.value = KnapsackInfo.new()
-		return __Info.value
+		__info.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+	func new_info() -> KnapsackInfo:
+		__info.value = KnapsackInfo.new()
+		return __info.value
 	
 	func _to_string() -> String:
 		return PBPacker.message_to_string(data)
@@ -4262,49 +4636,49 @@ class BarterReq:
 	func _init():
 		var service
 		
-		__ID = PBField.new("ID", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
+		__iD = PBField.new("iD", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
 		service = PBServiceField.new()
-		service.field = __ID
-		data[__ID.tag] = service
+		service.field = __iD
+		data[__iD.tag] = service
 		
-		__ToID = PBField.new("ToID", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
+		__toID = PBField.new("toID", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
 		service = PBServiceField.new()
-		service.field = __ToID
-		data[__ToID.tag] = service
+		service.field = __toID
+		data[__toID.tag] = service
 		
-		__Amount = PBField.new("Amount", PB_DATA_TYPE.INT32, PB_RULE.OPTIONAL, 3, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT32])
+		__amount = PBField.new("amount", PB_DATA_TYPE.INT32, PB_RULE.OPTIONAL, 3, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT32])
 		service = PBServiceField.new()
-		service.field = __Amount
-		data[__Amount.tag] = service
+		service.field = __amount
+		data[__amount.tag] = service
 		
 	var data = {}
 	
-	var __ID: PBField
-	func get_ID() -> int:
-		return __ID.value
-	func clear_ID() -> void:
+	var __iD: PBField
+	func get_iD() -> int:
+		return __iD.value
+	func clear_iD() -> void:
 		data[1].state = PB_SERVICE_STATE.UNFILLED
-		__ID.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
-	func set_ID(value : int) -> void:
-		__ID.value = value
+		__iD.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
+	func set_iD(value : int) -> void:
+		__iD.value = value
 	
-	var __ToID: PBField
-	func get_ToID() -> int:
-		return __ToID.value
-	func clear_ToID() -> void:
+	var __toID: PBField
+	func get_toID() -> int:
+		return __toID.value
+	func clear_toID() -> void:
 		data[2].state = PB_SERVICE_STATE.UNFILLED
-		__ToID.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
-	func set_ToID(value : int) -> void:
-		__ToID.value = value
+		__toID.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
+	func set_toID(value : int) -> void:
+		__toID.value = value
 	
-	var __Amount: PBField
-	func get_Amount() -> int:
-		return __Amount.value
-	func clear_Amount() -> void:
+	var __amount: PBField
+	func get_amount() -> int:
+		return __amount.value
+	func clear_amount() -> void:
 		data[3].state = PB_SERVICE_STATE.UNFILLED
-		__Amount.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT32]
-	func set_Amount(value : int) -> void:
-		__Amount.value = value
+		__amount.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT32]
+	func set_amount(value : int) -> void:
+		__amount.value = value
 	
 	func _to_string() -> String:
 		return PBPacker.message_to_string(data)
@@ -4331,37 +4705,37 @@ class BarterResp:
 	func _init():
 		var service
 		
-		__UserID = PBField.new("UserID", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
+		__userID = PBField.new("userID", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
 		service = PBServiceField.new()
-		service.field = __UserID
-		data[__UserID.tag] = service
+		service.field = __userID
+		data[__userID.tag] = service
 		
-		__Info = PBField.new("Info", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
+		__info = PBField.new("info", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
-		service.field = __Info
-		service.func_ref = Callable(self, "new_Info")
-		data[__Info.tag] = service
+		service.field = __info
+		service.func_ref = Callable(self, "new_info")
+		data[__info.tag] = service
 		
 	var data = {}
 	
-	var __UserID: PBField
-	func get_UserID() -> int:
-		return __UserID.value
-	func clear_UserID() -> void:
+	var __userID: PBField
+	func get_userID() -> int:
+		return __userID.value
+	func clear_userID() -> void:
 		data[1].state = PB_SERVICE_STATE.UNFILLED
-		__UserID.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
-	func set_UserID(value : int) -> void:
-		__UserID.value = value
+		__userID.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
+	func set_userID(value : int) -> void:
+		__userID.value = value
 	
-	var __Info: PBField
-	func get_Info() -> KnapsackInfo:
-		return __Info.value
-	func clear_Info() -> void:
+	var __info: PBField
+	func get_info() -> KnapsackInfo:
+		return __info.value
+	func clear_info() -> void:
 		data[2].state = PB_SERVICE_STATE.UNFILLED
-		__Info.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
-	func new_Info() -> KnapsackInfo:
-		__Info.value = KnapsackInfo.new()
-		return __Info.value
+		__info.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+	func new_info() -> KnapsackInfo:
+		__info.value = KnapsackInfo.new()
+		return __info.value
 	
 	func _to_string() -> String:
 		return PBPacker.message_to_string(data)
@@ -4388,49 +4762,49 @@ class ToShoppingResp:
 	func _init():
 		var service
 		
-		__ID = PBField.new("ID", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
+		__iD = PBField.new("iD", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
 		service = PBServiceField.new()
-		service.field = __ID
-		data[__ID.tag] = service
+		service.field = __iD
+		data[__iD.tag] = service
 		
-		__Count = PBField.new("Count", PB_DATA_TYPE.INT32, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT32])
+		__count = PBField.new("count", PB_DATA_TYPE.INT32, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT32])
 		service = PBServiceField.new()
-		service.field = __Count
-		data[__Count.tag] = service
+		service.field = __count
+		data[__count.tag] = service
 		
-		__Reason = PBField.new("Reason", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 3, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
+		__reason = PBField.new("reason", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 3, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
-		service.field = __Reason
-		data[__Reason.tag] = service
+		service.field = __reason
+		data[__reason.tag] = service
 		
 	var data = {}
 	
-	var __ID: PBField
-	func get_ID() -> int:
-		return __ID.value
-	func clear_ID() -> void:
+	var __iD: PBField
+	func get_iD() -> int:
+		return __iD.value
+	func clear_iD() -> void:
 		data[1].state = PB_SERVICE_STATE.UNFILLED
-		__ID.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
-	func set_ID(value : int) -> void:
-		__ID.value = value
+		__iD.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
+	func set_iD(value : int) -> void:
+		__iD.value = value
 	
-	var __Count: PBField
-	func get_Count() -> int:
-		return __Count.value
-	func clear_Count() -> void:
+	var __count: PBField
+	func get_count() -> int:
+		return __count.value
+	func clear_count() -> void:
 		data[2].state = PB_SERVICE_STATE.UNFILLED
-		__Count.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT32]
-	func set_Count(value : int) -> void:
-		__Count.value = value
+		__count.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT32]
+	func set_count(value : int) -> void:
+		__count.value = value
 	
-	var __Reason: PBField
-	func get_Reason() -> String:
-		return __Reason.value
-	func clear_Reason() -> void:
+	var __reason: PBField
+	func get_reason() -> String:
+		return __reason.value
+	func clear_reason() -> void:
 		data[3].state = PB_SERVICE_STATE.UNFILLED
-		__Reason.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
-	func set_Reason(value : String) -> void:
-		__Reason.value = value
+		__reason.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
+	func set_reason(value : String) -> void:
+		__reason.value = value
 	
 	func _to_string() -> String:
 		return PBPacker.message_to_string(data)
@@ -4457,21 +4831,21 @@ class EmailReq:
 	func _init():
 		var service
 		
-		__PageNum = PBField.new("PageNum", PB_DATA_TYPE.INT32, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT32])
+		__pageNum = PBField.new("pageNum", PB_DATA_TYPE.INT32, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT32])
 		service = PBServiceField.new()
-		service.field = __PageNum
-		data[__PageNum.tag] = service
+		service.field = __pageNum
+		data[__pageNum.tag] = service
 		
 	var data = {}
 	
-	var __PageNum: PBField
-	func get_PageNum() -> int:
-		return __PageNum.value
-	func clear_PageNum() -> void:
+	var __pageNum: PBField
+	func get_pageNum() -> int:
+		return __pageNum.value
+	func clear_pageNum() -> void:
 		data[1].state = PB_SERVICE_STATE.UNFILLED
-		__PageNum.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT32]
-	func set_PageNum(value : int) -> void:
-		__PageNum.value = value
+		__pageNum.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT32]
+	func set_pageNum(value : int) -> void:
+		__pageNum.value = value
 	
 	func _to_string() -> String:
 		return PBPacker.message_to_string(data)
@@ -4498,53 +4872,53 @@ class EmailResp:
 	func _init():
 		var service
 		
-		__UserID = PBField.new("UserID", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
+		__userID = PBField.new("userID", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
 		service = PBServiceField.new()
-		service.field = __UserID
-		data[__UserID.tag] = service
+		service.field = __userID
+		data[__userID.tag] = service
 		
-		var __Infos_default: Array[EmailInfo] = []
-		__Infos = PBField.new("Infos", PB_DATA_TYPE.MESSAGE, PB_RULE.REPEATED, 2, true, __Infos_default)
+		var __infos_default: Array[EmailInfo] = []
+		__infos = PBField.new("infos", PB_DATA_TYPE.MESSAGE, PB_RULE.REPEATED, 2, true, __infos_default)
 		service = PBServiceField.new()
-		service.field = __Infos
-		service.func_ref = Callable(self, "add_Infos")
-		data[__Infos.tag] = service
+		service.field = __infos
+		service.func_ref = Callable(self, "add_infos")
+		data[__infos.tag] = service
 		
-		__PageNum = PBField.new("PageNum", PB_DATA_TYPE.INT32, PB_RULE.OPTIONAL, 3, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT32])
+		__pageNum = PBField.new("pageNum", PB_DATA_TYPE.INT32, PB_RULE.OPTIONAL, 3, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT32])
 		service = PBServiceField.new()
-		service.field = __PageNum
-		data[__PageNum.tag] = service
+		service.field = __pageNum
+		data[__pageNum.tag] = service
 		
 	var data = {}
 	
-	var __UserID: PBField
-	func get_UserID() -> int:
-		return __UserID.value
-	func clear_UserID() -> void:
+	var __userID: PBField
+	func get_userID() -> int:
+		return __userID.value
+	func clear_userID() -> void:
 		data[1].state = PB_SERVICE_STATE.UNFILLED
-		__UserID.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
-	func set_UserID(value : int) -> void:
-		__UserID.value = value
+		__userID.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
+	func set_userID(value : int) -> void:
+		__userID.value = value
 	
-	var __Infos: PBField
-	func get_Infos() -> Array[EmailInfo]:
-		return __Infos.value
-	func clear_Infos() -> void:
+	var __infos: PBField
+	func get_infos() -> Array[EmailInfo]:
+		return __infos.value
+	func clear_infos() -> void:
 		data[2].state = PB_SERVICE_STATE.UNFILLED
-		__Infos.value = []
-	func add_Infos() -> EmailInfo:
+		__infos.value = []
+	func add_infos() -> EmailInfo:
 		var element = EmailInfo.new()
-		__Infos.value.append(element)
+		__infos.value.append(element)
 		return element
 	
-	var __PageNum: PBField
-	func get_PageNum() -> int:
-		return __PageNum.value
-	func clear_PageNum() -> void:
+	var __pageNum: PBField
+	func get_pageNum() -> int:
+		return __pageNum.value
+	func clear_pageNum() -> void:
 		data[3].state = PB_SERVICE_STATE.UNFILLED
-		__PageNum.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT32]
-	func set_PageNum(value : int) -> void:
-		__PageNum.value = value
+		__pageNum.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT32]
+	func set_pageNum(value : int) -> void:
+		__pageNum.value = value
 	
 	func _to_string() -> String:
 		return PBPacker.message_to_string(data)
@@ -4571,21 +4945,21 @@ class ClaimReq:
 	func _init():
 		var service
 		
-		__EmailID = PBField.new("EmailID", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
+		__emailID = PBField.new("emailID", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
 		service = PBServiceField.new()
-		service.field = __EmailID
-		data[__EmailID.tag] = service
+		service.field = __emailID
+		data[__emailID.tag] = service
 		
 	var data = {}
 	
-	var __EmailID: PBField
-	func get_EmailID() -> int:
-		return __EmailID.value
-	func clear_EmailID() -> void:
+	var __emailID: PBField
+	func get_emailID() -> int:
+		return __emailID.value
+	func clear_emailID() -> void:
 		data[1].state = PB_SERVICE_STATE.UNFILLED
-		__EmailID.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
-	func set_EmailID(value : int) -> void:
-		__EmailID.value = value
+		__emailID.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
+	func set_emailID(value : int) -> void:
+		__emailID.value = value
 	
 	func _to_string() -> String:
 		return PBPacker.message_to_string(data)
@@ -4612,35 +4986,35 @@ class ClaimResp:
 	func _init():
 		var service
 		
-		__UserID = PBField.new("UserID", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
+		__userID = PBField.new("userID", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
 		service = PBServiceField.new()
-		service.field = __UserID
-		data[__UserID.tag] = service
+		service.field = __userID
+		data[__userID.tag] = service
 		
-		__EmailID = PBField.new("EmailID", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
+		__emailID = PBField.new("emailID", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
 		service = PBServiceField.new()
-		service.field = __EmailID
-		data[__EmailID.tag] = service
+		service.field = __emailID
+		data[__emailID.tag] = service
 		
 	var data = {}
 	
-	var __UserID: PBField
-	func get_UserID() -> int:
-		return __UserID.value
-	func clear_UserID() -> void:
+	var __userID: PBField
+	func get_userID() -> int:
+		return __userID.value
+	func clear_userID() -> void:
 		data[1].state = PB_SERVICE_STATE.UNFILLED
-		__UserID.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
-	func set_UserID(value : int) -> void:
-		__UserID.value = value
+		__userID.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
+	func set_userID(value : int) -> void:
+		__userID.value = value
 	
-	var __EmailID: PBField
-	func get_EmailID() -> int:
-		return __EmailID.value
-	func clear_EmailID() -> void:
+	var __emailID: PBField
+	func get_emailID() -> int:
+		return __emailID.value
+	func clear_emailID() -> void:
 		data[2].state = PB_SERVICE_STATE.UNFILLED
-		__EmailID.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
-	func set_EmailID(value : int) -> void:
-		__EmailID.value = value
+		__emailID.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
+	func set_emailID(value : int) -> void:
+		__emailID.value = value
 	
 	func _to_string() -> String:
 		return PBPacker.message_to_string(data)
@@ -4667,21 +5041,21 @@ class SuggestReq:
 	func _init():
 		var service
 		
-		__Content = PBField.new("Content", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
+		__content = PBField.new("content", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
-		service.field = __Content
-		data[__Content.tag] = service
+		service.field = __content
+		data[__content.tag] = service
 		
 	var data = {}
 	
-	var __Content: PBField
-	func get_Content() -> String:
-		return __Content.value
-	func clear_Content() -> void:
+	var __content: PBField
+	func get_content() -> String:
+		return __content.value
+	func clear_content() -> void:
 		data[1].state = PB_SERVICE_STATE.UNFILLED
-		__Content.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
-	func set_Content(value : String) -> void:
-		__Content.value = value
+		__content.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
+	func set_content(value : String) -> void:
+		__content.value = value
 	
 	func _to_string() -> String:
 		return PBPacker.message_to_string(data)
@@ -4708,37 +5082,37 @@ class SuggestResp:
 	func _init():
 		var service
 		
-		__UserID = PBField.new("UserID", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
+		__userID = PBField.new("userID", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
 		service = PBServiceField.new()
-		service.field = __UserID
-		data[__UserID.tag] = service
+		service.field = __userID
+		data[__userID.tag] = service
 		
-		__Feedback = PBField.new("Feedback", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
+		__feedback = PBField.new("feedback", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
-		service.field = __Feedback
-		service.func_ref = Callable(self, "new_Feedback")
-		data[__Feedback.tag] = service
+		service.field = __feedback
+		service.func_ref = Callable(self, "new_feedback")
+		data[__feedback.tag] = service
 		
 	var data = {}
 	
-	var __UserID: PBField
-	func get_UserID() -> int:
-		return __UserID.value
-	func clear_UserID() -> void:
+	var __userID: PBField
+	func get_userID() -> int:
+		return __userID.value
+	func clear_userID() -> void:
 		data[1].state = PB_SERVICE_STATE.UNFILLED
-		__UserID.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
-	func set_UserID(value : int) -> void:
-		__UserID.value = value
+		__userID.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
+	func set_userID(value : int) -> void:
+		__userID.value = value
 	
-	var __Feedback: PBField
-	func get_Feedback() -> EmailInfo:
-		return __Feedback.value
-	func clear_Feedback() -> void:
+	var __feedback: PBField
+	func get_feedback() -> EmailInfo:
+		return __feedback.value
+	func clear_feedback() -> void:
 		data[2].state = PB_SERVICE_STATE.UNFILLED
-		__Feedback.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
-	func new_Feedback() -> EmailInfo:
-		__Feedback.value = EmailInfo.new()
-		return __Feedback.value
+		__feedback.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+	func new_feedback() -> EmailInfo:
+		__feedback.value = EmailInfo.new()
+		return __feedback.value
 	
 	func _to_string() -> String:
 		return PBPacker.message_to_string(data)
@@ -4765,21 +5139,21 @@ class EmailReadReq:
 	func _init():
 		var service
 		
-		__EmailID = PBField.new("EmailID", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
+		__emailID = PBField.new("emailID", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
 		service = PBServiceField.new()
-		service.field = __EmailID
-		data[__EmailID.tag] = service
+		service.field = __emailID
+		data[__emailID.tag] = service
 		
 	var data = {}
 	
-	var __EmailID: PBField
-	func get_EmailID() -> int:
-		return __EmailID.value
-	func clear_EmailID() -> void:
+	var __emailID: PBField
+	func get_emailID() -> int:
+		return __emailID.value
+	func clear_emailID() -> void:
 		data[1].state = PB_SERVICE_STATE.UNFILLED
-		__EmailID.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
-	func set_EmailID(value : int) -> void:
-		__EmailID.value = value
+		__emailID.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
+	func set_emailID(value : int) -> void:
+		__emailID.value = value
 	
 	func _to_string() -> String:
 		return PBPacker.message_to_string(data)
@@ -4806,35 +5180,35 @@ class EmailReadResp:
 	func _init():
 		var service
 		
-		__UserID = PBField.new("UserID", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
+		__userID = PBField.new("userID", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
 		service = PBServiceField.new()
-		service.field = __UserID
-		data[__UserID.tag] = service
+		service.field = __userID
+		data[__userID.tag] = service
 		
-		__EmailID = PBField.new("EmailID", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
+		__emailID = PBField.new("emailID", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
 		service = PBServiceField.new()
-		service.field = __EmailID
-		data[__EmailID.tag] = service
+		service.field = __emailID
+		data[__emailID.tag] = service
 		
 	var data = {}
 	
-	var __UserID: PBField
-	func get_UserID() -> int:
-		return __UserID.value
-	func clear_UserID() -> void:
+	var __userID: PBField
+	func get_userID() -> int:
+		return __userID.value
+	func clear_userID() -> void:
 		data[1].state = PB_SERVICE_STATE.UNFILLED
-		__UserID.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
-	func set_UserID(value : int) -> void:
-		__UserID.value = value
+		__userID.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
+	func set_userID(value : int) -> void:
+		__userID.value = value
 	
-	var __EmailID: PBField
-	func get_EmailID() -> int:
-		return __EmailID.value
-	func clear_EmailID() -> void:
+	var __emailID: PBField
+	func get_emailID() -> int:
+		return __emailID.value
+	func clear_emailID() -> void:
 		data[2].state = PB_SERVICE_STATE.UNFILLED
-		__EmailID.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
-	func set_EmailID(value : int) -> void:
-		__EmailID.value = value
+		__emailID.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
+	func set_emailID(value : int) -> void:
+		__emailID.value = value
 	
 	func _to_string() -> String:
 		return PBPacker.message_to_string(data)
@@ -4861,21 +5235,21 @@ class EmailDelReq:
 	func _init():
 		var service
 		
-		__EmailID = PBField.new("EmailID", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
+		__emailID = PBField.new("emailID", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
 		service = PBServiceField.new()
-		service.field = __EmailID
-		data[__EmailID.tag] = service
+		service.field = __emailID
+		data[__emailID.tag] = service
 		
 	var data = {}
 	
-	var __EmailID: PBField
-	func get_EmailID() -> int:
-		return __EmailID.value
-	func clear_EmailID() -> void:
+	var __emailID: PBField
+	func get_emailID() -> int:
+		return __emailID.value
+	func clear_emailID() -> void:
 		data[1].state = PB_SERVICE_STATE.UNFILLED
-		__EmailID.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
-	func set_EmailID(value : int) -> void:
-		__EmailID.value = value
+		__emailID.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
+	func set_emailID(value : int) -> void:
+		__emailID.value = value
 	
 	func _to_string() -> String:
 		return PBPacker.message_to_string(data)
@@ -4902,35 +5276,35 @@ class EmailDelResp:
 	func _init():
 		var service
 		
-		__UserID = PBField.new("UserID", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
+		__userID = PBField.new("userID", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
 		service = PBServiceField.new()
-		service.field = __UserID
-		data[__UserID.tag] = service
+		service.field = __userID
+		data[__userID.tag] = service
 		
-		__EmailID = PBField.new("EmailID", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
+		__emailID = PBField.new("emailID", PB_DATA_TYPE.INT64, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT64])
 		service = PBServiceField.new()
-		service.field = __EmailID
-		data[__EmailID.tag] = service
+		service.field = __emailID
+		data[__emailID.tag] = service
 		
 	var data = {}
 	
-	var __UserID: PBField
-	func get_UserID() -> int:
-		return __UserID.value
-	func clear_UserID() -> void:
+	var __userID: PBField
+	func get_userID() -> int:
+		return __userID.value
+	func clear_userID() -> void:
 		data[1].state = PB_SERVICE_STATE.UNFILLED
-		__UserID.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
-	func set_UserID(value : int) -> void:
-		__UserID.value = value
+		__userID.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
+	func set_userID(value : int) -> void:
+		__userID.value = value
 	
-	var __EmailID: PBField
-	func get_EmailID() -> int:
-		return __EmailID.value
-	func clear_EmailID() -> void:
+	var __emailID: PBField
+	func get_emailID() -> int:
+		return __emailID.value
+	func clear_emailID() -> void:
 		data[2].state = PB_SERVICE_STATE.UNFILLED
-		__EmailID.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
-	func set_EmailID(value : int) -> void:
-		__EmailID.value = value
+		__emailID.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT64]
+	func set_emailID(value : int) -> void:
+		__emailID.value = value
 	
 	func _to_string() -> String:
 		return PBPacker.message_to_string(data)
@@ -4957,35 +5331,35 @@ class ResultResp:
 	func _init():
 		var service
 		
-		__State = PBField.new("State", PB_DATA_TYPE.INT32, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT32])
+		__state = PBField.new("state", PB_DATA_TYPE.INT32, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT32])
 		service = PBServiceField.new()
-		service.field = __State
-		data[__State.tag] = service
+		service.field = __state
+		data[__state.tag] = service
 		
-		__Hints = PBField.new("Hints", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
+		__hints = PBField.new("hints", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
-		service.field = __Hints
-		data[__Hints.tag] = service
+		service.field = __hints
+		data[__hints.tag] = service
 		
 	var data = {}
 	
-	var __State: PBField
-	func get_State() -> int:
-		return __State.value
-	func clear_State() -> void:
+	var __state: PBField
+	func get_state() -> int:
+		return __state.value
+	func clear_state() -> void:
 		data[1].state = PB_SERVICE_STATE.UNFILLED
-		__State.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT32]
-	func set_State(value : int) -> void:
-		__State.value = value
+		__state.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT32]
+	func set_state(value : int) -> void:
+		__state.value = value
 	
-	var __Hints: PBField
-	func get_Hints() -> String:
-		return __Hints.value
-	func clear_Hints() -> void:
+	var __hints: PBField
+	func get_hints() -> String:
+		return __hints.value
+	func clear_hints() -> void:
 		data[2].state = PB_SERVICE_STATE.UNFILLED
-		__Hints.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
-	func set_Hints(value : String) -> void:
-		__Hints.value = value
+		__hints.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
+	func set_hints(value : String) -> void:
+		__hints.value = value
 	
 	func _to_string() -> String:
 		return PBPacker.message_to_string(data)
@@ -5012,49 +5386,49 @@ class ResultPopResp:
 	func _init():
 		var service
 		
-		__Flag = PBField.new("Flag", PB_DATA_TYPE.INT32, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT32])
+		__flag = PBField.new("flag", PB_DATA_TYPE.INT32, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT32])
 		service = PBServiceField.new()
-		service.field = __Flag
-		data[__Flag.tag] = service
+		service.field = __flag
+		data[__flag.tag] = service
 		
-		__Title = PBField.new("Title", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
+		__title = PBField.new("title", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
-		service.field = __Title
-		data[__Title.tag] = service
+		service.field = __title
+		data[__title.tag] = service
 		
-		__Hints = PBField.new("Hints", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 3, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
+		__hints = PBField.new("hints", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 3, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
-		service.field = __Hints
-		data[__Hints.tag] = service
+		service.field = __hints
+		data[__hints.tag] = service
 		
 	var data = {}
 	
-	var __Flag: PBField
-	func get_Flag() -> int:
-		return __Flag.value
-	func clear_Flag() -> void:
+	var __flag: PBField
+	func get_flag() -> int:
+		return __flag.value
+	func clear_flag() -> void:
 		data[1].state = PB_SERVICE_STATE.UNFILLED
-		__Flag.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT32]
-	func set_Flag(value : int) -> void:
-		__Flag.value = value
+		__flag.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT32]
+	func set_flag(value : int) -> void:
+		__flag.value = value
 	
-	var __Title: PBField
-	func get_Title() -> String:
-		return __Title.value
-	func clear_Title() -> void:
+	var __title: PBField
+	func get_title() -> String:
+		return __title.value
+	func clear_title() -> void:
 		data[2].state = PB_SERVICE_STATE.UNFILLED
-		__Title.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
-	func set_Title(value : String) -> void:
-		__Title.value = value
+		__title.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
+	func set_title(value : String) -> void:
+		__title.value = value
 	
-	var __Hints: PBField
-	func get_Hints() -> String:
-		return __Hints.value
-	func clear_Hints() -> void:
+	var __hints: PBField
+	func get_hints() -> String:
+		return __hints.value
+	func clear_hints() -> void:
 		data[3].state = PB_SERVICE_STATE.UNFILLED
-		__Hints.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
-	func set_Hints(value : String) -> void:
-		__Hints.value = value
+		__hints.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
+	func set_hints(value : String) -> void:
+		__hints.value = value
 	
 	func _to_string() -> String:
 		return PBPacker.message_to_string(data)
@@ -5079,7 +5453,7 @@ class ResultPopResp:
 	
 class PingReq:
 	func _init():
-		var service
+		pass
 		
 	var data = {}
 	
@@ -5106,7 +5480,7 @@ class PingReq:
 	
 class PongResp:
 	func _init():
-		var service
+		pass
 		
 	var data = {}
 	

@@ -1,0 +1,74 @@
+syntax = "proto3";
+
+option go_package = "superplace/net/proto/proto;superProto";
+
+package cherryProto;
+
+message I32 {
+  int32  value = 1;
+}
+
+// member data
+message Member {
+  string              nodeId = 1;     // node id
+  string              nodeType = 2;   // node type
+  string              address = 3;    // rpc ip address
+  map<string, string> settings = 4;   // node settings data
+  //map<string, int32>  routes   = 5; // route list  key:route name,value:status 0.enable 1.disable
+}
+
+// member list data
+message MemberList {
+  repeated Member list = 1;
+}
+
+// cross node response data
+message Response {
+  int32 code = 1; // message code
+  bytes data = 2; // message data
+}
+
+message ClusterPacket {
+  int64  buildTime = 1;
+  string sourcePath = 2;
+  string targetPath = 3;
+  string funcName = 4;
+  bytes argBytes = 5;
+  Session session = 6;
+}
+
+message Session {
+  string sid = 1;                 // session unique id
+  int64 uid = 2;                  // user id
+  string agentPath = 3;           // frontend actor agent path
+  string ip = 4;                  // ip address
+  uint32 mid = 5;                 // message id build by client
+  map<string, string> data = 7;   // extend data
+}
+
+message PomeloResponse {
+  string sid = 1;
+  uint32 mid = 2;
+  bytes data = 3;
+  int32 code = 4;
+}
+
+message PomeloPush {
+  string sid = 1;
+  string route = 2;
+  bytes data = 3;
+}
+
+message PomeloKick {
+  string sid = 1;
+  int64 uid = 2;
+  bytes reason = 3;
+  bool close = 4;
+}
+
+message PomeloBroadcastPush {
+  repeated int64 uidList = 1;  // broadcast the uid list
+  bool allUID = 2;             // broadcast all uid
+  string route = 3;            // route
+  bytes data = 4;              // data
+}

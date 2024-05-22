@@ -1,14 +1,15 @@
+OptionButton
+Label
+HBoxContainer
 ColorRect
 RichTextLabel
 TextureRect
 TextEdit
 Node
 Control
-HBoxContainer
 GridContainer
 AcceptDialog
 VBoxContainer
-Label
 Button
 PopupMenu
 Popup
