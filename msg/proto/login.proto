@@ -37,14 +37,45 @@ enum HeroType {
   HUO = 4;        //火
   TU = 5;         //土
 }
+//桌子状态
+enum TableState {
+  InitTB = 0;     //初始化
+  OpenTB = 1;     //开启
+  RepairTB = 2;   //维修
+  ClearTB = 3;    //清场(当前局结束后,清空所有场景信息)
+  StopTB = 4;     //停运(再次启动时，以当前局的场景信息继续运作)
+  CloseTB = 5;    //关闭
+}
+//游戏类型
+enum GameType {
+  General = 0;
+  Fight = 1;          //对战类(两个或两个以上玩家同桌博弈，如三公、诈金花、牛牛)
+  Multiperson = 2;    //百人类型
+  TableCard = 3;      //房卡类型
+  Guess = 4;          //竞猜类型
+  GamesCity = 5;      //电玩城类型
+  DualMeet = 6;       //电竞类型
+  Sport = 7;          //体育类型
+  Smart = 8;          //益智休闲
+  RPG = 9;            //RPG类型
+}
 //游戏场景
 enum GameScene {
   Free = 0;           //空闲
   Start = 1;          //开始
-  Playing = 2;        //游戏中
-  Opening = 3;        //开奖
-  Over = 4;           //结算
-  Closing = 5;        //关闭
+  Call = 2;           //叫分
+  Decide = 3;         //定庄
+  Playing = 4;        //游戏中
+  Opening = 5;        //开奖
+  Over = 6;           //结算
+  Closing = 7;        //关闭
+  SitDirect = 8;      //决定方位
+  RollDice = 9;       //掷骰子
+  WaitOperate = 10;   //等待操作
+  ChangeThree = 11;   //换三张
+  DingQue = 12;       //定缺门
+  CheckTing = 13;     //查听
+  CheckHuaZhu = 14;   //查花猪
 }
 /////////////基础信息//////////////////
 //用户个人信息
@@ -137,11 +168,76 @@ message EmailInfo {
   GoodsList awardList = 8;//奖励商品列表
   int64 timeStamp = 9; //时间戳
 }
+//桌子信息
+message TableInfo{
+  int64 hostID = 1;       //房主ID
+  string name = 2;         //桌子名称：如李寻欢 李诚等
+  string password = 3;     //桌子密钥
+  TableState state = 4;    //桌子状态
+  int32 enterScore = 5;   //进 场 分
+  int32 lessScore = 6;    //坐 下 分
+  int64  playScore = 7;    //携带积分
+  int32 commission = 8;   //税收（百分比数，即为1==1%）
+  int32 maxChair = 9;     //最大座位数 (=0时,默认不受限)
+  int32 amount = 10;      //总 局 数  (=0时,默认不受限)
+  int32 maxOnline = 11;   //在线人数
+  int32 robotCount = 12;   //机器人数量
+}
+//游戏信息
+message GameInfo{
+  GameType type = 1;      //游戏类型
+  int32 kindID = 2;      //游戏种类标识
+  int32 level = 3;       //游戏类别 0:普通 1:中级 2:高级 3:积分排位 4:淘汰制排位
+  GameScene scene = 4;    //游戏场景
+  string name = 5;        //游戏名称：如高级麻将房 四川麻将 广东麻将 跑胡子等等
+}
+/////////////////item/////////////////////////////////
+//任务项
+message TaskItem{
+  int32 iD = 1;
+  int32 twice = 2;     //实现次数
+  string hints = 3;     //提示语 “恭喜 祝贺”之类
+}
+//分类项
+message ClassItem{
+  int64 iD = 1;        //标识[必要项]
+  string name = 2;      //分类名称
+  string key = 3;       //分类密钥(自定义分类可用)
+}
+//子游戏
+message GameItem{
+  int64 iD = 1;       //游戏ID
+  GameInfo info = 2;    //游戏信息
+}
+//桌子
+message TableItem{
+  int32 num = 1;        //序号 (界面排序参考项:非必要)
+  int64 gameID = 2;     //游戏ID
+  TableInfo info = 3;    //桌子信息
+}
+/////////////list//////////////////////////////////
+//任务列表
+message TaskList{
+  repeated TaskItem task = 1;
+}
+//分类列表
+message ClassList{
+  repeated ClassItem classify = 1;
+}
+//游戏列表
+message GameList{
+  repeated GameItem items = 1;
+}
+//桌子列表
+message TableList{
+  repeated TableItem items = 1;
+}
+///////////////////////////////////////////////////////////
 //主页信息
 message MasterInfo{
   UserInfo userInfo = 1;          //用户信息
-  //  ClassList classes = 2;          //分类列表
-  //  TaskList tasks = 3;             //任务列表
+  ClassList classes = 2;          //分类列表
+  TaskList tasks = 3;             //任务列表
 }
 /////////////[优秀如你]-->Req:请求 Resp:反馈<--[交互专用]///////////////////////////////////
 /////////////[优秀如你]-->Req:请求 Resp:反馈<--[交互专用]///////////////////////////////////
@@ -165,10 +261,10 @@ message RegisterReq{
   string address = 14;     //住址
 }
 message RegisterResp{
-  UserInfo info = 1;
+//  UserInfo info = 1;
   int32  sdkId = 2;    // sdk id
   int32  pid = 3;      // 包id
-  string openId = 4;   // sdk的openid
+  string openId = 4;   // sdk的openid 即uid
   int32  serverId = 5; // 所在游戏服id
   string ip = 6;       // 请求ip
 }
@@ -202,6 +298,35 @@ message ReconnectResp{
   int64 inGameID = 2;     //所在游戏ID(=0时,不在任何游戏中)
   int64 inTableNum = 3;   //所在桌子ID(=0时,没有进桌)
   string token = 4;
+}
+/////////////////选择操作///////////////////////////////////
+//选择分类
+message ChooseClassReq{
+  int32 iD = 1;             //分类编号
+  string tableKey = 2;        //分类密钥
+}
+message ChooseClassResp{
+  int32 iD = 1;             //分类编号
+  GameList games = 2;         //游戏列表
+  int32 pageNum = 3;         //分页码 默认20
+}
+//选择游戏
+message ChooseGameReq{
+  GameInfo info = 1;          //游戏(kindID level不可缺省)
+  int32 pageNum = 2;         //请求页数
+}
+message ChooseGameResp{
+  GameInfo info = 1;
+  int32 pageNum = 2;         //分页码 默认 每页20条
+  TableList tables = 3;       //牌桌列表
+}
+//配置游戏(房卡模式)
+message SettingTableReq {
+  GameInfo gInfo = 1;         //游戏信息
+  TableInfo tInfo = 2;        //桌子信息
+}
+message SettingTableResp {
+  TableItem item = 1;
 }
 //////////////////////签到///////////////////////////////////////////
 //签到

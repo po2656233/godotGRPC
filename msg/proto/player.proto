@@ -1,0 +1,73 @@
+// TODO message结构的属性名请使用 驼峰小写字母开始
+// TODO enum枚举的属性名请使用 驼峰大写字母开始
+syntax = "proto3";
+option go_package = "/pb";
+package pb;
+//该协议文件不提供 req 和 resp 注:如需使用,请在子游戏协议中嵌套相关协议.
+enum PlayerState {
+  PlayerLookOn = 0;         //旁观(可作为刚入场时的初始状态)
+  PlayerSitDown = 1;        //坐下(此状态下，才能参与游戏)
+  PlayerAgree = 2;          //同意(可作为准备状态)
+  PlayerPlaying = 3;        //游戏中
+  PlayerPickUp = 4;         //托管
+  PlayerCall = 5;           //叫分
+  PlayerFollow = 6;         //跟牌
+  PlayerRaise = 7;          //加注
+  PlayerLook = 8;           //看牌
+  PlayerCompare = 9;        //比牌
+  PlayerCompareLose = 10;   //比牌失败
+  PlayerOutCard = 11;       //出牌|摊牌
+  PlayerPass = 12;          //过牌|要不起
+  PlayerChi = 13;           //吃
+  PlayerPong = 14;          //碰
+  PlayerMingGang = 15;      //明杠
+  PlayerAnGang = 16;        //暗杠
+  PlayerTing = 17;          //听
+  PlayerHu = 18;            //胡
+  PlayerZiMo = 19;          //自摸
+  PlayerTrustee = 97;       //托管
+  PlayerGiveUp = 98;        //弃牌
+  PlayerStandUp = 99;       //站起(可作为结束状态)
+}
+//玩家信息
+message PlayerInfo {
+  int64 userID = 1;       // ID
+  string account = 2;     // 账号
+  string name = 3;        // 名称
+  int32 faceID = 4;       // 头像
+  int32 age = 5;          // 年龄
+  int32 sex = 6;          // 性别
+  int64 yuanBao = 7;      // 元宝 *100
+  int64 coin = 8;         // 铜钱
+  int32 level = 9;        // 游戏级别
+  int32 ranking = 10;      // 排名
+  PlayerState state = 11; // 状态
+  int64 gold = 12; //金币 *100
+  int64 money = 13;//钱
+  string bindInfo = 14; // 绑定信息
+  int32 gameState = 15; //游戏级别
+  int64 platformID = 16; // 平台ID 0:无效
+  int64 roomNum = 17; // 房间号 0:无效
+  int64 gameID = 18; // 所在游戏ID 0:无效
+  int32 tableID = 19; // 所在桌号ID 0:不提供
+  int32 chairID = 20; // 所在椅子ID 0:不提供
+}
+//玩家列表(信息)
+message PlayerListInfo {
+  repeated PlayerInfo allInfos = 1; //所有玩家信息
+}
+//玩家记录（从数据库中获取）ResResult
+message PlayerRecord {
+  PlayerInfo user = 1;//玩家
+  int32 twice = 2;    //游戏次数
+  int32 ranking = 3;  //当前排名
+  int64 bankroll = 4; //投注额度
+  int64 winLos = 5;   //总输赢 （当局）
+}
+//更新余额
+message UpdateMoneyReq{
+}
+message UpdateMoneyResp{
+  int64 userID = 1;
+  int64 money = 2;//当前玩家余额
+}

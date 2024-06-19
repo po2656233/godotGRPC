@@ -4,6 +4,8 @@ res://addons/gdscript_formatter/format_preference.tres
 res://login/login.gd
 res://game.tscn
 res://home.tscn
-res://option_theme.tres
+res://addons/protobuf/protobuf_ui_dock.tscn
+res://prompt.tscn
 res://network/network.gd
-res://network/net_pomelo.gd
+res://network/net_simple.gd
+res://msg/message_id.json

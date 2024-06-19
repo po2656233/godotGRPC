@@ -1,0 +1,254 @@
+syntax = "proto3";
+option go_package = "/pb";
+package pb;
+import "player.proto";
+// 公告级别
+enum NTFLevel{
+  //系统公告
+  GeneralNTF = 0;//普通公告
+  UrgencyNTF = 1;//紧急公告
+  NTMaintainNTF = 2;//维护公告
+  ServeStopNTF = 3;//停服公告
+  PraiseNTF = 4;    //表扬公告
+  //个人公告
+  STrumpetNTF = 5;  // 小喇叭
+  MTrumpetNTF = 6;  // 银喇叭
+  BTrumpetNTF = 7;  // 金喇叭
+}
+// 方位
+enum Direct {
+  Centre = 0;
+  EAST = 1;
+  South = 2;
+  West = 3;
+  North = 4;
+  EASTSouth = 5;
+  WestSouth = 6;
+  EASTNorth = 7;
+  WestNorth = 8;
+}
+// 麻将操作
+enum MJOperate {
+  NULL = 0;       //用于校验
+  Pass = 1;       // 过牌
+  Chi = 2;        // 吃
+  Pong = 3;       // 碰
+  Gang = 4;       // 杠 自己手上三个,杠别家一个。和MingGang效果一样,显示不同
+  MingGang = 5;   // 明杠(同杠)或碰后,抓牌起杠
+  AnGang = 6;     // 暗杠
+  BuHua = 7;      // 补花
+  Ting = 8;       // 听
+  Hu = 9;         // 胡牌
+  ZiMo = 10;      // 自摸
+}
+//跑胡子
+enum PHZOperate {
+  PhzNull = 0;       //用于校验
+  PhzTi = 1;         // 提
+  PhzWei = 2;        // 偎
+  PhzHe = 3;         // 和
+  PhzPao = 4;        // 跑
+  PhzPong = 5;       // 碰
+  PhzChi = 6;        // 吃
+}
+//时间信息
+message TimeInfo {
+  int64 timeStamp = 1; //时间戳（起始时间戳）
+  int32 waitTime = 2;  //仍需等待时长
+  int32 outTime = 3;   //服务器已过时长
+  int32 totalTime = 4; //总时长
+}
+//牌局信息
+message InningInfo{
+  int64 gameID = 1; //游戏ID
+  string gameName = 2;  // 游戏名称
+  string number = 3;    // 牌局编号
+  int64 winnerID = 4;   // 赢家
+  int64 loserID = 5;    // 输家
+  int64 payoff = 6;     // 结算
+  int64 timeStamp = 7;  // 时间戳
+  string result = 8;    // 牌局结果奖励
+}
+//牌信息
+message CardInfo {
+  bytes cards = 1;        //牌
+  int32 cardType = 2;     //牌型
+  int32 cardValue = 3;    //牌值
+}
+//区域信息
+message AreaInfo {
+  int32 iD = 1;           //区域ID
+  int64 myGold = 2;       //my
+  int64 totalGold = 3;    //总
+  int64 awardGold = 4;  //输赢情况
+}
+//游戏记录
+message GameRecord {
+  CardInfo cardInfo = 1;
+  bool isWon = 2; //输赢情况
+}
+//历史记录(保存十二条记录)
+message GameRecordList {
+  repeated GameRecord list = 1; //所有历史信息
+}
+//-----------------------------------------------------------------------------------------
+/////////////[优秀如你]-->Req:请求 Resp:反馈<--[交互专用]///////////////////////////////////
+/////////////[优秀如你]-->Req:请求 Resp:反馈<--[交互专用]///////////////////////////////////
+/////////////[优秀如你]-->Req:请求 Resp:反馈<--[交互专用]///////////////////////////////////
+//-----------------------------------------------------------------------------------------
+//入场协议 对战类 [EnterXXXGameResp]
+//受游戏本身特性影响,PlayerInfo有本地化需求
+//请查看对应的子游戏协议文件 中的 EnterXXXGameResp
+//若无本地化需求,统一走 EnterGameResp协议
+//进入游戏
+message EnterGameReq {
+  int64 gameID = 1;          //游戏 ID
+  string password = 2;        //房间密钥
+  int32 chairNum = 3;        //椅子编号(可选) 注: =0时,将由系统分配.
+  string token = 4;
+}
+//入场协议  百人类
+message EnterGameResp {
+  int64 gameID = 1;          //游戏标识
+  int32 chairNum = 2;        //椅子编号(不满足req的此项时,将由系统分配,并返回提示)
+  PlayerInfo userInfo = 3;    //玩家信息
+}
+//入场协议 对战类 [EnterXXXGameResp]
+//受游戏本身特性影响,PlayerInfo有本地化需求
+//请查看对应的子游戏协议文件 中的 EnterXXXGameResp
+//若无本地化需求,统一走 EnterGameResp协议
+//退出游戏
+message ExitGameReq {
+  int64 gameID = 1; //游戏标识
+}
+message ExitGameResp {
+  int64 gameID = 1; //游戏标识
+  int64 userID = 2;
+}
+//解散游戏
+message DisbandedGameReq {
+  int64 gameID = 1; //游戏标识
+}
+message DisbandedGameResp {
+  int64 gameID = 1; //游戏标识
+  int64 userID = 2;
+}
+//换桌
+message ChangeTableReq {
+  int64 gameID = 1; //游戏标识
+}
+message ChangeTableResp {
+  int64 gameID = 1; //游戏ID(新的,有别于req的此项)
+  int32 tableNum = 2; //桌子ID
+  int64 userID = 3;  //玩家ID
+}
+//找回游戏密码 [创建者|群主]权限
+message GetBackPasswordReq {
+  int64 gameID = 1; //游戏标识
+}
+message GetBackPasswordResp {
+  int64 gameID = 1; //游戏标识
+  string password = 2;//
+}
+/////////////玩家行为(与游戏弱相关的行为)/////////////////////
+// [排行榜]
+message RankingListReq {
+  int32 topCount = 1; // =>0 默认20
+}
+message RankingListResp {
+  PlayerInfo userInfo = 1;    //玩家信息
+}
+// 托管[暂保留]
+message TrusteeReq {
+  bool isTrustee = 1; //是否托管
+}
+message TrusteeResp {
+  int64 userID = 1; // 玩家ID
+  bool isTrustee = 2; //是否托管
+}
+//扔骰子
+message RollDiceReq {
+  int32 diceCount = 1; //骰子的个数
+}
+message RollDiceResp {
+  int64 userID = 1;
+  int32 diceCount = 2;  //骰子的个数
+  bytes dice = 3;       //骰子具体个数,起抓牌位置
+}
+//请求游戏结束（注:返回牌局记录后,游戏随即销毁）
+message GameOverReq {
+  int64 gameID = 1; //注:不能为0
+}
+message GameOverResp {
+  int64 gameID = 1; //注:不能为0
+  repeated InningInfo innings = 2;//牌局信息
+  int32 pageNum = 3;//页码 默认20条一页;
+}
+///////////////////金币变化///////////////////////////////
+//更新金币
+message UpdateGoldReq{
+}
+message UpdateGoldResp{
+  int64 userID = 1;
+  int64 gold = 2;//当前玩家金币
+}
+///////////////////游戏记录///////////////////////////////
+//获取游戏记录(根据kindID)
+message GetRecordReq{
+  int64 kindID = 1; //游戏标识 =0时,表示所有参与过的游戏
+  int32 level = 2;      // -1:表示不分级别统计
+  int64 startTimeStamp = 3; //起始时间戳 = 0默认所有
+  int64 endTimeStamp = 4;   //结束时间戳 = 0
+}
+message GetRecordResp{
+  int64 userID = 1;  //玩家ID
+  int64 kindID = 2; //游戏标识 =0时,表示所有参与过的游戏
+  int32 level = 3;      // -1:表示不分级别统计
+  int64 startTimeStamp = 4;
+  int64 endTimeStamp = 5;
+  repeated InningInfo innings = 6;//牌局信息
+  int32 pageNum = 7;//页码 默认20条一页
+}
+//获取牌局记录 注: 房主权限
+message GetInningsInfoReq{
+  int64 gameID = 1; //游戏标识 =0时,表示所有参与过的游戏
+}
+message GetInningsInfoResp{
+  int64 gameID = 1; //游戏标识 =0时,表示所有参与过的游戏
+  repeated InningInfo innings = 2;//牌局信息
+  int32 pageNum = 3;//页码 默认20条一页
+}
+////////////////////notify/////////////////////////////
+// 踢出[暂保留]
+message NotifyBeOut {
+  int64 userID = 1;  //玩家ID
+  int64 gameID = 2; //游戏标识
+  int32 code = 3;    //操作码 0:时间到被剔除 1:刷子
+  string hints = 4;    //被踢出的原因
+}
+// 财产变化通知
+message NotifyBalanceChange{
+  int64 userID = 1;
+  int64 yuanBao = 2;          // 元宝 (客户端统一 */100)
+  int64 alterYuanBao = 3;     // 增减了多少元宝 (客户端统一 */100)
+  int64 coin = 4;             // 铜钱 (客户端统一 */100)
+  int64 alterCoin = 5;        // 增减了多少铜钱 (客户端统一 */100)
+  int32 code = 6;             // 操作原因 1:结算 2:充值 3:平台扣除 4:平台奖励 5:冻结 6:返还
+  string reason = 7;          // 备注详情
+}
+//公告
+message NotifyNoticeReq {
+  int64 gameID = 1;       // 游戏标识 =0大厅
+  string title = 2;       // 标题
+  string content = 3;     // 内容
+  NTFLevel  level = 4;    // 个人只能发送 喇叭
+  int32 timeout = 5;      // 总时长 0<= 默认一分钟
+}
+message NotifyNoticeResp {
+  int64 userID = 1;      //玩家ID =0时为所有玩家
+  int64 gameID = 2;      //游戏标识 =0大厅
+  NTFLevel  level = 3;    //公告级别
+  TimeInfo timeInfo = 4;  //时间
+  string title = 5;       //标题
+  string content = 6;     //内容
+}

@@ -1,11 +1,39 @@
-[gd_scene load_steps=9 format=3 uid="uid://c5848tw2w6iyq"]
+[gd_scene load_steps=25 format=3 uid="uid://c5848tw2w6iyq"]
 
 [ext_resource type="Texture2D" uid="uid://dhbr73joabdq6" path="res://image/eb45d7f1-6e63-47fa-8aea-023131a862f7.e6740.png" id="1_bhiyg"]
 [ext_resource type="Script" path="res://login/login.gd" id="1_s37o2"]
 [ext_resource type="Texture2D" uid="uid://dan2smlcfki32" path="res://image/a0b46364-08d2-4204-bea8-8df3a8903db0.38546.jpg" id="3_mvanq"]
 [ext_resource type="Texture2D" uid="uid://chrwymla0bi66" path="res://image/e97272a3-5b9e-4dd4-b253-6b897b7ba702.bcf40.png" id="4_gvg4q"]
 
+[sub_resource type="FontFile" id="FontFile_cly5l"]
+cache/0/16/0/ascent = 0.0
+cache/0/16/0/descent = 0.0
+cache/0/16/0/underline_position = 0.0
+cache/0/16/0/underline_thickness = 0.0
+cache/0/16/0/scale = 1.0
+cache/0/16/0/kerning_overrides/16/0 = Vector2(0, 0)
+
+[sub_resource type="FontVariation" id="FontVariation_d53i1"]
+base_font = SubResource("FontFile_cly5l")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7o7q0"]
+content_margin_bottom = 10.0
+bg_color = Color(0.301961, 0.666667, 0.67451, 1)
+border_width_left = 12
+border_width_right = 12
+border_color = Color(0.619608, 0.866667, 0.705882, 1)
+border_blend = true
+
+[sub_resource type="FontVariation" id="FontVariation_sl8wd"]
+
 [sub_resource type="Theme" id="Theme_2d7mg"]
+default_font = SubResource("FontVariation_sl8wd")
+AcceptDialog/constants/buttons_separation = 10
+AcceptDialog/fonts/btn_font = SubResource("FontVariation_d53i1")
+AcceptDialog/styles/panel = SubResource("StyleBoxFlat_7o7q0")
+
+[sub_resource type="Theme" id="Theme_uphux"]
+OptionButton/colors/font_color = Color(0.211765, 0.627451, 0.470588, 1)
 
 [sub_resource type="FontFile" id="FontFile_x8uq2"]
 cache/0/16/0/ascent = 0.0
@@ -555,15 +583,160 @@ cache/24/16/0/kerning_overrides/16/0 = Vector2(0, 0)
 base_font = SubResource("FontFile_x8uq2")
 variation_embolden = 0.33
 
+[sub_resource type="Image" id="Image_gujh1"]
+data = {
+"data": PackedByteArray(255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 179, 179, 179, 153, 178, 178, 178, 166, 184, 184, 184, 18, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 184, 184, 184, 18, 178, 178, 178, 166, 178, 178, 178, 151, 255, 255, 255, 0, 255, 255, 255, 0, 178, 178, 178, 166, 178, 178, 178, 217, 178, 178, 178, 179, 184, 184, 184, 18, 255, 255, 255, 0, 255, 255, 255, 0, 175, 175, 175, 19, 178, 178, 178, 179, 178, 178, 178, 217, 178, 178, 178, 165, 255, 255, 255, 0, 255, 255, 255, 0, 184, 184, 184, 18, 177, 177, 177, 179, 178, 178, 178, 217, 179, 179, 179, 180, 175, 175, 175, 19, 175, 175, 175, 19, 179, 179, 179, 180, 178, 178, 178, 217, 177, 177, 177, 179, 180, 180, 180, 17, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 184, 184, 184, 18, 177, 177, 177, 179, 178, 178, 178, 217, 178, 178, 178, 181, 178, 178, 178, 181, 178, 178, 178, 217, 177, 177, 177, 179, 180, 180, 180, 17, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 184, 184, 184, 18, 177, 177, 177, 179, 178, 178, 178, 217, 178, 178, 178, 217, 177, 177, 177, 179, 180, 180, 180, 17, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 184, 184, 184, 18, 178, 178, 178, 165, 178, 178, 178, 165, 180, 180, 180, 17, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0, 255, 255, 255, 0),
+"format": "RGBA8",
+"height": 12,
+"mipmaps": false,
+"width": 12
+}
+
+[sub_resource type="ImageTexture" id="ImageTexture_q1dfi"]
+image = SubResource("Image_gujh1")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ou78a"]
+content_margin_left = 8.0
+content_margin_top = 4.0
+content_margin_right = 21.0
+content_margin_bottom = 4.0
+bg_color = Color(0.1, 0.1, 0.1, 0.3)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_e21xe"]
+content_margin_left = 21.0
+content_margin_top = 4.0
+content_margin_right = 8.0
+content_margin_bottom = 4.0
+bg_color = Color(0.1, 0.1, 0.1, 0.3)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_so71a"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(1, 1, 1, 0.75)
+draw_center = false
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 5
+expand_margin_left = 2.0
+expand_margin_top = 2.0
+expand_margin_right = 2.0
+expand_margin_bottom = 2.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_smvrp"]
+content_margin_left = 8.0
+content_margin_top = 4.0
+content_margin_right = 21.0
+content_margin_bottom = 4.0
+bg_color = Color(0.225, 0.225, 0.225, 0.6)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4libb"]
+content_margin_left = 21.0
+content_margin_top = 4.0
+content_margin_right = 8.0
+content_margin_bottom = 4.0
+bg_color = Color(0.225, 0.225, 0.225, 0.6)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_d7vcv"]
+content_margin_left = 8.0
+content_margin_top = 4.0
+content_margin_right = 21.0
+content_margin_bottom = 4.0
+bg_color = Color(0.1, 0.1, 0.1, 0.6)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3csay"]
+content_margin_left = 21.0
+content_margin_top = 4.0
+content_margin_right = 8.0
+content_margin_bottom = 4.0
+bg_color = Color(0.1, 0.1, 0.1, 0.6)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ewf0i"]
+content_margin_left = 8.0
+content_margin_top = 4.0
+content_margin_right = 21.0
+content_margin_bottom = 4.0
+bg_color = Color(0, 0, 0, 0.6)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_30hju"]
+content_margin_left = 21.0
+content_margin_top = 4.0
+content_margin_right = 8.0
+content_margin_bottom = 4.0
+bg_color = Color(0, 0, 0, 0.6)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 5
+
 [sub_resource type="Theme" id="Theme_ac0jn"]
 default_font = SubResource("FontVariation_x5786")
 OptionButton/colors/font_color = Color(0.458824, 0.984314, 0.858824, 1)
+OptionButton/colors/font_disabled_color = Color(0.875, 0.875, 0.875, 0.5)
 OptionButton/colors/font_focus_color = Color(0.164706, 1, 0.537255, 1)
 OptionButton/colors/font_hover_color = Color(0.917647, 0.94902, 0.141176, 1)
 OptionButton/colors/font_hover_pressed_color = Color(0.266667, 0.34902, 1, 1)
 OptionButton/colors/font_outline_color = Color(0.141176, 0.223529, 0.443137, 1)
 OptionButton/colors/font_pressed_color = Color(0.188235, 0.556863, 0.145098, 1)
+OptionButton/constants/arrow_margin = 4
+OptionButton/constants/h_separation = 4
+OptionButton/constants/modulate_arrow = 0
+OptionButton/constants/outline_size = 0
+OptionButton/font_sizes/font_size = 16
 OptionButton/fonts/font = SubResource("FontVariation_x5786")
+OptionButton/icons/arrow = SubResource("ImageTexture_q1dfi")
+OptionButton/styles/disabled = SubResource("StyleBoxFlat_ou78a")
+OptionButton/styles/disabled_mirrored = SubResource("StyleBoxFlat_e21xe")
+OptionButton/styles/focus = SubResource("StyleBoxFlat_so71a")
+OptionButton/styles/hover = SubResource("StyleBoxFlat_smvrp")
+OptionButton/styles/hover_mirrored = SubResource("StyleBoxFlat_4libb")
+OptionButton/styles/normal = SubResource("StyleBoxFlat_d7vcv")
+OptionButton/styles/normal_mirrored = SubResource("StyleBoxFlat_3csay")
+OptionButton/styles/pressed = SubResource("StyleBoxFlat_ewf0i")
+OptionButton/styles/pressed_mirrored = SubResource("StyleBoxFlat_30hju")
 
 [node name="MainControl" type="Control"]
 layout_mode = 3
@@ -573,7 +746,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="tips" type="Sprite2D" parent="."]
+[node name="12tips" type="Sprite2D" parent="."]
 z_index = 1
 position = Vector2(56, 58)
 scale = Vector2(0.3, 0.3)
@@ -589,6 +762,8 @@ always_on_top = true
 popup_window = true
 content_scale_mode = 1
 theme = SubResource("Theme_2d7mg")
+ok_button_text = "确认"
+dialog_autowrap = true
 
 [node name="Login" type="Node" parent="."]
 script = ExtResource("1_s37o2")
@@ -726,21 +901,35 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -98.0
+offset_left = -106.0
 offset_top = -151.0
-offset_right = 102.0
+offset_right = 119.0
 offset_bottom = -111.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="OptionButton" type="OptionButton" parent="Login/HBox_login/ColorRect/HBoxContainer_server"]
+[node name="AreaList" type="OptionButton" parent="Login/HBox_login/ColorRect/HBoxContainer_server"]
 unique_name_in_owner = true
-clip_contents = true
+custom_minimum_size = Vector2(114, 0)
 layout_mode = 2
-size_flags_horizontal = 3
+tooltip_text = "服务地区"
+theme = SubResource("Theme_uphux")
+item_count = 1
+selected = 0
+popup/item_0/text = "无区域"
+popup/item_0/id = 0
+
+[node name="ServerList" type="OptionButton" parent="Login/HBox_login/ColorRect/HBoxContainer_server"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(114, 0)
+layout_mode = 2
+tooltip_text = "服务区"
 theme = SubResource("Theme_ac0jn")
-alignment = 1
 icon_alignment = 1
+item_count = 1
+selected = 0
+popup/item_0/text = "无服务"
+popup/item_0/id = 0
 
 [node name="TextureRect_logo" type="TextureRect" parent="."]
 top_level = true
@@ -777,10 +966,10 @@ anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -189.0
-offset_top = -215.0
-offset_right = 189.0
-offset_bottom = -35.0
+offset_left = -179.0
+offset_top = -218.0
+offset_right = 199.0
+offset_bottom = -38.0
 grow_horizontal = 2
 grow_vertical = 0
 theme_override_colors/default_color = Color(0, 0, 0, 1)
@@ -804,3 +993,5 @@ color = Color(0.34902, 1, 1, 0.129412)
 
 [connection signal="pressed" from="Login/HBox_login/ColorRect/HBoxContainer_login/Btn_login" to="Login" method="_on_bt_login_pressed"]
 [connection signal="pressed" from="Login/HBox_login/ColorRect/HBoxContainer_login/Btn_register" to="Login" method="_on_bt_register_pressed"]
+[connection signal="item_selected" from="Login/HBox_login/ColorRect/HBoxContainer_server/AreaList" to="Login" method="_on_area_list_item_selected"]
+[connection signal="item_selected" from="Login/HBox_login/ColorRect/HBoxContainer_server/ServerList" to="Login" method="_on_server_list_item_selected"]
